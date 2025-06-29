@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { View, Text, StyleProp, ViewStyle, StyleSheet } from "react-native";
+import { StyleProp, ViewStyle, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import configs from "../config";
 
 type ScreenProps = {
   children: React.ReactNode;
@@ -19,6 +19,7 @@ function Screen({ children, style }: ScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: configs.colors.white,
   },
 });
 

@@ -11,9 +11,12 @@ import { useNavigation } from "@react-navigation/native";
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
   password: Yup.string().required("Password is required"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password"), undefined], "Passwords must match")
+    .required("Confirm Password is required"),
 });
 
-function LoginScreen() {
+function RegisterScreen() {
   const navigation = useNavigation();
 
   const handleSubmit = (values: { email: string; password: string }) => {
@@ -28,7 +31,7 @@ function LoginScreen() {
         resizeMode="contain"
       />
       <OForm
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ email: "", password: "", confirmPassword: "" }}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
@@ -41,19 +44,27 @@ function LoginScreen() {
           style={styles.passwordInput}
           includeShowIcon={true}
         />
+        <OFormField
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          icon="lock"
+          secureTextEntry={true}
+          style={styles.passwordInput}
+          includeShowIcon={true}
+        />
         <OFormSubmit
-          title="Login"
+          title="Register"
           style={styles.button}
           textStyle={styles.buttonText}
         />
       </OForm>
       <View style={styles.registerContainer}>
-        <OText style={styles.registerText}>Don't have an account?</OText>
+        <OText style={styles.registerText}>Already have an account?</OText>
         <TouchableOpacity
-          onPress={() => navigation.navigate("Register" as never)}
+          onPress={() => navigation.navigate("Login" as never)}
           style={styles.registerLink}
         >
-          <OText style={styles.link}>Register</OText>
+          <OText style={styles.link}>Login</OText>
         </TouchableOpacity>
       </View>
     </Screen>
@@ -79,11 +90,13 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 15,
+    backgroundColor: configs.colors.primary,
   },
-  link: {
-    color: configs.colors.secondary,
-    fontWeight: "bold",
-    fontSize: 16,
+  registerContainer: {
+    marginTop: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
   },
   registerText: {
     textAlign: "center",
@@ -92,12 +105,11 @@ const styles = StyleSheet.create({
   registerLink: {
     marginLeft: 5,
   },
-  registerContainer: {
-    marginTop: 15,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
+  link: {
+    color: configs.colors.secondary,
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
 
-export default LoginScreen;
+export default RegisterScreen;
