@@ -7,10 +7,23 @@ import configs from "../config";
 import OFormSubmit from "../components/forms/OFormSubmit";
 import OText from "../components/OText.ios";
 import { useNavigation } from "@react-navigation/native";
+import { login, register } from "../api/auth";
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const validationSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string().required("Password is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters long")
+    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+    .matches(/[0-9]/, "Password must contain at least one number")
+    .matches(
+      /[^A-Za-z0-9]/,
+      "Password must contain at least one special character"
+    ),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), undefined], "Passwords must match")
     .required("Confirm Password is required"),
@@ -18,9 +31,27 @@ const validationSchema = Yup.object().shape({
 
 function RegisterScreen() {
   const navigation = useNavigation();
+  const { token, setToken } = useAuth();
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (values: { email: string; password: string }) => {
+  const handleSubmit = async (values: {
+    name: string;
+    email: string;
+    password: string;
+  }) => {
     console.log(values);
+    try {
+      const response = await register(
+        values.name,
+        values.email,
+        values.password
+      );
+      setToken(response);
+      setError(null);
+    } catch (error: any) {
+      setError(error.response.data);
+      setToken(null);
+    }
   };
 
   return (
@@ -31,11 +62,22 @@ function RegisterScreen() {
         resizeMode="contain"
       />
       <OForm
-        initialValues={{ email: "", password: "", confirmPassword: "" }}
+        initialValues={{
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        }}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        <OFormField name="email" placeholder="Email" icon="email" />
+        <OFormField name="name" placeholder="Name" icon="account" />
+        <OFormField
+          name="email"
+          placeholder="Email"
+          icon="email"
+          style={styles.emailInput}
+        />
         <OFormField
           name="password"
           placeholder="Password"
@@ -58,6 +100,8 @@ function RegisterScreen() {
           textStyle={styles.buttonText}
         />
       </OForm>
+      {error && <OText>{error}</OText>}
+      {token && <OText>{token}</OText>}
       <View style={styles.registerContainer}>
         <OText style={styles.registerText}>Already have an account?</OText>
         <TouchableOpacity
@@ -74,6 +118,9 @@ function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+  },
+  emailInput: {
+    marginTop: 15,
   },
   passwordInput: {
     marginTop: 15,

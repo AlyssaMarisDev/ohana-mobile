@@ -7,6 +7,9 @@ import configs from "../config";
 import OFormSubmit from "../components/forms/OFormSubmit";
 import OText from "../components/OText.ios";
 import { useNavigation } from "@react-navigation/native";
+import { login } from "../api/auth";
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -15,9 +18,19 @@ const validationSchema = Yup.object().shape({
 
 function LoginScreen() {
   const navigation = useNavigation();
+  const { token, setToken } = useAuth();
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (values: { email: string; password: string }) => {
+  const handleSubmit = async (values: { email: string; password: string }) => {
     console.log(values);
+    try {
+      const response = await login(values.email, values.password);
+      setToken(response);
+      setError(null);
+    } catch (error: any) {
+      setError(error.response.data);
+      setToken(null);
+    }
   };
 
   return (
@@ -47,6 +60,8 @@ function LoginScreen() {
           textStyle={styles.buttonText}
         />
       </OForm>
+      {error && <OText>{error}</OText>}
+      {token && <OText>{token}</OText>}
       <View style={styles.registerContainer}>
         <OText style={styles.registerText}>Don't have an account?</OText>
         <TouchableOpacity
