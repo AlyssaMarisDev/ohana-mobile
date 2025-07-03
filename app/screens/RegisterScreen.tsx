@@ -1,13 +1,13 @@
 import Screen from "../components/Screen";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
-import OForm from "../components/forms/OForm";
-import OFormField from "../components/forms/OFormField";
+import Form from "../components/forms/Form";
+import FormField from "../components/forms/FormField";
 import * as Yup from "yup";
 import configs from "../config";
-import OFormSubmit from "../components/forms/OFormSubmit";
-import OText from "../components/OText.ios";
+import FormSubmit from "../components/forms/FormSubmit";
+import Text from "../components/Text";
 import { useNavigation } from "@react-navigation/native";
-import { login, register } from "../api/auth";
+import { register } from "../api/auth";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
@@ -48,6 +48,7 @@ function RegisterScreen() {
       );
       setToken(response);
       setError(null);
+      navigation.navigate("Home" as never);
     } catch (error: any) {
       setError(error.response.data);
       setToken(null);
@@ -61,7 +62,7 @@ function RegisterScreen() {
         style={styles.logo}
         resizeMode="contain"
       />
-      <OForm
+      <Form
         initialValues={{
           name: "",
           email: "",
@@ -71,14 +72,14 @@ function RegisterScreen() {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        <OFormField name="name" placeholder="Name" icon="account" />
-        <OFormField
+        <FormField name="name" placeholder="Name" icon="account" />
+        <FormField
           name="email"
           placeholder="Email"
           icon="email"
           style={styles.emailInput}
         />
-        <OFormField
+        <FormField
           name="password"
           placeholder="Password"
           icon="lock"
@@ -86,7 +87,7 @@ function RegisterScreen() {
           style={styles.passwordInput}
           includeShowIcon={true}
         />
-        <OFormField
+        <FormField
           name="confirmPassword"
           placeholder="Confirm Password"
           icon="lock"
@@ -94,21 +95,17 @@ function RegisterScreen() {
           style={styles.passwordInput}
           includeShowIcon={true}
         />
-        <OFormSubmit
-          title="Register"
-          style={styles.button}
-          textStyle={styles.buttonText}
-        />
-      </OForm>
-      {error && <OText>{error}</OText>}
-      {token && <OText>{token}</OText>}
+        <FormSubmit title="Register" style={styles.button} />
+      </Form>
+      {error && <Text>{error}</Text>}
+      {token && <Text>{token}</Text>}
       <View style={styles.registerContainer}>
-        <OText style={styles.registerText}>Already have an account?</OText>
+        <Text style={styles.registerText}>Already have an account?</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate("Login" as never)}
           style={styles.registerLink}
         >
-          <OText style={styles.link}>Login</OText>
+          <Text style={styles.link}>Login</Text>
         </TouchableOpacity>
       </View>
     </Screen>
@@ -131,9 +128,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: "15%",
     marginBottom: "5%",
-  },
-  buttonText: {
-    color: configs.colors.white,
   },
   button: {
     marginTop: 15,

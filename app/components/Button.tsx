@@ -5,8 +5,9 @@ import {
   ViewStyle,
 } from "react-native";
 import configs from "../config";
+import Text from "./Text";
 
-interface OButtonProps {
+interface ButtonProps {
   onPress: (arg0: any) => void;
   children?: React.ReactNode;
   color?: string;
@@ -14,14 +15,14 @@ interface OButtonProps {
   activeOpacity?: number;
 }
 
-function OButton({
+function Button({
   children,
   color,
   style,
   onPress,
   activeOpacity = 0.7,
   ...otherProps
-}: OButtonProps) {
+}: ButtonProps) {
   return (
     <TouchableOpacity
       style={[styles.button, style]}
@@ -29,7 +30,7 @@ function OButton({
       activeOpacity={activeOpacity}
       {...otherProps}
     >
-      {children}
+      <Text style={styles.buttonText}>{children}</Text>
     </TouchableOpacity>
   );
 }
@@ -43,6 +44,9 @@ const styles = StyleSheet.create({
     padding: 15,
     width: "100%",
   },
+  buttonText: {
+    color: configs.colors.white,
+  },
 });
 
-export default OButton;
+export default Button;

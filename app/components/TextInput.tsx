@@ -1,7 +1,7 @@
 import {
   StyleProp,
   StyleSheet,
-  TextInput,
+  TextInput as RNTextInput,
   View,
   ViewStyle,
 } from "react-native";
@@ -9,7 +9,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import configs from "../config";
 import { useState } from "react";
 
-interface OTextInputProps {
+interface TextInputProps {
   secureTextEntry?: boolean;
   placeholder: string;
   value: string;
@@ -19,7 +19,7 @@ interface OTextInputProps {
   includeShowIcon?: boolean;
 }
 
-function OTextInput({
+function TextInput({
   secureTextEntry = false,
   placeholder,
   value,
@@ -27,7 +27,7 @@ function OTextInput({
   icon,
   style,
   includeShowIcon = false,
-}: OTextInputProps) {
+}: TextInputProps) {
   const [showSecureTextEntry, setShowSecureTextEntry] =
     useState(secureTextEntry);
 
@@ -36,7 +36,7 @@ function OTextInput({
       {icon && (
         <MaterialCommunityIcons name={icon} size={24} style={styles.icon} />
       )}
-      <TextInput
+      <RNTextInput
         secureTextEntry={showSecureTextEntry}
         placeholder={placeholder}
         placeholderTextColor={configs.colors.gray2}
@@ -84,4 +84,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OTextInput;
+export default TextInput;

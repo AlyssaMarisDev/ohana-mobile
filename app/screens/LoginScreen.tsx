@@ -1,11 +1,11 @@
 import Screen from "../components/Screen";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
-import OForm from "../components/forms/OForm";
-import OFormField from "../components/forms/OFormField";
+import Form from "../components/forms/Form";
+import FormField from "../components/forms/FormField";
 import * as Yup from "yup";
 import configs from "../config";
-import OFormSubmit from "../components/forms/OFormSubmit";
-import OText from "../components/OText.ios";
+import FormSubmit from "../components/forms/FormSubmit";
+import Text from "../components/Text";
 import { useNavigation } from "@react-navigation/native";
 import { login } from "../api/auth";
 import { useState } from "react";
@@ -27,6 +27,7 @@ function LoginScreen() {
       const response = await login(values.email, values.password);
       setToken(response);
       setError(null);
+      navigation.navigate("Home" as never);
     } catch (error: any) {
       setError(error.response.data);
       setToken(null);
@@ -40,13 +41,13 @@ function LoginScreen() {
         style={styles.logo}
         resizeMode="contain"
       />
-      <OForm
+      <Form
         initialValues={{ email: "", password: "" }}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        <OFormField name="email" placeholder="Email" icon="email" />
-        <OFormField
+        <FormField name="email" placeholder="Email" icon="email" />
+        <FormField
           name="password"
           placeholder="Password"
           icon="lock"
@@ -54,21 +55,21 @@ function LoginScreen() {
           style={styles.passwordInput}
           includeShowIcon={true}
         />
-        <OFormSubmit
+        <FormSubmit
           title="Login"
           style={styles.button}
           textStyle={styles.buttonText}
         />
-      </OForm>
-      {error && <OText>{error}</OText>}
-      {token && <OText>{token}</OText>}
+      </Form>
+      {error && <Text>{error}</Text>}
+      {token && <Text>{token}</Text>}
       <View style={styles.registerContainer}>
-        <OText style={styles.registerText}>Don't have an account?</OText>
+        <Text style={styles.registerText}>Don't have an account?</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate("Register" as never)}
           style={styles.registerLink}
         >
-          <OText style={styles.link}>Register</OText>
+          <Text style={styles.link}>Register</Text>
         </TouchableOpacity>
       </View>
     </Screen>

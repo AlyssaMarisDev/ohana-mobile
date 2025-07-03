@@ -2,7 +2,7 @@ import { Formik, FormikHelpers, FormikValues } from "formik";
 import React from "react";
 import { Schema } from "yup";
 
-interface OFormProps<T extends FormikValues> {
+interface FormProps<T extends FormikValues> {
   initialValues: T;
   onSubmit: (
     values: T,
@@ -12,12 +12,12 @@ interface OFormProps<T extends FormikValues> {
   children: React.ReactNode;
 }
 
-function OForm<T extends FormikValues>({
+function Form<T extends FormikValues>({
   initialValues,
   onSubmit,
   validationSchema,
   children,
-}: OFormProps<T>) {
+}: FormProps<T>) {
   return (
     <Formik<T>
       initialValues={initialValues}
@@ -29,4 +29,4 @@ function OForm<T extends FormikValues>({
   );
 }
 
-export default OForm;
+export default Form;

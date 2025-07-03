@@ -1,27 +1,27 @@
-import OErrorMessage from "../OErrorMessage";
-import OTextInput from "../OTextInput";
+import OErrorMessage from "../ErrorMessage";
+import TextInput from "../TextInput";
 import { useFormikContext } from "formik";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 
-interface OFormFieldProps<T> {
+interface FormFieldProps<T> {
   name: keyof T;
   placeholder: string;
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
   [key: string]: unknown;
 }
 
-function OFormField<T>({
+function FormField<T>({
   name,
   placeholder,
   icon,
   ...otherProps
-}: OFormFieldProps<T>) {
+}: FormFieldProps<T>) {
   const { handleChange, values, errors, touched } = useFormikContext<T>();
 
   return (
     <>
-      <OTextInput
+      <TextInput
         placeholder={placeholder}
         icon={icon}
         value={values[name] as string}
@@ -36,4 +36,4 @@ function OFormField<T>({
   );
 }
 
-export default OFormField;
+export default FormField;
