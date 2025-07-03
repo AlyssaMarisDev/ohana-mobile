@@ -2,34 +2,44 @@ import {
   StyleProp,
   StyleSheet,
   TextStyle,
-  View,
+  TouchableOpacity,
   ViewStyle,
 } from "react-native";
 import Text from "./Text";
 import colors from "../config/colors";
+import React from "react";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-type TaskPreviewProps = {
+type Task = {
+  id: number;
   title: string;
   dueDate: Date;
+  isCompleted: boolean;
+};
+
+type TaskPreviewProps = {
+  task: Task;
   showDueDate?: boolean;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
+  onPress?: () => void;
 };
 
 function TaskPreview({
-  title,
-  dueDate,
+  task,
   showDueDate = true,
   style,
   textStyle,
+  onPress,
 }: TaskPreviewProps) {
   const today = new Date();
 
-  const isToday = dueDate.toLocaleDateString() === today.toLocaleDateString();
+  const isToday =
+    task.dueDate.toLocaleDateString() === today.toLocaleDateString();
   const isTomorrow =
-    dueDate.toLocaleDateString() ===
+    task.dueDate.toLocaleDateString() ===
     new Date(today.getTime() + 24 * 60 * 60 * 1000).toLocaleDateString();
-  const isInPast = dueDate.getTime() < today.getTime();
+  const isInPast = task.dueDate.getTime() < today.getTime();
 
   const doByString = isToday
     ? "Today"
@@ -37,23 +47,43 @@ function TaskPreview({
     ? "Tomorrow"
     : isInPast
     ? "Overdue"
-    : dueDate.toLocaleDateString();
+    : task.dueDate.toLocaleDateString();
 
   return (
-    <View style={[styles.container, style]}>
+    <TouchableOpacity
+      style={[styles.container, style, task.isCompleted && styles.completed]}
+      onPress={onPress}
+      activeOpacity={0.8}
+    >
+      {task.isCompleted && (
+        <MaterialCommunityIcons
+          name="check"
+          size={20}
+          color={colors.white}
+          style={styles.checkIcon}
+        />
+      )}
+      {!task.isCompleted && (
+        <MaterialCommunityIcons
+          name="checkbox-blank-outline"
+          size={20}
+          color={colors.white}
+          style={styles.checkIcon}
+        />
+      )}
       <Text
         style={[styles.title, textStyle]}
         numberOfLines={1}
         ellipsizeMode="tail"
       >
-        {title}
+        {task.title}
       </Text>
       {showDueDate && (
         <Text style={styles.dueDate} numberOfLines={1} align="right">
           {doByString}
         </Text>
       )}
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -82,6 +112,13 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     textAlign: "right",
   },
+  completed: {
+    backgroundColor: colors.gray2,
+  },
+  checkIcon: {
+    marginRight: 10,
+  },
 });
 
 export default TaskPreview;
+export type { Task };
