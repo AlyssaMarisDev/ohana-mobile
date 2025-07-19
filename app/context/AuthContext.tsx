@@ -10,10 +10,12 @@ import {
   login as apiLogin,
   register as apiRegister,
 } from "../services/authService";
+import { useGlobalState } from "./GlobalStateContext";
 
 type AuthContextType = {
   isAuthenticated: boolean;
   isLoading: boolean;
+  memberId: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -25,19 +27,45 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [memberId, setMemberId] = useState<string | null>(null);
+  const { clearAllState } = useGlobalState();
 
   // Check authentication status on app start
   useEffect(() => {
     checkAuthStatus();
   }, []);
 
+  const extractMemberIdFromToken = async (): Promise<string | null> => {
+    try {
+      const token = await tokenManager.getValidAccessToken();
+      if (!token) return null;
+
+      const decoded = tokenManager.decodeToken(token);
+      return decoded?.userId || null;
+    } catch (error) {
+      console.error("Error extracting member ID from token:", error);
+      return null;
+    }
+  };
+
   const checkAuthStatus = async () => {
     try {
       const token = await tokenManager.getValidAccessToken();
-      setIsAuthenticated(!!token);
+      const isAuth = !!token;
+      setIsAuthenticated(isAuth);
+
+      if (isAuth) {
+        const userId = await extractMemberIdFromToken();
+        setMemberId(userId);
+      } else {
+        setMemberId(null);
+        clearAllState();
+      }
     } catch (error) {
       console.error("Error checking auth status:", error);
       setIsAuthenticated(false);
+      setMemberId(null);
+      clearAllState();
     } finally {
       setIsLoading(false);
     }
@@ -51,6 +79,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         authData.accessToken,
         authData.refreshToken
       );
+
+      // Extract member ID from the new token
+      const userId = await extractMemberIdFromToken();
+      setMemberId(userId);
       setIsAuthenticated(true);
     } catch (error) {
       console.error("Login error:", error);
@@ -66,6 +98,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         authData.accessToken,
         authData.refreshToken
       );
+
+      // Extract member ID from the new token
+      const userId = await extractMemberIdFromToken();
+      setMemberId(userId);
       setIsAuthenticated(true);
     } catch (error) {
       console.error("Register error:", error);
@@ -77,10 +113,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await tokenManager.clearTokens();
       setIsAuthenticated(false);
+      setMemberId(null);
+      clearAllState();
     } catch (error) {
       console.error("Logout error:", error);
       // Even if logout fails, clear local state
       setIsAuthenticated(false);
+      setMemberId(null);
+      clearAllState();
     }
   };
 
@@ -93,6 +133,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{
         isAuthenticated,
         isLoading,
+        memberId,
         login,
         register,
         logout,

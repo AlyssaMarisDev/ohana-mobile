@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,23 +6,85 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Screen from "../components/Screen";
 import configs from "../config";
+import { useMemberData } from "../hooks/useMemberData";
+import { useAuth } from "../context/AuthContext";
 
 function ProfileScreen() {
+  const { member, fetchMemberData, isLoading } = useMemberData(true);
+  const { logout, isAuthenticated } = useAuth();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      if (isAuthenticated) {
+        await fetchMemberData();
+      } else {
+        // If user is not authenticated, they should be redirected to login
+        console.log("User not authenticated during refresh");
+      }
+    } catch (error) {
+      console.error("Error refreshing member data:", error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  if (!member) {
+    return (
+      <Screen style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator
+            size="large"
+            color={configs.colors.primary || "#0000ff"}
+          />
+          <Text style={styles.loadingText}>Loading profile...</Text>
+        </View>
+      </Screen>
+    );
+  }
+
   return (
     <Screen style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[configs.colors.primary || "#0000ff"]}
+            tintColor={configs.colors.primary || "#0000ff"}
+          />
+        }
+      >
         {/* Profile Header */}
         <View style={styles.profileHeader}>
           <Image
             source={require("../../assets/icon.png")}
             style={styles.profileImage}
           />
-          <Text style={styles.userName}>John Doe</Text>
-          <Text style={styles.userEmail}>john.doe@example.com</Text>
+          <Text style={styles.userName}>{member?.name || "John Doe"}</Text>
+          <Text style={styles.userEmail}>
+            {member?.email || "john.doe@example.com"}
+          </Text>
+          <Text style={styles.userDetails}>
+            {member?.age ? `${member.age} years old` : ""} •{" "}
+            {member?.gender || ""}
+          </Text>
         </View>
 
         {/* Profile Options */}
@@ -107,7 +169,7 @@ function ProfileScreen() {
         </View>
 
         {/* Logout Button */}
-        <TouchableOpacity style={styles.logoutButton}>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Ionicons name="log-out-outline" size={20} color="#ff4444" />
           <Text style={styles.logoutText}>Log Out</Text>
         </TouchableOpacity>
@@ -119,6 +181,16 @@ function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 0,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: "#666",
   },
   profileHeader: {
     alignItems: "center",
@@ -151,6 +223,11 @@ const styles = StyleSheet.create({
   userEmail: {
     fontSize: 16,
     color: "#666",
+    marginBottom: 4,
+  },
+  userDetails: {
+    fontSize: 14,
+    color: "#888",
   },
   section: {
     paddingHorizontal: 20,

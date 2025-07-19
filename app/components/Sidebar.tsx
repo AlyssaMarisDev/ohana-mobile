@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import configs from "../config";
+import { useMemberData } from "../hooks/useMemberData";
 
 type SidebarProps = {
   isVisible: boolean;
@@ -27,6 +28,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   onTodayPress,
 }) => {
   const slideAnim = React.useRef(new Animated.Value(-width)).current;
+  const { member } = useMemberData(isVisible);
 
   React.useEffect(() => {
     if (isVisible) {
@@ -82,7 +84,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               source={require("../../assets/icon.png")} // Stock profile image
               style={styles.profileImage}
             />
-            <Text style={styles.userName}>John Doe</Text>
+            <Text style={styles.userName}>{member?.name || "Loading..."}</Text>
           </View>
         </TouchableOpacity>
 
