@@ -32,14 +32,10 @@ export const createAuthenticatedAxios = () => {
         originalRequest._retry = true;
 
         try {
-          const { refreshToken } = await tokenManager.getTokens();
-          if (refreshToken && !tokenManager.isTokenExpired(refreshToken)) {
-            await tokenManager.refreshAccessToken(refreshToken);
-            const newAccessToken = await tokenManager.getValidAccessToken();
-            if (newAccessToken) {
-              originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-              return instance(originalRequest);
-            }
+          const newAccessToken = await tokenManager.getValidAccessToken();
+          if (newAccessToken) {
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+            return instance(originalRequest);
           }
         } catch (refreshError) {
           console.error("Token refresh failed:", refreshError);
