@@ -1,27 +1,24 @@
 import React, { useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { useAuth } from "../context/AuthContext";
 import LoginScreen from "./LoginScreen";
 import RegisterScreen from "./RegisterScreen";
-import ProfileHeader from "../components/ProfileHeader";
 import HamburgerMenu from "../components/HamburgerMenu";
 import Sidebar from "../components/Sidebar";
 import { ActivityIndicator, View } from "react-native";
 import configs from "../config";
 import TodayScreen from "./TodayScreen";
+import ProfileScreen from "./ProfileScreen";
 
-function Navigation() {
+// Wrapper component that can access navigation
+function NavigationContent() {
   const Stack = createNativeStackNavigator();
   const { isAuthenticated, isLoading } = useAuth();
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const navigation = useNavigation();
 
   if (isLoading) return <ActivityIndicator size="large" color="#0000ff" />;
-
-  const handleProfilePress = () => {
-    // Navigate to profile screen or open profile modal
-    console.log("Profile pressed");
-  };
 
   const handleHamburgerPress = () => {
     setIsSidebarVisible(true);
@@ -31,56 +28,78 @@ function Navigation() {
     setIsSidebarVisible(false);
   };
 
+  const handleSidebarProfilePress = () => {
+    setIsSidebarVisible(false); // Close sidebar
+    navigation.navigate("Profile" as never); // Navigate to profile
+  };
+
+  const handleSidebarTodayPress = () => {
+    setIsSidebarVisible(false); // Close sidebar
+    navigation.navigate("Today" as never); // Navigate to today
+  };
+
   return (
     <View style={{ flex: 1 }}>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName={isAuthenticated ? "Today" : "Login"}
-          screenOptions={{
-            headerShown: isAuthenticated, // Only show header for authenticated screens
-            headerLeft: () => <HamburgerMenu onPress={handleHamburgerPress} />,
-            headerRight: () => (
-              <ProfileHeader
-                onProfilePress={handleProfilePress}
-                // profileImageUrl="https://example.com/user-avatar.jpg" // Add user's profile image URL here
-              />
-            ),
-            headerStyle: {
-              backgroundColor: configs.colors.white,
-            },
-            headerTransparent: false, // This ensures header takes up space
-            headerTitleStyle: {
-              fontSize: 20,
-              fontWeight: "600",
-              color: "#000",
-            },
-            headerBackVisible: false, // Hide back button for cleaner look
-            headerShadowVisible: false, // Remove the horizontal line/shadow
+      <Stack.Navigator
+        initialRouteName={isAuthenticated ? "Today" : "Login"}
+        screenOptions={{
+          headerShown: isAuthenticated, // Only show header for authenticated screens
+          headerLeft: () => <HamburgerMenu onPress={handleHamburgerPress} />,
+          headerStyle: {
+            backgroundColor: configs.colors.white,
+          },
+          headerTransparent: false, // This ensures header takes up space
+          headerTitleStyle: {
+            fontSize: 20,
+            fontWeight: "600",
+            color: "#000",
+          },
+          headerBackVisible: false, // Hide back button for cleaner look
+          headerShadowVisible: false, // Remove the horizontal line/shadow
+        }}
+      >
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Today"
+          component={TodayScreen}
+          options={{
+            title: "Today",
           }}
-        >
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Register"
-            component={RegisterScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Today"
-            component={TodayScreen}
-            options={{
-              title: "Today",
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+        />
+        <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            title: "Profile",
+          }}
+        />
+      </Stack.Navigator>
 
       {/* Sidebar */}
-      <Sidebar isVisible={isSidebarVisible} onClose={handleSidebarClose} />
+      <Sidebar
+        isVisible={isSidebarVisible}
+        onClose={handleSidebarClose}
+        onProfilePress={handleSidebarProfilePress}
+        onTodayPress={handleSidebarTodayPress}
+      />
     </View>
+  );
+}
+
+function Navigation() {
+  return (
+    <NavigationContainer>
+      <NavigationContent />
+    </NavigationContainer>
   );
 }
 

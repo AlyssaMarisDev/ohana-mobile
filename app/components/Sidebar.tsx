@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Animated,
   Dimensions,
+  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import configs from "../config";
@@ -13,11 +14,18 @@ import configs from "../config";
 type SidebarProps = {
   isVisible: boolean;
   onClose: () => void;
+  onProfilePress: () => void;
+  onTodayPress: () => void;
 };
 
 const { width } = Dimensions.get("window");
 
-const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  isVisible,
+  onClose,
+  onProfilePress,
+  onTodayPress,
+}) => {
   const slideAnim = React.useRef(new Animated.Value(-width)).current;
 
   React.useEffect(() => {
@@ -36,6 +44,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
     }
   }, [isVisible, slideAnim]);
 
+  const handleProfilePress = () => {
+    onClose(); // Close the sidebar
+    onProfilePress(); // Navigate to profile
+  };
+
+  const handleTodayPress = () => {
+    onClose(); // Close the sidebar
+    onTodayPress(); // Navigate to today
+  };
+
   if (!isVisible) return null;
 
   return (
@@ -53,16 +71,34 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
           },
         ]}
       >
-        <View style={styles.header}>
-          <Text style={styles.title}>Menu</Text>
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Ionicons name="close" size={24} color="#000" />
-          </TouchableOpacity>
-        </View>
+        {/* User Profile Section */}
+        <TouchableOpacity
+          style={styles.userProfileSection}
+          onPress={handleProfilePress}
+          activeOpacity={0.7}
+        >
+          <View style={styles.profileContainer}>
+            <Image
+              source={require("../../assets/icon.png")} // Stock profile image
+              style={styles.profileImage}
+            />
+            <Text style={styles.userName}>John Doe</Text>
+          </View>
+        </TouchableOpacity>
 
-        <View style={styles.content}>
-          <Text style={styles.placeholder}>Sidebar content goes here</Text>
-          <Text style={styles.placeholder}>Add your menu items</Text>
+        {/* Menu Items */}
+        <View style={styles.menuSection}>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={handleTodayPress}
+            activeOpacity={0.7}
+          >
+            <View style={styles.menuItemLeft}>
+              <Ionicons name="today-outline" size={20} color="#666" />
+              <Text style={styles.menuItemText}>Today</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={16} color="#ccc" />
+          </TouchableOpacity>
         </View>
       </Animated.View>
     </View>
@@ -102,33 +138,56 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 20,
+  userProfileSection: {
     paddingTop: 60, // Account for status bar
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
+    paddingHorizontal: 20,
+    paddingBottom: 20,
   },
-  title: {
-    fontSize: 20,
+  profileContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 12,
+    borderWidth: 2,
+    borderColor: configs.colors.white,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  userName: {
+    fontSize: 18,
     fontWeight: "600",
     color: "#000",
-  },
-  closeButton: {
-    padding: 4,
-  },
-  content: {
     flex: 1,
-    padding: 20,
-    justifyContent: "center",
+  },
+  menuSection: {
+    paddingHorizontal: 20,
+  },
+  menuItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
+  },
+  menuItemLeft: {
+    flexDirection: "row",
     alignItems: "center",
   },
-  placeholder: {
+  menuItemText: {
     fontSize: 16,
-    color: "#666",
-    marginBottom: 10,
+    color: "#333",
+    marginLeft: 12,
   },
 });
 
