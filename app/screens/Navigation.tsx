@@ -8,14 +8,14 @@ import { ActivityIndicator } from "react-native";
 
 function Navigation() {
   const Stack = createNativeStackNavigator();
-  const { token, isLoading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) return <ActivityIndicator size="large" color="#0000ff" />;
 
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={token ? "Home" : "Login"}
+        initialRouteName={isAuthenticated ? "Home" : "Login"}
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Login" component={LoginScreen} />

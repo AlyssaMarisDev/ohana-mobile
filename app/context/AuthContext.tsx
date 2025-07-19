@@ -5,54 +5,99 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import tokenManager from "../utils/tokenManager";
+import {
+  login as apiLogin,
+  register as apiRegister,
+} from "../services/authService";
 
 type AuthContextType = {
-  token: string | null;
-  setToken: (token: string | null) => void;
+  isAuthenticated: boolean;
   isLoading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  getAccessToken: () => Promise<string | null>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const TOKEN_KEY = "auth_token";
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load token from storage on app start
+  // Check authentication status on app start
   useEffect(() => {
-    loadToken();
+    checkAuthStatus();
   }, []);
 
-  const loadToken = async () => {
+  const checkAuthStatus = async () => {
     try {
-      const storedToken = await AsyncStorage.getItem(TOKEN_KEY);
-      setToken(storedToken);
+      const authenticated = await tokenManager.isAuthenticated();
+      setIsAuthenticated(authenticated);
     } catch (error) {
-      console.error("Error loading token:", error);
+      console.error("Error checking auth status:", error);
+      setIsAuthenticated(false);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const setTokenAndStore = async (newToken: string | null) => {
+  const login = async (email: string, password: string) => {
     try {
-      if (newToken) {
-        await AsyncStorage.setItem(TOKEN_KEY, newToken);
-      } else {
-        await AsyncStorage.removeItem(TOKEN_KEY);
-      }
-      setToken(newToken);
+      const authData = await apiLogin(email, password);
+      // Store tokens automatically
+      await tokenManager.storeTokens(
+        authData.accessToken,
+        authData.refreshToken
+      );
+      setIsAuthenticated(true);
     } catch (error) {
-      console.error("Error storing token:", error);
+      console.error("Login error:", error);
+      throw error;
     }
+  };
+
+  const register = async (name: string, email: string, password: string) => {
+    try {
+      const authData = await apiRegister(name, email, password);
+      // Store tokens automatically
+      await tokenManager.storeTokens(
+        authData.accessToken,
+        authData.refreshToken
+      );
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error("Register error:", error);
+      throw error;
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await tokenManager.clearTokens();
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Even if logout fails, clear local state
+      setIsAuthenticated(false);
+    }
+  };
+
+  const getAccessToken = async (): Promise<string | null> => {
+    return await tokenManager.getValidAccessToken();
   };
 
   return (
     <AuthContext.Provider
-      value={{ token, setToken: setTokenAndStore, isLoading }}
+      value={{
+        isAuthenticated,
+        isLoading,
+        login,
+        register,
+        logout,
+        getAccessToken,
+      }}
     >
       {children}
     </AuthContext.Provider>

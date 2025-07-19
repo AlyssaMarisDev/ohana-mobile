@@ -7,7 +7,6 @@ import configs from "../config";
 import FormSubmit from "../components/forms/FormSubmit";
 import Text from "../components/Text";
 import { useNavigation } from "@react-navigation/native";
-import { register } from "../api/auth";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
@@ -31,7 +30,7 @@ const validationSchema = Yup.object().shape({
 
 function RegisterScreen() {
   const navigation = useNavigation();
-  const { token, setToken } = useAuth();
+  const { register } = useAuth();
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (values: {
@@ -41,17 +40,13 @@ function RegisterScreen() {
   }) => {
     console.log(values);
     try {
-      const response = await register(
-        values.name,
-        values.email,
-        values.password
-      );
-      setToken(response);
+      await register(values.name, values.email, values.password);
       setError(null);
       navigation.navigate("Home" as never);
     } catch (error: any) {
-      setError(error.response.data);
-      setToken(null);
+      setError(
+        error.response?.data?.message || error.message || "Registration failed"
+      );
     }
   };
 
@@ -97,8 +92,7 @@ function RegisterScreen() {
         />
         <FormSubmit title="Register" style={styles.button} />
       </Form>
-      {error && <Text>{error}</Text>}
-      {token && <Text>{token}</Text>}
+      {error && <Text style={styles.errorText}>{error}</Text>}
       <View style={styles.registerContainer}>
         <Text style={styles.registerText}>Already have an account?</Text>
         <TouchableOpacity
@@ -150,6 +144,11 @@ const styles = StyleSheet.create({
     color: configs.colors.secondary,
     fontWeight: "bold",
     fontSize: 16,
+  },
+  errorText: {
+    color: "red",
+    textAlign: "center",
+    marginTop: 10,
   },
 });
 
