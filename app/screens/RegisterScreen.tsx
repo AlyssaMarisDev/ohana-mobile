@@ -42,7 +42,7 @@ function RegisterScreen() {
     try {
       await register(values.name, values.email, values.password);
       setError(null);
-      navigation.navigate("Home" as never);
+      navigation.navigate("Today" as never);
     } catch (error: any) {
       setError(
         error.response?.data?.message || error.message || "Registration failed"
@@ -108,7 +108,8 @@ function RegisterScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingHorizontal: "5%",
+    paddingTop: "30%",
   },
   emailInput: {
     marginTop: 15,

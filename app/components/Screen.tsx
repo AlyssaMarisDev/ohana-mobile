@@ -1,5 +1,5 @@
-import { StyleProp, ViewStyle, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { StyleProp, ViewStyle, StyleSheet, View } from "react-native";
+// import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import configs from "../config";
 
@@ -11,7 +11,7 @@ type ScreenProps = {
 function Screen({ children, style }: ScreenProps) {
   return (
     <GestureHandlerRootView>
-      <SafeAreaView style={[styles.container, style]}>{children}</SafeAreaView>
+      <View style={[styles.container, style]}>{children}</View>
     </GestureHandlerRootView>
   );
 }

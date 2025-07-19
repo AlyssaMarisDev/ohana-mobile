@@ -25,7 +25,7 @@ function LoginScreen() {
     try {
       await login(values.email, values.password);
       setError(null);
-      navigation.navigate("Home" as never);
+      navigation.navigate("Today" as never);
     } catch (error: any) {
       setError(
         error.response?.data?.message || error.message || "Login failed"
@@ -76,7 +76,8 @@ function LoginScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingHorizontal: "5%",
+    paddingTop: "30%",
   },
   passwordInput: {
     marginTop: 15,

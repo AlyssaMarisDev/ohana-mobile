@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import Screen from "../components/Screen";
 import TaskPreview from "../components/TaskPreview";
 import Text from "../components/Text";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { Task } from "../components/TaskPreview";
 
-function HomeScreen() {
+function TodayScreen() {
   const initialTasks: Task[] = [
     {
       id: 1,
@@ -94,7 +94,7 @@ function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingHorizontal: "5%",
   },
   task: {
     marginBottom: 10,
@@ -110,4 +110,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default TodayScreen;
