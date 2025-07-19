@@ -97,18 +97,16 @@ export class TokenManager {
     return decoded.exp <= currentTime;
   }
 
-  // Check if user is authenticated (has valid tokens)
-  async isAuthenticated(): Promise<boolean> {
-    const { accessToken, refreshToken } = await this.getTokens();
-    return !!(accessToken && refreshToken && !this.isTokenExpired(accessToken));
-  }
-
   // Get valid access token (refresh if needed)
   async getValidAccessToken(): Promise<string | null> {
     const { accessToken, refreshToken } = await this.getTokens();
 
     if (!accessToken || !refreshToken) {
       return null;
+    }
+
+    if (!this.isTokenExpired(accessToken)) {
+      return accessToken;
     }
 
     // If refresh token is expired, user needs to login again

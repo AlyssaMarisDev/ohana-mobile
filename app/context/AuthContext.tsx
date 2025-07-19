@@ -33,8 +33,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const checkAuthStatus = async () => {
     try {
-      const authenticated = await tokenManager.isAuthenticated();
-      setIsAuthenticated(authenticated);
+      const token = await tokenManager.getValidAccessToken();
+      setIsAuthenticated(!!token);
     } catch (error) {
       console.error("Error checking auth status:", error);
       setIsAuthenticated(false);
