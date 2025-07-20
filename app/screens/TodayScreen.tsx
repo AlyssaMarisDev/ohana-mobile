@@ -2,92 +2,111 @@ import React, { useState } from "react";
 import Screen from "../components/Screen";
 import TaskPreview from "../components/TaskPreview";
 import Text from "../components/Text";
-import { StyleSheet } from "react-native";
-import { Task } from "../components/TaskPreview";
+import {
+  StyleSheet,
+  ActivityIndicator,
+  View,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
+import { useTasks } from "../hooks/useTasks";
+import { Task } from "../services/taskService";
+import configs from "../config";
 
 function TodayScreen() {
-  const initialTasks: Task[] = [
-    {
-      id: 1,
-      title: "Task 1",
-      dueDate: new Date("2025-07-01"),
-      isCompleted: false,
-    },
-    {
-      id: 2,
-      title: "Task 2",
-      dueDate: new Date("2025-07-03"),
-      isCompleted: false,
-    },
-    {
-      id: 3,
-      title: "Task 3",
-      dueDate: new Date("2025-07-09"),
-      isCompleted: false,
-    },
-    {
-      id: 4,
-      title: "Task 4",
-      dueDate: new Date("2025-07-04"),
-      isCompleted: true,
-    },
-    {
-      id: 5,
-      title: "Task 5",
-      dueDate: new Date("2025-07-05"),
-      isCompleted: false,
-    },
-  ];
-
-  const [tasks, setTasks] = useState(initialTasks);
+  const { tasks, isLoading, fetchTasks } = useTasks(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const toggleTaskCompletion = (task: Task) => {
-    setTasks(
-      tasks.map((t) =>
-        t.id === task.id ? { ...t, isCompleted: !t.isCompleted } : t
-      )
-    );
+    // TODO: Implement task status update using updateTask from taskService
+    console.log("Toggle task completion:", task.id);
   };
 
-  const incompleteTasks = tasks.filter((task) => !task.isCompleted);
-  const completeTasks = tasks.filter((task) => task.isCompleted);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await fetchTasks();
+    } catch (error) {
+      console.error("Error refreshing tasks:", error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  const incompleteTasks = tasks.filter((task) => task.status !== "COMPLETED");
+  const completeTasks = tasks.filter((task) => task.status === "COMPLETED");
+
+  if (isLoading && !refreshing) {
+    return (
+      <Screen style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator
+            size="large"
+            color={configs.colors.primary || "#0000ff"}
+          />
+          <Text style={styles.loadingText}>Loading tasks...</Text>
+        </View>
+      </Screen>
+    );
+  }
 
   return (
     <Screen style={styles.container}>
-      {incompleteTasks.length > 0 && (
-        <>
-          <Text style={styles.sectionText}>To Do</Text>
-          {incompleteTasks
-            .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())
-            .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())
-            .map((task) => (
-              <TaskPreview
-                key={task.id}
-                task={task}
-                style={styles.task}
-                textStyle={styles.taskText}
-                onPress={() => toggleTaskCompletion(task)}
-              />
-            ))}
-        </>
-      )}
-      {completeTasks.length > 0 && (
-        <>
-          <Text style={styles.sectionText}>Completed</Text>
-          {completeTasks
-            .filter((task) => task.isCompleted)
-            .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())
-            .map((task) => (
-              <TaskPreview
-                key={task.id}
-                task={task}
-                style={styles.task}
-                textStyle={styles.taskText}
-                onPress={() => toggleTaskCompletion(task)}
-              />
-            ))}
-        </>
-      )}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[configs.colors.primary || "#0000ff"]}
+            tintColor={configs.colors.primary || "#0000ff"}
+          />
+        }
+      >
+        {incompleteTasks.length > 0 && (
+          <>
+            <Text style={styles.sectionText}>To Do</Text>
+            {incompleteTasks
+              .sort(
+                (a, b) =>
+                  new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+              )
+              .map((task) => (
+                <TaskPreview
+                  key={task.id}
+                  task={task}
+                  style={styles.task}
+                  textStyle={styles.taskText}
+                  onPress={() => toggleTaskCompletion(task)}
+                />
+              ))}
+          </>
+        )}
+        {completeTasks.length > 0 && (
+          <>
+            <Text style={styles.sectionText}>Completed</Text>
+            {completeTasks
+              .sort(
+                (a, b) =>
+                  new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+              )
+              .map((task) => (
+                <TaskPreview
+                  key={task.id}
+                  task={task}
+                  style={styles.task}
+                  textStyle={styles.taskText}
+                  onPress={() => toggleTaskCompletion(task)}
+                />
+              ))}
+          </>
+        )}
+        {tasks.length === 0 && !isLoading && (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No tasks found</Text>
+          </View>
+        )}
+      </ScrollView>
     </Screen>
   );
 }
@@ -95,6 +114,26 @@ function TodayScreen() {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: "5%",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: "#666",
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 50,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "#666",
   },
   task: {
     marginBottom: 10,

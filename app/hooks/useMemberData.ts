@@ -11,7 +11,7 @@ export const useMemberData = (shouldFetch: boolean = true) => {
   const fetchMemberData = async () => {
     try {
       setIsLoading(true);
-      if (isAuthenticated && memberId) {
+      if (memberId) {
         const memberData = await getMember(memberId);
         setMember(memberData);
       }

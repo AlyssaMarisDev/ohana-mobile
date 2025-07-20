@@ -9,13 +9,7 @@ import Text from "./Text";
 import colors from "../config/colors";
 import React from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-
-type Task = {
-  id: number;
-  title: string;
-  dueDate: Date;
-  isCompleted: boolean;
-};
+import { Task } from "../services/taskService";
 
 type TaskPreviewProps = {
   task: Task;
@@ -33,13 +27,15 @@ function TaskPreview({
   onPress,
 }: TaskPreviewProps) {
   const today = new Date();
+  const taskDueDate = new Date(task.dueDate);
 
   const isToday =
-    task.dueDate.toLocaleDateString() === today.toLocaleDateString();
+    taskDueDate.toLocaleDateString() === today.toLocaleDateString();
   const isTomorrow =
-    task.dueDate.toLocaleDateString() ===
+    taskDueDate.toLocaleDateString() ===
     new Date(today.getTime() + 24 * 60 * 60 * 1000).toLocaleDateString();
-  const isInPast = task.dueDate.getTime() < today.getTime();
+  const isInPast = taskDueDate.getTime() < today.getTime();
+  const isCompleted = task.status === "COMPLETED";
 
   const doByString = isToday
     ? "Today"
@@ -47,15 +43,15 @@ function TaskPreview({
     ? "Tomorrow"
     : isInPast
     ? "Overdue"
-    : task.dueDate.toLocaleDateString();
+    : taskDueDate.toLocaleDateString();
 
   return (
     <TouchableOpacity
-      style={[styles.container, style, task.isCompleted && styles.completed]}
+      style={[styles.container, style, isCompleted && styles.completed]}
       onPress={onPress}
       activeOpacity={0.8}
     >
-      {task.isCompleted && (
+      {isCompleted && (
         <MaterialCommunityIcons
           name="check"
           size={20}
@@ -63,7 +59,7 @@ function TaskPreview({
           style={styles.checkIcon}
         />
       )}
-      {!task.isCompleted && (
+      {!isCompleted && (
         <MaterialCommunityIcons
           name="checkbox-blank-outline"
           size={20}
@@ -121,4 +117,3 @@ const styles = StyleSheet.create({
 });
 
 export default TaskPreview;
-export type { Task };
