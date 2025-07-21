@@ -5,16 +5,19 @@ import {
   TouchableOpacity,
   ViewStyle,
   ActivityIndicator,
+  View,
 } from "react-native";
 import Text from "./Text";
 import colors from "../config/colors";
 import React from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Task } from "../services/taskService";
+import { useGlobalState } from "../context/GlobalStateContext";
 
 type TaskPreviewProps = {
   task: Task;
   showDueDate?: boolean;
+  showHousehold?: boolean;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   onPress?: () => void;
@@ -23,10 +26,12 @@ type TaskPreviewProps = {
 function TaskPreview({
   task,
   showDueDate = true,
+  showHousehold = false,
   style,
   textStyle,
   onPress,
 }: TaskPreviewProps) {
+  const { households } = useGlobalState();
   const today = new Date();
   const taskDueDate = new Date(task.dueDate);
 
@@ -45,6 +50,8 @@ function TaskPreview({
     : isInPast
     ? "Overdue"
     : taskDueDate.toLocaleDateString();
+
+  const household = households.find((h) => h.id === task.householdId);
 
   return (
     <TouchableOpacity
@@ -67,18 +74,27 @@ function TaskPreview({
           style={styles.checkIcon}
         />
       )}
-      <Text
-        style={[styles.title, textStyle]}
-        numberOfLines={1}
-        ellipsizeMode="tail"
-      >
-        {task.title}
-      </Text>
-      {showDueDate && (
-        <Text style={styles.dueDate} numberOfLines={1} align="right">
-          {doByString}
+      <View style={styles.contentContainer}>
+        <Text
+          style={[styles.title, textStyle]}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
+          {task.title}
         </Text>
-      )}
+        {showDueDate && (
+          <View style={styles.bottomRow}>
+            <Text style={styles.dueDate} numberOfLines={1}>
+              {doByString}
+            </Text>
+            {showHousehold && household && (
+              <Text style={styles.householdName} numberOfLines={1}>
+                {household.name}
+              </Text>
+            )}
+          </View>
+        )}
+      </View>
     </TouchableOpacity>
   );
 }
@@ -89,30 +105,42 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: 10,
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-start",
   },
   text: {
     color: colors.white,
   },
+  contentContainer: {
+    flex: 1,
+    marginLeft: 10,
+  },
   title: {
     fontSize: 20,
     color: colors.white,
-    flex: 1,
+    marginBottom: 2,
+  },
+  bottomRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   dueDate: {
-    fontSize: 16,
+    fontSize: 14,
     color: colors.white,
-    flexShrink: 0,
-    minWidth: 60,
-    marginLeft: 10,
+    opacity: 0.8,
+  },
+  householdName: {
+    fontSize: 14,
+    color: colors.white,
+    opacity: 0.8,
     textAlign: "right",
+    flexShrink: 1,
   },
   completed: {
     backgroundColor: colors.gray2,
   },
   checkIcon: {
-    marginRight: 10,
+    marginTop: 2,
   },
   disabled: {
     opacity: 0.6,

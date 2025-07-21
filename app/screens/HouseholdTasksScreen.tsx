@@ -1,23 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import Screen from "../components/Screen";
 import TaskList from "../components/TaskList";
-import { useTasks } from "../hooks/useTasks";
+import { useTasksByHousehold } from "../hooks/useTasksByHousehold";
 import { useHouseholds } from "../hooks/useHouseholds";
 import { Task, TaskStatus } from "../services/taskService";
 
-function TodayScreen() {
+type HouseholdTasksRouteProp = RouteProp<
+  {
+    HouseholdTasks: { householdId: string };
+  },
+  "HouseholdTasks"
+>;
+
+function HouseholdTasksScreen() {
+  const route = useRoute<HouseholdTasksRouteProp>();
+  const navigation = useNavigation();
+  const { householdId } = route.params;
+
   const {
     tasks,
     isLoading: isLoadingTasks,
     refetch: refetchTasks,
     updateTaskData,
     createNewTask,
-  } = useTasks();
+  } = useTasksByHousehold(householdId, true);
+
   const {
     households,
     isLoading: isLoadingHouseholds,
     refetch: refetchHouseholds,
-  } = useHouseholds(true);
+  } = useHouseholds(false);
 
   const onRefresh = async () => {
     await Promise.all([refetchTasks(), refetchHouseholds()]);
@@ -31,9 +44,20 @@ function TodayScreen() {
     updateTaskData({ ...task, status: newStatus });
   };
 
-  const handleCreateTask = (title: string, householdId: string) => {
-    createNewTask(title, householdId);
+  const handleCreateTask = (title: string, taskHouseholdId: string) => {
+    createNewTask(title, taskHouseholdId);
   };
+
+  const household = households.find((h) => h.id === householdId);
+
+  // Update header title when household data is loaded
+  useEffect(() => {
+    if (household) {
+      (navigation as any).setOptions({
+        title: household.name,
+      });
+    }
+  }, [household, navigation]);
 
   return (
     <Screen style={{ paddingHorizontal: "5%" }}>
@@ -45,10 +69,9 @@ function TodayScreen() {
         onCreateTask={handleCreateTask}
         households={households}
         isLoadingHouseholds={isLoadingHouseholds}
-        showHousehold={true}
       />
     </Screen>
   );
 }
 
-export default TodayScreen;
+export default HouseholdTasksScreen;

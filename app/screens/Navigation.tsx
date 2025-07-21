@@ -10,6 +10,7 @@ import { ActivityIndicator, View } from "react-native";
 import configs from "../config";
 import TodayScreen from "./TodayScreen";
 import ProfileScreen from "./ProfileScreen";
+import HouseholdTasksScreen from "./HouseholdTasksScreen";
 
 // Wrapper component that can access navigation
 function NavigationContent() {
@@ -36,6 +37,11 @@ function NavigationContent() {
   const handleSidebarTodayPress = () => {
     setIsSidebarVisible(false); // Close sidebar
     navigation.navigate("Today" as never); // Navigate to today
+  };
+
+  const handleSidebarHouseholdPress = (householdId: string) => {
+    setIsSidebarVisible(false); // Close sidebar
+    (navigation as any).navigate("HouseholdTasks", { householdId }); // Navigate to household tasks
   };
 
   return (
@@ -82,6 +88,13 @@ function NavigationContent() {
             title: "Profile",
           }}
         />
+        <Stack.Screen
+          name="HouseholdTasks"
+          component={HouseholdTasksScreen}
+          options={{
+            title: "Household Tasks",
+          }}
+        />
       </Stack.Navigator>
 
       {/* Sidebar */}
@@ -90,6 +103,7 @@ function NavigationContent() {
         onClose={handleSidebarClose}
         onProfilePress={handleSidebarProfilePress}
         onTodayPress={handleSidebarTodayPress}
+        onHouseholdPress={handleSidebarHouseholdPress}
       />
     </View>
   );

@@ -24,6 +24,16 @@ export const getTasks = async (): Promise<Task[]> => {
   return response.data;
 };
 
+// Get tasks by household IDs
+export const getTasksforHouseholds = async (
+  householdIds: string[]
+): Promise<Task[]> => {
+  const response = await authenticatedAxios.get(
+    `/tasks?householdIds=${householdIds.join(",")}`
+  );
+  return response.data;
+};
+
 // Get task by ID
 export const getTask = async (taskId: string): Promise<Task> => {
   const response = await authenticatedAxios.get(`/tasks/${taskId}`);

@@ -7,16 +7,19 @@ import {
   Animated,
   Dimensions,
   Image,
+  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import configs from "../config";
 import { useMembers } from "../hooks/useMembers";
+import { useHouseholds } from "../hooks/useHouseholds";
 
 type SidebarProps = {
   isVisible: boolean;
   onClose: () => void;
   onProfilePress: () => void;
   onTodayPress: () => void;
+  onHouseholdPress: (householdId: string) => void;
 };
 
 const { width } = Dimensions.get("window");
@@ -26,9 +29,11 @@ const Sidebar: React.FC<SidebarProps> = ({
   onClose,
   onProfilePress,
   onTodayPress,
+  onHouseholdPress,
 }) => {
   const slideAnim = React.useRef(new Animated.Value(-width)).current;
   const { member } = useMembers(isVisible);
+  const { households, isLoading: householdsLoading } = useHouseholds(isVisible);
 
   React.useEffect(() => {
     if (isVisible) {
@@ -73,35 +78,63 @@ const Sidebar: React.FC<SidebarProps> = ({
           },
         ]}
       >
-        {/* User Profile Section */}
-        <TouchableOpacity
-          style={styles.userProfileSection}
-          onPress={handleProfilePress}
-          activeOpacity={0.7}
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
         >
-          <View style={styles.profileContainer}>
-            <Image
-              source={require("../../assets/icon.png")} // Stock profile image
-              style={styles.profileImage}
-            />
-            <Text style={styles.userName}>{member?.name || "Loading..."}</Text>
-          </View>
-        </TouchableOpacity>
-
-        {/* Menu Items */}
-        <View style={styles.menuSection}>
+          {/* User Profile Section */}
           <TouchableOpacity
-            style={styles.menuItem}
-            onPress={handleTodayPress}
+            style={styles.userProfileSection}
+            onPress={handleProfilePress}
             activeOpacity={0.7}
           >
-            <View style={styles.menuItemLeft}>
-              <Ionicons name="today-outline" size={20} color="#666" />
-              <Text style={styles.menuItemText}>Today</Text>
+            <View style={styles.profileContainer}>
+              <Image
+                source={require("../../assets/icon.png")} // Stock profile image
+                style={styles.profileImage}
+              />
+              <Text style={styles.userName}>
+                {member?.name || "Loading..."}
+              </Text>
             </View>
-            <Ionicons name="chevron-forward" size={16} color="#ccc" />
           </TouchableOpacity>
-        </View>
+
+          {/* Menu Items */}
+          <View style={styles.menuSection}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={handleTodayPress}
+              activeOpacity={0.7}
+            >
+              <View style={styles.menuItemLeft}>
+                <Ionicons name="today-outline" size={20} color="#666" />
+                <Text style={styles.menuItemText}>Today</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={16} color="#ccc" />
+            </TouchableOpacity>
+          </View>
+
+          {/* Households Section */}
+          <View style={styles.householdsSection}>
+            <Text style={styles.sectionTitle}>Households</Text>
+            {householdsLoading ? (
+              <Text style={styles.loadingText}>Loading households...</Text>
+            ) : households.length > 0 ? (
+              households.map((household) => (
+                <TouchableOpacity
+                  key={household.id}
+                  style={styles.householdItem}
+                  onPress={() => onHouseholdPress(household.id)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.householdName}>{household.name}</Text>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <Text style={styles.emptyText}>No households found</Text>
+            )}
+          </View>
+        </ScrollView>
       </Animated.View>
     </View>
   );
@@ -139,6 +172,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  scrollView: {
+    flex: 1,
   },
   userProfileSection: {
     paddingTop: 60, // Account for status bar
@@ -190,6 +226,37 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
     marginLeft: 12,
+  },
+  householdsSection: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 40,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#333",
+    marginBottom: 16,
+  },
+  householdItem: {
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
+  },
+  householdName: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#333",
+  },
+  loadingText: {
+    fontSize: 14,
+    color: "#666",
+    fontStyle: "italic",
+  },
+  emptyText: {
+    fontSize: 14,
+    color: "#666",
+    fontStyle: "italic",
   },
 });
 

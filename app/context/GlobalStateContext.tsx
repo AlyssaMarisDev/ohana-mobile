@@ -1,10 +1,14 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Member } from "../services/memberService";
+import { Household } from "../services/householdService";
 
 type GlobalStateType = {
   member: Member | null;
   setMember: (member: Member | null) => void;
   clearMember: () => void;
+  households: Household[];
+  setHouseholds: (households: Household[]) => void;
+  clearHouseholds: () => void;
   clearAllState: () => void;
 };
 
@@ -14,13 +18,19 @@ const GlobalStateContext = createContext<GlobalStateType | undefined>(
 
 export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
   const [member, setMember] = useState<Member | null>(null);
+  const [households, setHouseholds] = useState<Household[]>([]);
 
   const clearMember = () => {
     setMember(null);
   };
 
+  const clearHouseholds = () => {
+    setHouseholds([]);
+  };
+
   const clearAllState = () => {
     setMember(null);
+    setHouseholds([]);
   };
 
   return (
@@ -29,6 +39,9 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
         member,
         setMember,
         clearMember,
+        households,
+        setHouseholds,
+        clearHouseholds,
         clearAllState,
       }}
     >

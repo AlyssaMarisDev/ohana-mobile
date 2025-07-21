@@ -13,29 +13,46 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Text from "./Text";
 import TextInput from "./TextInput";
 import Button from "./Button";
+import HouseholdSelector from "./HouseholdSelector";
+import { Household } from "../services/householdService";
 import configs from "../config";
 
 interface CreateTaskModalProps {
   visible: boolean;
   onClose: () => void;
-  onSubmit: (title: string) => void;
+  onSubmit: (title: string, householdId: string) => void;
+  households: Household[];
+  isLoadingHouseholds?: boolean;
 }
 
-function CreateTaskModal({ visible, onClose, onSubmit }: CreateTaskModalProps) {
+function CreateTaskModal({
+  visible,
+  onClose,
+  onSubmit,
+  households,
+  isLoadingHouseholds = false,
+}: CreateTaskModalProps) {
   const [title, setTitle] = useState("");
+  const [selectedHouseholdId, setSelectedHouseholdId] = useState<string | null>(
+    null
+  );
 
   const handleSubmit = () => {
-    if (title.trim()) {
-      onSubmit(title.trim());
+    if (title.trim() && selectedHouseholdId) {
+      onSubmit(title.trim(), selectedHouseholdId);
       setTitle("");
+      setSelectedHouseholdId(null);
       onClose();
     }
   };
 
   const handleClose = () => {
     setTitle("");
+    setSelectedHouseholdId(null);
     onClose();
   };
+
+  const isFormValid = title.trim() && selectedHouseholdId;
 
   return (
     <Modal
@@ -74,17 +91,18 @@ function CreateTaskModal({ visible, onClose, onSubmit }: CreateTaskModalProps) {
                   style={styles.input}
                 />
 
+                <HouseholdSelector
+                  households={households}
+                  selectedHouseholdId={selectedHouseholdId}
+                  onSelectHousehold={setSelectedHouseholdId}
+                  isLoading={isLoadingHouseholds}
+                />
+
                 <Button
-                  onPress={
-                    title.trim()
-                      ? handleSubmit
-                      : () => {
-                          onClose();
-                        }
-                  }
+                  onPress={isFormValid ? handleSubmit : () => {}}
                   style={[
                     styles.submitButton,
-                    !title.trim() && styles.disabledButton,
+                    !isFormValid && styles.disabledButton,
                   ]}
                 >
                   {"Create Task"}
@@ -111,7 +129,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 40,
     paddingHorizontal: 20,
-    maxHeight: "50%",
+    maxHeight: "60%",
   },
   header: {
     flexDirection: "row",

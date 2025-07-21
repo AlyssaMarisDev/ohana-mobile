@@ -2,3 +2,4 @@
 export * from "./authService";
 export * from "./memberService";
 export * from "./taskService";
+export * from "./householdService";
