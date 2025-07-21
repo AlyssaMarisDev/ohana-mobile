@@ -1,15 +1,10 @@
-import axios from "axios";
 import tokenManager from "./tokenManager";
-import { API_CONFIG } from "../../../common/config/constants";
+import baseAxios from "./baseAxios";
 
 // Create an axios instance with automatic token refresh
 export const createAuthenticatedAxios = () => {
-  const instance = axios.create({
-    baseURL: API_CONFIG.FULL_URL,
-  });
-
   // Add request interceptor to include access token
-  instance.interceptors.request.use(
+  baseAxios.interceptors.request.use(
     async (config) => {
       const accessToken = await tokenManager.getValidAccessToken();
       if (accessToken) {
@@ -23,7 +18,7 @@ export const createAuthenticatedAxios = () => {
   );
 
   // Add response interceptor to handle 401 errors
-  instance.interceptors.response.use(
+  baseAxios.interceptors.response.use(
     (response) => response,
     async (error) => {
       const originalRequest = error.config;
@@ -35,7 +30,7 @@ export const createAuthenticatedAxios = () => {
           const newAccessToken = await tokenManager.getValidAccessToken();
           if (newAccessToken) {
             originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-            return instance(originalRequest);
+            return baseAxios(originalRequest);
           }
         } catch (refreshError) {
           console.error("Token refresh failed:", refreshError);
@@ -47,7 +42,7 @@ export const createAuthenticatedAxios = () => {
     }
   );
 
-  return instance;
+  return baseAxios;
 };
 
 // Export a default instance for convenience

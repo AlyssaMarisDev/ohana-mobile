@@ -1,5 +1,4 @@
-import axios from "axios";
-import { API_CONFIG } from "../../../common/config/constants";
+import baseAxios from "../utils/baseAxios";
 
 interface AuthResponse {
   accessToken: string;
@@ -11,7 +10,7 @@ export const login = async (
   email: string,
   password: string
 ): Promise<AuthResponse> => {
-  const response = await axios.post(`${API_CONFIG.FULL_URL}/login`, {
+  const response = await baseAxios.post(`/login`, {
     email,
     password,
   });
@@ -23,7 +22,7 @@ export const register = async (
   email: string,
   password: string
 ): Promise<AuthResponse> => {
-  const response = await axios.post(`${API_CONFIG.FULL_URL}/register`, {
+  const response = await baseAxios.post(`/register`, {
     name,
     email,
     password,
@@ -32,7 +31,7 @@ export const register = async (
 };
 
 export const refresh = async (refreshToken: string): Promise<AuthResponse> => {
-  const response = await axios.post(`${API_CONFIG.FULL_URL}/refresh`, {
+  const response = await baseAxios.post(`/refresh`, {
     refreshToken,
   });
   return response.data;
