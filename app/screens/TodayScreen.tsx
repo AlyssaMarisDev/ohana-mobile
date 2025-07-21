@@ -10,22 +10,16 @@ import {
   RefreshControl,
 } from "react-native";
 import { useTasks } from "../hooks/useTasks";
-import { Task } from "../services/taskService";
 import configs from "../config";
 
 function TodayScreen() {
-  const { tasks, isLoading, fetchTasks } = useTasks(true);
+  const { tasks, isLoading, refetch, toggleTaskCompletion } = useTasks();
   const [refreshing, setRefreshing] = useState(false);
-
-  const toggleTaskCompletion = (task: Task) => {
-    // TODO: Implement task status update using updateTask from taskService
-    console.log("Toggle task completion:", task.id);
-  };
 
   const onRefresh = async () => {
     setRefreshing(true);
     try {
-      await fetchTasks();
+      await refetch();
     } catch (error) {
       console.error("Error refreshing tasks:", error);
     } finally {

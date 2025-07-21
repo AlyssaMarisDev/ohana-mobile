@@ -4,6 +4,7 @@ import {
   TextStyle,
   TouchableOpacity,
   ViewStyle,
+  ActivityIndicator,
 } from "react-native";
 import Text from "./Text";
 import colors from "../config/colors";
@@ -51,15 +52,14 @@ function TaskPreview({
       onPress={onPress}
       activeOpacity={0.8}
     >
-      {isCompleted && (
+      {isCompleted ? (
         <MaterialCommunityIcons
           name="check"
           size={20}
           color={colors.white}
           style={styles.checkIcon}
         />
-      )}
-      {!isCompleted && (
+      ) : (
         <MaterialCommunityIcons
           name="checkbox-blank-outline"
           size={20}
@@ -113,6 +113,9 @@ const styles = StyleSheet.create({
   },
   checkIcon: {
     marginRight: 10,
+  },
+  disabled: {
+    opacity: 0.6,
   },
 });
 

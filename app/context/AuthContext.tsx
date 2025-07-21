@@ -11,6 +11,7 @@ import {
   register as apiRegister,
 } from "../services/authService";
 import { useGlobalState } from "./GlobalStateContext";
+import { useQueryClient } from "@tanstack/react-query";
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -29,6 +30,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [memberId, setMemberId] = useState<string | null>(null);
   const { clearAllState } = useGlobalState();
+  const queryClient = useQueryClient();
 
   // Check authentication status on app start
   useEffect(() => {
@@ -60,12 +62,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } else {
         setMemberId(null);
         clearAllState();
+        // Clear React Query cache
+        queryClient.clear();
       }
     } catch (error) {
       console.error("Error checking auth status:", error);
       setIsAuthenticated(false);
       setMemberId(null);
       clearAllState();
+      // Clear React Query cache
+      queryClient.clear();
     } finally {
       setIsLoading(false);
     }
@@ -115,12 +121,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsAuthenticated(false);
       setMemberId(null);
       clearAllState();
+      // Clear React Query cache
+      queryClient.clear();
     } catch (error) {
       console.error("Logout error:", error);
       // Even if logout fails, clear local state
       setIsAuthenticated(false);
       setMemberId(null);
       clearAllState();
+      // Clear React Query cache
+      queryClient.clear();
     }
   };
 

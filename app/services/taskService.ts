@@ -11,7 +11,12 @@ export interface Task {
   householdId: string;
 }
 
-export type TaskStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
+export enum TaskStatus {
+  PENDING = "PENDING",
+  IN_PROGRESS = "IN_PROGRESS",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED",
+}
 
 // Get all tasks for the authenticated user
 export const getTasks = async (): Promise<Task[]> => {
@@ -27,7 +32,7 @@ export const getTask = async (taskId: string): Promise<Task> => {
 
 // Create a new task
 export const createTask = async (
-  taskData: Omit<Task, "id" | "createdBy">
+  taskData: Omit<Task, "createdBy">
 ): Promise<Task> => {
   const response = await authenticatedAxios.post("/tasks", taskData);
   return response.data;
@@ -36,8 +41,9 @@ export const createTask = async (
 // Update a task
 export const updateTask = async (
   taskId: string,
-  taskData: Partial<Omit<Task, "id" | "createdBy" | "householdId">>
+  taskData: Omit<Task, "id" | "createdBy" | "householdId">
 ): Promise<Task> => {
+  console.log("Updating task:", taskId, taskData);
   const response = await authenticatedAxios.put(`/tasks/${taskId}`, taskData);
   return response.data;
 };
