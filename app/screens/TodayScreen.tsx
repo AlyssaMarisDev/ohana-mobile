@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Screen from "../components/Screen";
 import TaskPreview from "../components/TaskPreview";
 import Text from "../components/Text";
+import FloatingActionButton from "../components/FloatingActionButton";
+import CreateTaskModal from "../components/CreateTaskModal";
 import {
   StyleSheet,
   ActivityIndicator,
@@ -14,8 +16,10 @@ import configs from "../config";
 import { Task, TaskStatus } from "../services/taskService";
 
 function TodayScreen() {
-  const { tasks, isLoading, refetch, updateTaskData } = useTasks();
+  const { tasks, isLoading, refetch, updateTaskData, createNewTask } =
+    useTasks();
   const [refreshing, setRefreshing] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -34,6 +38,10 @@ function TodayScreen() {
         ? TaskStatus.PENDING
         : TaskStatus.COMPLETED;
     updateTaskData({ ...task, status: newStatus });
+  };
+
+  const handleCreateTask = (title: string) => {
+    createNewTask(title);
   };
 
   const incompleteTasks = tasks.filter((task) => task.status !== "COMPLETED");
@@ -110,6 +118,18 @@ function TodayScreen() {
           </View>
         )}
       </ScrollView>
+
+      <FloatingActionButton
+        onPress={() => setIsModalVisible(true)}
+        icon="plus"
+        style={styles.fab}
+      />
+
+      <CreateTaskModal
+        visible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        onSubmit={handleCreateTask}
+      />
     </Screen>
   );
 }
@@ -149,6 +169,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
     marginLeft: 5,
+  },
+  fab: {
+    position: "absolute",
+    bottom: 30,
+    right: 30,
   },
 });
 

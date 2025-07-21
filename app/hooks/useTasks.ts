@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getTasks,
   updateTask,
+  createTask,
   Task,
   TaskStatus,
 } from "../services/taskService";
@@ -22,6 +23,31 @@ export const useTasks = () => {
     queryFn: getTasks,
     enabled: isAuthenticated,
     staleTime: 1000 * 60 * 2, // 2 minutes
+  });
+
+  // Create task mutation
+  const createTaskMutation = useMutation({
+    mutationFn: async (taskData: { title: string }) => {
+      return await createTask({
+        id: "", // This will be set by the backend
+        title: taskData.title,
+        description: "",
+        dueDate: new Date().toISOString(),
+        status: TaskStatus.PENDING,
+        householdId: "", // This will be set by the backend
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+    onError: (err) => {
+      console.error("Task creation failed:", err);
+      alert(
+        `Failed to create task: ${
+          err instanceof Error ? err.message : "Unknown error"
+        }`
+      );
+    },
   });
 
   // Update task with optimistic updates
@@ -89,11 +115,16 @@ export const useTasks = () => {
     });
   };
 
+  const createNewTask = (title: string) => {
+    createTaskMutation.mutate({ title });
+  };
+
   return {
     tasks,
     isLoading,
     error,
     updateTaskData,
+    createNewTask,
     refetch,
   };
 };
