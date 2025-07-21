@@ -48,6 +48,16 @@ function HouseholdTasksScreen() {
     createNewTask(title, taskHouseholdId);
   };
 
+  const handleUpdateTask = (
+    taskId: string,
+    data: Omit<Task, "id" | "createdBy" | "householdId">
+  ) => {
+    const task = tasks.find((t) => t.id === taskId);
+    if (task) {
+      updateTaskData({ ...task, ...data });
+    }
+  };
+
   const household = households.find((h) => h.id === householdId);
 
   // Update header title when household data is loaded
@@ -66,6 +76,7 @@ function HouseholdTasksScreen() {
         isLoading={isLoadingTasks}
         onRefresh={onRefresh}
         onToggleTask={toggleTaskCompletion}
+        onUpdateTask={handleUpdateTask}
         onCreateTask={handleCreateTask}
         households={households}
         isLoadingHouseholds={isLoadingHouseholds}

@@ -22,6 +22,7 @@ type TaskPreviewProps = {
   textStyle?: StyleProp<TextStyle>;
   textColor?: string;
   onPress?: () => void;
+  onUpdateTask?: (task: Task) => void;
 };
 
 function TaskPreview({
@@ -32,6 +33,7 @@ function TaskPreview({
   textStyle,
   textColor,
   onPress,
+  onUpdateTask,
 }: TaskPreviewProps) {
   const { households } = useGlobalState();
   const today = new Date();
@@ -55,28 +57,47 @@ function TaskPreview({
 
   const household = households.find((h) => h.id === task.householdId);
 
+  const handleCheckboxPress = () => {
+    if (onPress) {
+      onPress();
+    }
+  };
+
+  const handleContentPress = () => {
+    if (onUpdateTask) {
+      onUpdateTask(task);
+    }
+  };
+
   return (
-    <TouchableOpacity
-      style={[styles.container, style]}
-      onPress={onPress}
-      activeOpacity={0.8}
-    >
-      {isCompleted ? (
-        <MaterialCommunityIcons
-          name="check"
-          size={18}
-          color={textColor || colors.white}
-          style={styles.checkIcon}
-        />
-      ) : (
-        <MaterialCommunityIcons
-          name="checkbox-blank-outline"
-          size={18}
-          color={textColor || colors.white}
-          style={styles.checkIcon}
-        />
-      )}
-      <View style={styles.contentContainer}>
+    <View style={[styles.container, style]}>
+      <TouchableOpacity
+        onPress={handleCheckboxPress}
+        activeOpacity={0.8}
+        style={styles.checkboxContainer}
+      >
+        {isCompleted ? (
+          <MaterialCommunityIcons
+            name="checkbox-marked"
+            size={22}
+            color={textColor || colors.white}
+            style={styles.checkIcon}
+          />
+        ) : (
+          <MaterialCommunityIcons
+            name="checkbox-blank-outline"
+            size={22}
+            color={textColor || colors.white}
+            style={styles.checkIcon}
+          />
+        )}
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.contentContainer}
+        onPress={handleContentPress}
+        activeOpacity={0.8}
+      >
         <Text
           style={[
             styles.title,
@@ -109,8 +130,8 @@ function TaskPreview({
             )}
           </View>
         )}
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </View>
   );
 }
 
@@ -154,6 +175,9 @@ const styles = StyleSheet.create({
   },
   disabled: {
     opacity: 0.6,
+  },
+  checkboxContainer: {
+    padding: 5,
   },
 });
 

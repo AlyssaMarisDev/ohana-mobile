@@ -9,6 +9,7 @@ interface TaskListBoxProps {
   title: string;
   tasks: Task[];
   onToggleTask: (task: Task) => void;
+  onUpdateTask?: (task: Task) => void;
   showHousehold?: boolean;
   backgroundColor?: string;
   textColor?: string;
@@ -18,6 +19,7 @@ function TaskList({
   title,
   tasks,
   onToggleTask,
+  onUpdateTask,
   showHousehold = false,
   backgroundColor = configs.colors.primary,
   textColor = configs.colors.white,
@@ -41,6 +43,7 @@ function TaskList({
               task={task}
               style={styles.task}
               onPress={() => onToggleTask(task)}
+              onUpdateTask={onUpdateTask}
               showHousehold={showHousehold}
               textColor={textColor}
             />

@@ -35,6 +35,16 @@ function TodayScreen() {
     createNewTask(title, householdId);
   };
 
+  const handleUpdateTask = (
+    taskId: string,
+    data: Omit<Task, "id" | "createdBy" | "householdId">
+  ) => {
+    const task = tasks.find((t) => t.id === taskId);
+    if (task) {
+      updateTaskData({ ...task, ...data });
+    }
+  };
+
   return (
     <Screen style={{ paddingHorizontal: "5%" }}>
       <TaskList
@@ -42,6 +52,7 @@ function TodayScreen() {
         isLoading={isLoadingTasks}
         onRefresh={onRefresh}
         onToggleTask={toggleTaskCompletion}
+        onUpdateTask={handleUpdateTask}
         onCreateTask={handleCreateTask}
         households={households}
         isLoadingHouseholds={isLoadingHouseholds}

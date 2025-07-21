@@ -10,6 +10,7 @@ import TaskList from "./TaskList";
 import Text from "../Text";
 import FloatingActionButton from "../FloatingActionButton";
 import CreateTaskModal from "../CreateTaskModal";
+import UpdateTaskModal from "../UpdateTaskModal";
 import { Task } from "../../services/taskService";
 import { Household } from "../../services/householdService";
 import configs from "../../config";
@@ -19,6 +20,10 @@ interface TaskListProps {
   isLoading: boolean;
   onRefresh: () => Promise<void>;
   onToggleTask: (task: Task) => void;
+  onUpdateTask: (
+    taskId: string,
+    data: Omit<Task, "id" | "createdBy" | "householdId">
+  ) => void;
   onCreateTask: (title: string, householdId: string) => void;
   households: Household[];
   isLoadingHouseholds?: boolean;
@@ -32,6 +37,7 @@ function MultiTaskList({
   isLoading,
   onRefresh,
   onToggleTask,
+  onUpdateTask,
   onCreateTask,
   households,
   isLoadingHouseholds = false,
@@ -40,7 +46,9 @@ function MultiTaskList({
   preSelectedHouseholdId,
 }: TaskListProps) {
   const [refreshing, setRefreshing] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
+  const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -55,6 +63,25 @@ function MultiTaskList({
 
   const handleCreateTask = (title: string, householdId: string) => {
     onCreateTask(title, householdId);
+  };
+
+  const handleUpdateTask = (task: Task) => {
+    setSelectedTask(task);
+    setIsUpdateModalVisible(true);
+  };
+
+  const handleUpdateTaskSubmit = (
+    taskId: string,
+    data: Omit<Task, "id" | "createdBy" | "householdId">
+  ) => {
+    onUpdateTask(taskId, data);
+    setIsUpdateModalVisible(false);
+    setSelectedTask(null);
+  };
+
+  const handleUpdateModalClose = () => {
+    setIsUpdateModalVisible(false);
+    setSelectedTask(null);
   };
 
   const incompleteTasks = tasks.filter((task) => task.status !== "COMPLETED");
@@ -89,6 +116,7 @@ function MultiTaskList({
           title="To Do"
           tasks={incompleteTasks}
           onToggleTask={onToggleTask}
+          onUpdateTask={handleUpdateTask}
           showHousehold={showHousehold}
           backgroundColor={configs.colors.primary}
         />
@@ -97,6 +125,7 @@ function MultiTaskList({
           title="Completed"
           tasks={completeTasks}
           onToggleTask={onToggleTask}
+          onUpdateTask={handleUpdateTask}
           showHousehold={showHousehold}
           backgroundColor={configs.colors.gray2}
         />
@@ -110,19 +139,26 @@ function MultiTaskList({
 
       {showCreateButton && (
         <FloatingActionButton
-          onPress={() => setIsModalVisible(true)}
+          onPress={() => setIsCreateModalVisible(true)}
           icon="plus"
           style={styles.fab}
         />
       )}
 
       <CreateTaskModal
-        visible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
+        visible={isCreateModalVisible}
+        onClose={() => setIsCreateModalVisible(false)}
         onSubmit={handleCreateTask}
         households={households}
         isLoadingHouseholds={isLoadingHouseholds}
         preSelectedHouseholdId={preSelectedHouseholdId}
+      />
+
+      <UpdateTaskModal
+        visible={isUpdateModalVisible}
+        onClose={handleUpdateModalClose}
+        onSubmit={handleUpdateTaskSubmit}
+        task={selectedTask}
       />
     </>
   );
