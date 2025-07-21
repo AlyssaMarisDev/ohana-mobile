@@ -7,12 +7,12 @@ import {
   ActivityIndicator,
   View,
 } from "react-native";
-import Text from "./Text";
-import colors from "../config/colors";
+import Text from "../Text";
+import colors from "../../config/colors";
 import React from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { Task } from "../services/taskService";
-import { useGlobalState } from "../context/GlobalStateContext";
+import { Task } from "../../services/taskService";
+import { useGlobalState } from "../../context/GlobalStateContext";
 
 type TaskPreviewProps = {
   task: Task;
@@ -20,6 +20,7 @@ type TaskPreviewProps = {
   showHousehold?: boolean;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
+  textColor?: string;
   onPress?: () => void;
 };
 
@@ -29,6 +30,7 @@ function TaskPreview({
   showHousehold = false,
   style,
   textStyle,
+  textColor,
   onPress,
 }: TaskPreviewProps) {
   const { households } = useGlobalState();
@@ -55,28 +57,32 @@ function TaskPreview({
 
   return (
     <TouchableOpacity
-      style={[styles.container, style, isCompleted && styles.completed]}
+      style={[styles.container, style]}
       onPress={onPress}
       activeOpacity={0.8}
     >
       {isCompleted ? (
         <MaterialCommunityIcons
           name="check"
-          size={20}
-          color={colors.white}
+          size={18}
+          color={textColor || colors.white}
           style={styles.checkIcon}
         />
       ) : (
         <MaterialCommunityIcons
           name="checkbox-blank-outline"
-          size={20}
-          color={colors.white}
+          size={18}
+          color={textColor || colors.white}
           style={styles.checkIcon}
         />
       )}
       <View style={styles.contentContainer}>
         <Text
-          style={[styles.title, textStyle]}
+          style={[
+            styles.title,
+            textStyle,
+            { color: textColor || colors.white },
+          ]}
           numberOfLines={1}
           ellipsizeMode="tail"
         >
@@ -84,11 +90,20 @@ function TaskPreview({
         </Text>
         {showDueDate && (
           <View style={styles.bottomRow}>
-            <Text style={styles.dueDate} numberOfLines={1}>
+            <Text
+              style={[styles.dueDate, { color: textColor || colors.white }]}
+              numberOfLines={1}
+            >
               {doByString}
             </Text>
             {showHousehold && household && (
-              <Text style={styles.householdName} numberOfLines={1}>
+              <Text
+                style={[
+                  styles.householdName,
+                  { color: textColor || colors.white },
+                ]}
+                numberOfLines={1}
+              >
                 {household.name}
               </Text>
             )}
@@ -101,9 +116,6 @@ function TaskPreview({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    backgroundColor: colors.primary,
-    borderRadius: 10,
     flexDirection: "row",
     alignItems: "flex-start",
   },
@@ -115,7 +127,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   title: {
-    fontSize: 20,
+    fontSize: 16,
     color: colors.white,
     marginBottom: 2,
   },
@@ -125,19 +137,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   dueDate: {
-    fontSize: 14,
+    fontSize: 12,
     color: colors.white,
     opacity: 0.8,
   },
   householdName: {
-    fontSize: 14,
+    fontSize: 12,
     color: colors.white,
     opacity: 0.8,
     textAlign: "right",
     flexShrink: 1,
-  },
-  completed: {
-    backgroundColor: colors.gray2,
   },
   checkIcon: {
     marginTop: 2,

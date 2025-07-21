@@ -6,13 +6,13 @@ import {
   ScrollView,
   RefreshControl,
 } from "react-native";
-import TaskPreview from "./TaskPreview";
-import Text from "./Text";
-import FloatingActionButton from "./FloatingActionButton";
-import CreateTaskModal from "./CreateTaskModal";
-import { Task, TaskStatus } from "../services/taskService";
-import { Household } from "../services/householdService";
-import configs from "../config";
+import TaskList from "./TaskList";
+import Text from "../Text";
+import FloatingActionButton from "../FloatingActionButton";
+import CreateTaskModal from "../CreateTaskModal";
+import { Task } from "../../services/taskService";
+import { Household } from "../../services/householdService";
+import configs from "../../config";
 
 interface TaskListProps {
   tasks: Task[];
@@ -24,10 +24,9 @@ interface TaskListProps {
   isLoadingHouseholds?: boolean;
   showCreateButton?: boolean;
   showHousehold?: boolean;
-  title?: string;
 }
 
-function TaskList({
+function MultiTaskList({
   tasks,
   isLoading,
   onRefresh,
@@ -37,7 +36,6 @@ function TaskList({
   isLoadingHouseholds = false,
   showCreateButton = true,
   showHousehold = false,
-  title,
 }: TaskListProps) {
   const [refreshing, setRefreshing] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -85,48 +83,22 @@ function TaskList({
           />
         }
       >
-        {title && <Text style={styles.titleText}>{title}</Text>}
+        <TaskList
+          title="To Do"
+          tasks={incompleteTasks}
+          onToggleTask={onToggleTask}
+          showHousehold={showHousehold}
+          backgroundColor={configs.colors.primary}
+        />
 
-        {incompleteTasks.length > 0 && (
-          <>
-            <Text style={styles.sectionText}>To Do</Text>
-            {incompleteTasks
-              .sort(
-                (a, b) =>
-                  new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
-              )
-              .map((task) => (
-                <TaskPreview
-                  key={task.id}
-                  task={task}
-                  style={styles.task}
-                  textStyle={styles.taskText}
-                  onPress={() => onToggleTask(task)}
-                  showHousehold={showHousehold}
-                />
-              ))}
-          </>
-        )}
-        {completeTasks.length > 0 && (
-          <>
-            <Text style={styles.sectionText}>Completed</Text>
-            {completeTasks
-              .sort(
-                (a, b) =>
-                  new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
-              )
-              .map((task) => (
-                <TaskPreview
-                  key={task.id}
-                  task={task}
-                  style={styles.task}
-                  textStyle={styles.taskText}
-                  onPress={() => onToggleTask(task)}
-                  showHousehold={showHousehold}
-                />
-              ))}
-          </>
-        )}
+        <TaskList
+          title="Completed"
+          tasks={completeTasks}
+          onToggleTask={onToggleTask}
+          showHousehold={showHousehold}
+          backgroundColor={configs.colors.gray2}
+        />
+
         {tasks.length === 0 && !isLoading && (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>No tasks found</Text>
@@ -181,18 +153,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#666",
   },
-  task: {
-    marginBottom: 10,
-  },
-  taskText: {
-    fontSize: 16,
-  },
-  sectionText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
-    marginLeft: 5,
-  },
   fab: {
     position: "absolute",
     bottom: 30,
@@ -200,4 +160,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TaskList;
+export default MultiTaskList;

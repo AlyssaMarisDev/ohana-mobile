@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import Screen from "../components/Screen";
-import TaskList from "../components/TaskList";
+import MultiTaskList from "../components/tasks/MultiTaskList";
 import { useTasksByHousehold } from "../hooks/useTasksByHousehold";
 import { useHouseholds } from "../hooks/useHouseholds";
 import { Task, TaskStatus } from "../services/taskService";
@@ -61,7 +61,7 @@ function HouseholdTasksScreen() {
 
   return (
     <Screen style={{ paddingHorizontal: "5%" }}>
-      <TaskList
+      <MultiTaskList
         tasks={tasks}
         isLoading={isLoadingTasks}
         onRefresh={onRefresh}

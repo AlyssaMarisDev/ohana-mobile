@@ -1,6 +1,6 @@
 import React from "react";
 import Screen from "../components/Screen";
-import TaskList from "../components/TaskList";
+import TaskList from "../components/tasks/MultiTaskList";
 import { useTasks } from "../hooks/useTasks";
 import { useHouseholds } from "../hooks/useHouseholds";
 import { Task, TaskStatus } from "../services/taskService";
