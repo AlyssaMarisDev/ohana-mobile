@@ -11,9 +11,10 @@ import {
 } from "react-native";
 import { useTasks } from "../hooks/useTasks";
 import configs from "../config";
+import { Task, TaskStatus } from "../services/taskService";
 
 function TodayScreen() {
-  const { tasks, isLoading, refetch, toggleTaskCompletion } = useTasks();
+  const { tasks, isLoading, refetch, updateTaskData } = useTasks();
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
@@ -25,6 +26,14 @@ function TodayScreen() {
     } finally {
       setRefreshing(false);
     }
+  };
+
+  const toggleTaskCompletion = (task: Task) => {
+    const newStatus =
+      task.status === TaskStatus.COMPLETED
+        ? TaskStatus.PENDING
+        : TaskStatus.COMPLETED;
+    updateTaskData({ ...task, status: newStatus });
   };
 
   const incompleteTasks = tasks.filter((task) => task.status !== "COMPLETED");

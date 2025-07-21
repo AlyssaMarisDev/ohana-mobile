@@ -12,11 +12,11 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import Screen from "../components/Screen";
 import configs from "../config";
-import { useMemberData } from "../hooks/useMemberData";
+import { useMembers } from "../hooks/useMembers";
 import { useAuth } from "../context/AuthContext";
 
 function ProfileScreen() {
-  const { member, fetchMemberData, isLoading } = useMemberData(true);
+  const { member, refetch, isLoading } = useMembers(true);
   const { logout, isAuthenticated } = useAuth();
   const [refreshing, setRefreshing] = useState(false);
 
@@ -32,7 +32,7 @@ function ProfileScreen() {
     setRefreshing(true);
     try {
       if (isAuthenticated) {
-        await fetchMemberData();
+        await refetch();
       } else {
         // If user is not authenticated, they should be redirected to login
         console.log("User not authenticated during refresh");

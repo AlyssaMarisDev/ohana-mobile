@@ -11,12 +11,6 @@ export interface Member {
   email: string;
 }
 
-export interface UpdateMemberRequest {
-  name: string;
-  age: number;
-  gender: string;
-}
-
 // Get member by ID
 export const getMember = async (memberId: string): Promise<Member> => {
   const response = await authenticatedAxios.get(`/members/${memberId}`);
@@ -26,7 +20,7 @@ export const getMember = async (memberId: string): Promise<Member> => {
 // Update member by ID
 export const updateMember = async (
   memberId: string,
-  memberData: UpdateMemberRequest
+  memberData: Omit<Member, "id" | "email">
 ): Promise<Member> => {
   const response = await authenticatedAxios.put(
     `/members/${memberId}`,

@@ -82,15 +82,10 @@ export const useTasks = () => {
     },
   });
 
-  const toggleTaskCompletion = (task: Task) => {
-    const newStatus =
-      task.status === TaskStatus.COMPLETED
-        ? TaskStatus.PENDING
-        : TaskStatus.COMPLETED;
-
+  const updateTaskData = (task: Omit<Task, "createdBy" | "householdId">) => {
     updateTaskMutation.mutate({
       taskId: task.id,
-      data: { ...task, status: newStatus },
+      data: task,
     });
   };
 
@@ -98,7 +93,7 @@ export const useTasks = () => {
     tasks,
     isLoading,
     error,
-    toggleTaskCompletion,
+    updateTaskData,
     refetch,
   };
 };
