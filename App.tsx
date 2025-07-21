@@ -1,6 +1,6 @@
-import { AuthProvider } from "./app/context/AuthContext";
-import { GlobalStateProvider } from "./app/context/GlobalStateContext";
-import Navigation from "./app/screens/Navigation";
+import { AuthProvider } from "./app/features/auth/context/AuthContext";
+import { GlobalStateProvider } from "./app/common/context/GlobalStateContext";
+import Navigation from "./app/features/navigation/Navigation";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Create a client
