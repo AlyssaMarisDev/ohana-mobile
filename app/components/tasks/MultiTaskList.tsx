@@ -24,6 +24,7 @@ interface TaskListProps {
   isLoadingHouseholds?: boolean;
   showCreateButton?: boolean;
   showHousehold?: boolean;
+  preSelectedHouseholdId?: string;
 }
 
 function MultiTaskList({
@@ -36,6 +37,7 @@ function MultiTaskList({
   isLoadingHouseholds = false,
   showCreateButton = true,
   showHousehold = false,
+  preSelectedHouseholdId,
 }: TaskListProps) {
   const [refreshing, setRefreshing] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -120,6 +122,7 @@ function MultiTaskList({
         onSubmit={handleCreateTask}
         households={households}
         isLoadingHouseholds={isLoadingHouseholds}
+        preSelectedHouseholdId={preSelectedHouseholdId}
       />
     </>
   );

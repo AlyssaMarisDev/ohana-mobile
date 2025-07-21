@@ -23,6 +23,7 @@ interface CreateTaskModalProps {
   onSubmit: (title: string, householdId: string) => void;
   households: Household[];
   isLoadingHouseholds?: boolean;
+  preSelectedHouseholdId?: string;
 }
 
 function CreateTaskModal({
@@ -31,24 +32,30 @@ function CreateTaskModal({
   onSubmit,
   households,
   isLoadingHouseholds = false,
+  preSelectedHouseholdId,
 }: CreateTaskModalProps) {
   const [title, setTitle] = useState("");
   const [selectedHouseholdId, setSelectedHouseholdId] = useState<string | null>(
-    null
+    preSelectedHouseholdId || null
   );
+
+  // Update selected household when preSelectedHouseholdId changes
+  React.useEffect(() => {
+    setSelectedHouseholdId(preSelectedHouseholdId || null);
+  }, [preSelectedHouseholdId]);
 
   const handleSubmit = () => {
     if (title.trim() && selectedHouseholdId) {
       onSubmit(title.trim(), selectedHouseholdId);
       setTitle("");
-      setSelectedHouseholdId(null);
+      setSelectedHouseholdId(preSelectedHouseholdId || null);
       onClose();
     }
   };
 
   const handleClose = () => {
     setTitle("");
-    setSelectedHouseholdId(null);
+    setSelectedHouseholdId(preSelectedHouseholdId || null);
     onClose();
   };
 
@@ -91,12 +98,14 @@ function CreateTaskModal({
                   style={styles.input}
                 />
 
-                <HouseholdSelector
-                  households={households}
-                  selectedHouseholdId={selectedHouseholdId}
-                  onSelectHousehold={setSelectedHouseholdId}
-                  isLoading={isLoadingHouseholds}
-                />
+                {!preSelectedHouseholdId && (
+                  <HouseholdSelector
+                    households={households}
+                    selectedHouseholdId={selectedHouseholdId}
+                    onSelectHousehold={setSelectedHouseholdId}
+                    isLoading={isLoadingHouseholds}
+                  />
+                )}
 
                 <Button
                   onPress={isFormValid ? handleSubmit : () => {}}

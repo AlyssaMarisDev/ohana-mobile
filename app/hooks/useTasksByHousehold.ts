@@ -122,14 +122,6 @@ export const useTasksByHousehold = (
         }`
       );
     },
-
-    // Always refetch after error or success to ensure data consistency
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["tasks", "household", householdId],
-      });
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
-    },
   });
 
   const updateTaskData = (task: Omit<Task, "createdBy" | "householdId">) => {

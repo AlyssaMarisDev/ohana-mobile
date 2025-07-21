@@ -69,6 +69,7 @@ function HouseholdTasksScreen() {
         onCreateTask={handleCreateTask}
         households={households}
         isLoadingHouseholds={isLoadingHouseholds}
+        preSelectedHouseholdId={householdId}
       />
     </Screen>
   );
