@@ -3,9 +3,9 @@ import {
   StyleSheet,
   StyleProp,
   ViewStyle,
-} from "react-native";
-import configs from "../config";
-import Text from "./Text";
+} from 'react-native';
+import configs from '../config';
+import Text from './Text';
 
 interface ButtonProps {
   onPress: (arg0: any) => void;
@@ -17,7 +17,7 @@ interface ButtonProps {
 
 function Button({
   children,
-  color,
+  color: _color,
   style,
   onPress,
   activeOpacity = 0.7,
@@ -39,10 +39,10 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: configs.colors.primary,
     borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 15,
-    width: "100%",
+    width: '100%',
   },
   buttonText: {
     color: configs.colors.white,

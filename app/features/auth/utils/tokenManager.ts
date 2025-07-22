@@ -1,6 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { jwtDecode } from "jwt-decode";
-import { refresh as apiRefresh } from "../services/authService";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { jwtDecode } from 'jwt-decode';
+import { refresh as apiRefresh } from '../services/authService';
 
 interface JWTPayload {
   exp: number;
@@ -17,9 +17,8 @@ interface TokenResponse {
   id?: string; // Only present in register response
 }
 
-const ACCESS_TOKEN_KEY = "access_token";
-const REFRESH_TOKEN_KEY = "refresh_token";
-const REFRESH_THRESHOLD_MINUTES = 5; // Refresh token if it expires within 5 minutes
+const ACCESS_TOKEN_KEY = 'access_token';
+const REFRESH_TOKEN_KEY = 'refresh_token';
 
 export class TokenManager {
   private static instance: TokenManager;
@@ -42,7 +41,7 @@ export class TokenManager {
         AsyncStorage.setItem(REFRESH_TOKEN_KEY, refreshToken),
       ]);
     } catch (error) {
-      console.error("Error storing tokens:", error);
+      console.error('Error storing tokens:', error);
       throw error;
     }
   }
@@ -59,7 +58,7 @@ export class TokenManager {
       ]);
       return { accessToken, refreshToken };
     } catch (error) {
-      console.error("Error getting tokens:", error);
+      console.error('Error getting tokens:', error);
       return { accessToken: null, refreshToken: null };
     }
   }
@@ -72,7 +71,7 @@ export class TokenManager {
         AsyncStorage.removeItem(REFRESH_TOKEN_KEY),
       ]);
     } catch (error) {
-      console.error("Error clearing tokens:", error);
+      console.error('Error clearing tokens:', error);
       throw error;
     }
   }
@@ -83,7 +82,7 @@ export class TokenManager {
       const decoded = jwtDecode(token);
       return decoded as JWTPayload;
     } catch (error) {
-      console.error("Error decoding token:", error);
+      console.error('Error decoding token:', error);
       return null;
     }
   }
@@ -120,7 +119,7 @@ export class TokenManager {
       const newTokens = await this.refreshAccessToken(refreshToken);
       return newTokens.accessToken;
     } catch (error) {
-      console.error("Error refreshing access token:", error);
+      console.error('Error refreshing access token:', error);
       await this.clearTokens();
       return null;
     }
@@ -152,7 +151,7 @@ export class TokenManager {
 
       return tokens;
     } catch (error) {
-      console.error("Error performing token refresh:", error);
+      console.error('Error performing token refresh:', error);
       throw error;
     }
   }

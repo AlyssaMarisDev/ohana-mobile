@@ -4,15 +4,14 @@ import {
   TextStyle,
   TouchableOpacity,
   ViewStyle,
-  ActivityIndicator,
   View,
-} from "react-native";
-import Text from "../../../common/components/Text";
-import colors from "../../../common/config/colors";
-import React from "react";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { Task } from "../services/taskService";
-import { useGlobalState } from "../../../common/context/GlobalStateContext";
+} from 'react-native';
+import Text from '../../../common/components/Text';
+import colors from '../../../common/config/colors';
+import React from 'react';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { Task } from '../services/taskService';
+import { useGlobalState } from '../../../common/context/GlobalStateContext';
 
 type TaskPreviewProps = {
   task: Task;
@@ -45,17 +44,17 @@ function TaskPreview({
     taskDueDate.toLocaleDateString() ===
     new Date(today.getTime() + 24 * 60 * 60 * 1000).toLocaleDateString();
   const isInPast = taskDueDate.getTime() < today.getTime();
-  const isCompleted = task.status === "COMPLETED";
+  const isCompleted = task.status === 'COMPLETED';
 
   const doByString = isToday
-    ? "Today"
+    ? 'Today'
     : isTomorrow
-    ? "Tomorrow"
-    : isInPast
-    ? "Overdue"
-    : taskDueDate.toLocaleDateString();
+      ? 'Tomorrow'
+      : isInPast
+        ? 'Overdue'
+        : taskDueDate.toLocaleDateString();
 
-  const household = households.find((h) => h.id === task.householdId);
+  const household = households.find(h => h.id === task.householdId);
 
   const handleCheckboxPress = () => {
     if (onPress) {
@@ -137,8 +136,8 @@ function TaskPreview({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
   },
   text: {
     color: colors.white,
@@ -151,12 +150,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.white,
     marginBottom: 2,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   bottomRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   dueDate: {
     fontSize: 12,
@@ -167,7 +166,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.white,
     opacity: 0.8,
-    textAlign: "right",
+    textAlign: 'right',
     flexShrink: 1,
   },
   checkIcon: {
