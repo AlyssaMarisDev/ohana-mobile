@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { Household } from '../services/householdService';
+import { Household } from '../services/HouseholdService';
 import configs from '../../../common/config';
 
 interface HouseholdSelectorProps {

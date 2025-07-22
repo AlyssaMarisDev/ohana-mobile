@@ -3,7 +3,7 @@ import Screen from '../../../common/components/Screen';
 import TaskList from '../../tasks/components/MultiTaskList';
 import { useTasks } from '../../tasks/hooks/useTasks';
 import { useHouseholds } from '../../households/hooks/useHouseholds';
-import { Task, TaskStatus } from '../../tasks/services/taskService';
+import { Task, TaskStatus } from '../../tasks/services/TaskService';
 
 function TodayScreen() {
   const {

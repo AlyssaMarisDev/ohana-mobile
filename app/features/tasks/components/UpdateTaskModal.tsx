@@ -13,7 +13,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Text from '../../../common/components/Text';
 import TextInput from '../../../common/components/TextInput';
 import Button from '../../../common/components/Button';
-import { Task } from '../services/taskService';
+import { Task } from '../services/TaskService';
 import configs from '../../../common/config';
 
 interface UpdateTaskModalProps {

@@ -14,7 +14,7 @@ import Text from '../../../common/components/Text';
 import TextInput from '../../../common/components/TextInput';
 import Button from '../../../common/components/Button';
 import HouseholdSelector from '../../households/components/HouseholdSelector';
-import { Household } from '../../households/services/householdService';
+import { Household } from '../../households/services/HouseholdService';
 import configs from '../../../common/config';
 
 interface CreateTaskModalProps {

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getMember, updateMember, Member } from '../services/memberService';
+import { memberService, Member } from '../services/MemberService';
 import { useAuth } from '../../auth/context/AuthContext';
 
 export const useMembers = (shouldFetch: boolean = true) => {
@@ -14,7 +14,7 @@ export const useMembers = (shouldFetch: boolean = true) => {
     refetch,
   } = useQuery({
     queryKey: ['member', memberId],
-    queryFn: () => getMember(memberId!),
+    queryFn: () => memberService.getMember(memberId!),
     enabled: shouldFetch && isAuthenticated && !!memberId,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
@@ -28,7 +28,7 @@ export const useMembers = (shouldFetch: boolean = true) => {
       memberId: string;
       data: Omit<Member, 'id' | 'email'>;
     }) => {
-      return await updateMember(memberId, data);
+      return await memberService.updateMember(memberId, data);
     },
 
     // Optimistic update

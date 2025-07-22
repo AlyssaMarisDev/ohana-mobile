@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { jwtDecode } from 'jwt-decode';
-import { refresh as apiRefresh } from '../services/authService';
+import { refresh as apiRefresh } from '../services/AuthService';
+import { enhancedLogger } from '@/app/common/utils/logger';
 
 interface JWTPayload {
   exp: number;
@@ -101,6 +102,7 @@ export class TokenManager {
     const { accessToken, refreshToken } = await this.getTokens();
 
     if (!accessToken || !refreshToken) {
+      enhancedLogger.info('No access token or refresh token found');
       return null;
     }
 
@@ -111,22 +113,27 @@ export class TokenManager {
     // If refresh token is expired, user needs to login again
     if (this.isTokenExpired(refreshToken)) {
       await this.clearTokens();
+      enhancedLogger.info('Refresh token is expired');
       return null;
     }
 
     // Refresh the access token
     try {
+      enhancedLogger.info('Refreshing access token');
       const newTokens = await this.refreshAccessToken(refreshToken);
+      enhancedLogger.info('New tokens', newTokens);
       return newTokens.accessToken;
-    } catch (error) {
-      console.error('Error refreshing access token:', error);
+    } catch (error: any) {
+      enhancedLogger.error('Error refreshing access token:', error);
       await this.clearTokens();
       return null;
     }
   }
 
   // Refresh access token using refresh token
-  async refreshAccessToken(refreshToken: string): Promise<TokenResponse> {
+  private async refreshAccessToken(
+    refreshToken: string
+  ): Promise<TokenResponse> {
     // Prevent multiple simultaneous refresh requests
     if (this.refreshPromise) {
       return this.refreshPromise;

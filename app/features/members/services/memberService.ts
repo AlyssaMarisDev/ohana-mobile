@@ -1,6 +1,6 @@
-import { authenticatedAxios } from '../../auth/utils/authenticatedAxios';
+import { BaseService } from '@/app/common/utils/BaseService';
+import { authenticatedAxios } from '@/app/features/auth/utils/authenticatedAxios';
 
-// Types for member data
 export interface Member {
   id: string;
   name: string;
@@ -9,20 +9,23 @@ export interface Member {
   email: string;
 }
 
-// Get member by ID
-export const getMember = async (memberId: string): Promise<Member> => {
-  const response = await authenticatedAxios.get(`/members/${memberId}`);
-  return response.data;
-};
+export class MemberService extends BaseService {
+  constructor() {
+    super(authenticatedAxios);
+  }
 
-// Update member by ID
-export const updateMember = async (
-  memberId: string,
-  memberData: Omit<Member, 'id' | 'email'>
-): Promise<Member> => {
-  const response = await authenticatedAxios.put(
-    `/members/${memberId}`,
-    memberData
-  );
-  return response.data;
-};
+  async getMember(memberId: string): Promise<Member> {
+    const response = await this.get(`/members/${memberId}`);
+    return response.data;
+  }
+
+  async updateMember(
+    memberId: string,
+    memberData: Omit<Member, 'id' | 'email'>
+  ): Promise<Member> {
+    const response = await this.put(`/members/${memberId}`, memberData);
+    return response.data;
+  }
+}
+
+export const memberService = new MemberService();

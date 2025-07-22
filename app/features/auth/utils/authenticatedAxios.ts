@@ -1,5 +1,6 @@
 import tokenManager from './tokenManager';
-import baseAxios from './baseAxios';
+import baseAxios from '../../../common/utils/baseAxios';
+import { enhancedLogger } from '@/app/common/utils/logger';
 
 // Create an axios instance with automatic token refresh
 export const createAuthenticatedAxios = () => {
@@ -32,8 +33,8 @@ export const createAuthenticatedAxios = () => {
             originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
             return baseAxios(originalRequest);
           }
-        } catch (refreshError) {
-          console.error('Token refresh failed:', refreshError);
+        } catch (refreshError: any) {
+          enhancedLogger.error('Token refresh failed:', refreshError);
           await tokenManager.clearTokens();
         }
       }

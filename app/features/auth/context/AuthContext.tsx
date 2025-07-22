@@ -9,7 +9,7 @@ import tokenManager from '../utils/tokenManager';
 import {
   login as apiLogin,
   register as apiRegister,
-} from '../services/authService';
+} from '../services/AuthService';
 import { useGlobalState } from '../../../common/context/GlobalStateContext';
 import { useQueryClient } from '@tanstack/react-query';
 

@@ -1,12 +1,6 @@
 import 'react-native-get-random-values';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  getTasks,
-  updateTask,
-  createTask,
-  Task,
-  TaskStatus,
-} from '../services/taskService';
+import { taskService, Task, TaskStatus } from '../services/TaskService';
 import { useAuth } from '../../auth/context/AuthContext';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -22,7 +16,7 @@ export const useTasks = () => {
     refetch,
   } = useQuery({
     queryKey: ['tasks'],
-    queryFn: getTasks,
+    queryFn: () => taskService.getTasks(),
     enabled: isAuthenticated,
     staleTime: 1000 * 60 * 2, // 2 minutes
   });
@@ -30,7 +24,7 @@ export const useTasks = () => {
   // Create task mutation
   const createTaskMutation = useMutation({
     mutationFn: async (taskData: { title: string; householdId: string }) => {
-      return await createTask({
+      return await taskService.createTask({
         id: uuidv4(),
         title: taskData.title,
         description: '',
@@ -61,7 +55,7 @@ export const useTasks = () => {
       taskId: string;
       data: Omit<Task, 'id' | 'createdBy' | 'householdId'>;
     }) => {
-      return await updateTask(taskId, data);
+      return await taskService.updateTask(taskId, data);
     },
 
     // Optimistic update

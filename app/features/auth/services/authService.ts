@@ -1,4 +1,5 @@
-import baseAxios from '../utils/baseAxios';
+import { BaseService } from '@/app/common/utils/BaseService';
+import baseAxios from '@/app/common/utils/baseAxios';
 
 interface AuthResponse {
   accessToken: string;
@@ -6,33 +7,38 @@ interface AuthResponse {
   id?: string; // Only present in register response
 }
 
-export const login = async (
-  email: string,
-  password: string
-): Promise<AuthResponse> => {
-  const response = await baseAxios.post(`/login`, {
-    email,
-    password,
-  });
-  return response.data;
-};
+export class AuthService extends BaseService {
+  constructor() {
+    super(baseAxios);
+  }
 
-export const register = async (
-  name: string,
-  email: string,
-  password: string
-): Promise<AuthResponse> => {
-  const response = await baseAxios.post(`/register`, {
-    name,
-    email,
-    password,
-  });
-  return response.data;
-};
+  async login(email: string, password: string): Promise<AuthResponse> {
+    const response = await this.post('/login', {
+      email,
+      password,
+    });
+    return response.data;
+  }
 
-export const refresh = async (refreshToken: string): Promise<AuthResponse> => {
-  const response = await baseAxios.post(`/refresh`, {
-    refreshToken,
-  });
-  return response.data;
-};
+  async register(
+    name: string,
+    email: string,
+    password: string
+  ): Promise<AuthResponse> {
+    const response = await this.post('/register', {
+      name,
+      email,
+      password,
+    });
+    return response.data;
+  }
+
+  async refresh(refreshToken: string): Promise<AuthResponse> {
+    const response = await this.post('/refresh', {
+      refreshToken,
+    });
+    return response.data;
+  }
+}
+
+export const authService = new AuthService();

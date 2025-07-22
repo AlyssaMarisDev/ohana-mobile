@@ -4,7 +4,7 @@ import Screen from '../../../common/components/Screen';
 import MultiTaskList from '../../tasks/components/MultiTaskList';
 import { useTasksByHousehold } from '../../tasks/hooks/useTasksByHousehold';
 import { useHouseholds } from '../hooks/useHouseholds';
-import { Task, TaskStatus } from '../../tasks/services/taskService';
+import { Task, TaskStatus } from '../../tasks/services/TaskService';
 
 type HouseholdTasksRouteProp = RouteProp<
   {

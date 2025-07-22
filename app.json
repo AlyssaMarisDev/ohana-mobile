@@ -42,10 +42,10 @@
         }
       ]
     ],
-    "extra": {
-      "eas": {
-        "projectId": "your-project-id-here"
-      }
+
+    "updates": {
+      "enabled": false,
+      "fallbackToCacheTimeout": 0
     }
   }
 }

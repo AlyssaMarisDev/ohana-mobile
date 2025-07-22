@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Member } from '../../features/members/services/memberService';
-import { Household } from '../../features/households/services/householdService';
+import { Member } from '../../features/members/services/MemberService';
+import { Household } from '../../features/households/services/HouseholdService';
 
 type GlobalStateType = {
   member: Member | null;

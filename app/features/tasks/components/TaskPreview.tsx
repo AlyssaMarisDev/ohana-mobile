@@ -10,7 +10,7 @@ import Text from '../../../common/components/Text';
 import colors from '../../../common/config/colors';
 import React from 'react';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { Task } from '../services/taskService';
+import { Task } from '../services/TaskService';
 import { useGlobalState } from '../../../common/context/GlobalStateContext';
 
 type TaskPreviewProps = {

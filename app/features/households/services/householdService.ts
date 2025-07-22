@@ -1,6 +1,6 @@
-import { authenticatedAxios } from '../../auth/utils/authenticatedAxios';
+import { BaseService } from '@/app/common/utils/BaseService';
+import { authenticatedAxios } from '@/app/features/auth/utils/authenticatedAxios';
 
-// Types for household data
 export interface Household {
   id: string;
   name: string;
@@ -8,8 +8,15 @@ export interface Household {
   createdBy: string;
 }
 
-// Get all households that the user has access to
-export const getHouseholds = async (): Promise<Household[]> => {
-  const response = await authenticatedAxios.get('/households');
-  return response.data;
-};
+export class HouseholdService extends BaseService {
+  constructor() {
+    super(authenticatedAxios);
+  }
+
+  async getHouseholds(): Promise<Household[]> {
+    const response = await this.get('/households');
+    return response.data;
+  }
+}
+
+export const householdService = new HouseholdService();

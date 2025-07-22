@@ -11,8 +11,8 @@ import Text from '../../../common/components/Text';
 import FloatingActionButton from '../../../common/components/FloatingActionButton';
 import CreateTaskModal from './CreateTaskModal';
 import UpdateTaskModal from './UpdateTaskModal';
-import { Task } from '../services/taskService';
-import { Household } from '../../households/services/householdService';
+import { Task } from '../services/TaskService';
+import { Household } from '../../households/services/HouseholdService';
 import configs from '../../../common/config';
 
 interface TaskListProps {

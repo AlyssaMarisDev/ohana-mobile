@@ -48,13 +48,13 @@ const getEnvVar = (value: string | undefined, fallback: string): string => {
 const getApiUrlForEnvironment = (environment: Environment): string => {
   switch (environment) {
     case 'development':
-      return getEnvVar(API_BASE_URL, 'http://10.0.2.2:4242');
+      return getEnvVar(API_BASE_URL, 'http://192.168.0.62:4242');
     case 'staging':
       return getEnvVar(API_BASE_URL, 'https://staging-api.ohana.com');
     case 'production':
       return getEnvVar(API_BASE_URL, 'https://api.ohana.com');
     default:
-      return getEnvVar(API_BASE_URL, 'http://10.0.2.2:4242');
+      return getEnvVar(API_BASE_URL, 'http://192.168.0.62:4242');
   }
 };
 

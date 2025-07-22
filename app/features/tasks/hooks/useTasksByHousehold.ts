@@ -1,11 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  updateTask,
-  createTask,
-  Task,
-  TaskStatus,
-  getTasksforHouseholds,
-} from '../services/taskService';
+import { Task, taskService, TaskStatus } from '../services/TaskService';
 import { useAuth } from '../../auth/context/AuthContext';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
@@ -25,7 +19,7 @@ export const useTasksByHousehold = (
     refetch,
   } = useQuery({
     queryKey: ['tasks', 'household', householdId],
-    queryFn: () => getTasksforHouseholds([householdId]),
+    queryFn: () => taskService.getTasks([householdId]),
     enabled: shouldFetch && isAuthenticated && !!householdId,
     staleTime: 1000 * 60 * 2, // 2 minutes
   });
@@ -36,7 +30,7 @@ export const useTasksByHousehold = (
       // Generate a UUID for the task ID
       const taskId = uuidv4();
 
-      return await createTask({
+      return await taskService.createTask({
         id: taskId,
         title: taskData.title,
         description: '',
@@ -70,7 +64,7 @@ export const useTasksByHousehold = (
       taskId: string;
       data: Omit<Task, 'id' | 'createdBy' | 'householdId'>;
     }) => {
-      return await updateTask(taskId, data);
+      return await taskService.updateTask(taskId, data);
     },
 
     // Optimistic update

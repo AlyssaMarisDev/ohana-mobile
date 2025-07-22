@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import TaskPreview from './TaskPreview';
 import Text from '../../../common/components/Text';
-import { Task } from '../services/taskService';
+import { Task } from '../services/TaskService';
 import configs from '../../../common/config';
 
 interface TaskListBoxProps {
