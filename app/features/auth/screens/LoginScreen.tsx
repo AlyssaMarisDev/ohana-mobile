@@ -36,7 +36,7 @@ function LoginScreen() {
   return (
     <Screen style={styles.container}>
       <Image
-        source={require("../../../assets/logo.png")}
+        source={require("../../../../assets/logo.png")}
         style={styles.logo}
         resizeMode="contain"
       />

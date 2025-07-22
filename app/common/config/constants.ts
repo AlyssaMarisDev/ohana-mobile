@@ -1,30 +1,46 @@
-// API Configuration
+import {
+  getApiUrl,
+  getConfig,
+  isDevelopment,
+  isProduction,
+  isStaging,
+} from './environment';
+
+// API Configuration - now uses environment variables
 export const API_CONFIG = {
-  BASE_URL: "http://10.0.2.2:4242",
-  API_VERSION: "v1",
-  FULL_URL: "http://10.0.2.2:4242/api/v1",
+  BASE_URL: getConfig().apiBaseUrl,
+  API_VERSION: getConfig().apiVersion,
+  FULL_URL: getApiUrl(),
 } as const;
 
 // Environment-specific configurations
 export const ENV_CONFIG = {
   DEVELOPMENT: {
-    API_BASE_URL: "http://10.0.2.2:4242",
+    API_BASE_URL: getConfig().apiBaseUrl,
   },
   PRODUCTION: {
-    API_BASE_URL: "https://your-production-api.com", // Update this when you have a production API
+    API_BASE_URL: getConfig().apiBaseUrl,
   },
 } as const;
 
-// Get the current environment (you can modify this based on your build process)
+// Get the current environment
 export const getCurrentEnv = () => {
-  // For now, default to development
-  // You can add logic here to detect environment based on __DEV__ or other flags
-  return __DEV__ ? "DEVELOPMENT" : "PRODUCTION";
+  if (isDevelopment()) return 'DEVELOPMENT';
+  if (isStaging()) return 'STAGING';
+  if (isProduction()) return 'PRODUCTION';
+  return 'DEVELOPMENT'; // fallback
 };
 
 // Get the appropriate API URL for the current environment
-export const getApiUrl = () => {
-  const env = getCurrentEnv();
-  const baseUrl = ENV_CONFIG[env as keyof typeof ENV_CONFIG].API_BASE_URL;
-  return `${baseUrl}/api/v1`;
+export const getApiUrlFromConstants = () => {
+  return getApiUrl();
 };
+
+// Re-export environment functions for convenience
+export {
+  getApiUrl,
+  getConfig,
+  isDevelopment,
+  isProduction,
+  isStaging,
+} from './environment';
