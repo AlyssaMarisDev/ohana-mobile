@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,13 +8,13 @@ import {
   ScrollView,
   ActivityIndicator,
   RefreshControl,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import Screen from "../../../common/components/Screen";
-import configs from "../../../common/config";
-import { useMembers } from "../../members/hooks/useMembers";
-import { useAuth } from "../../auth/context/AuthContext";
-import { useNavigation } from "@react-navigation/native";
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import Screen from '../../../common/components/Screen';
+import configs from '../../../common/config';
+import { useMembers } from '../../members/hooks/useMembers';
+import { useAuth } from '../../auth/context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
 
 function ProfileScreen() {
   const navigation = useNavigation();
@@ -25,9 +25,9 @@ function ProfileScreen() {
   const handleLogout = async () => {
     try {
       await logout();
-      navigation.navigate("Login" as never);
+      navigation.navigate('Login' as never);
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error('Logout error:', error);
     }
   };
 
@@ -38,10 +38,10 @@ function ProfileScreen() {
         await refetch();
       } else {
         // If user is not authenticated, they should be redirected to login
-        console.log("User not authenticated during refresh");
+        console.log('User not authenticated during refresh');
       }
     } catch (error) {
-      console.error("Error refreshing member data:", error);
+      console.error('Error refreshing member data:', error);
     } finally {
       setRefreshing(false);
     }
@@ -53,7 +53,7 @@ function ProfileScreen() {
         <View style={styles.loadingContainer}>
           <ActivityIndicator
             size="large"
-            color={configs.colors.primary || "#0000ff"}
+            color={configs.colors.primary || '#0000ff'}
           />
           <Text style={styles.loadingText}>Loading profile...</Text>
         </View>
@@ -69,24 +69,24 @@ function ProfileScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={[configs.colors.primary || "#0000ff"]}
-            tintColor={configs.colors.primary || "#0000ff"}
+            colors={[configs.colors.primary || '#0000ff']}
+            tintColor={configs.colors.primary || '#0000ff'}
           />
         }
       >
         {/* Profile Header */}
         <View style={styles.profileHeader}>
           <Image
-            source={require("../../../../assets/icon.png")}
+            source={require('../../../../assets/icon.png')}
             style={styles.profileImage}
           />
-          <Text style={styles.userName}>{member?.name || "John Doe"}</Text>
+          <Text style={styles.userName}>{member?.name || 'John Doe'}</Text>
           <Text style={styles.userEmail}>
-            {member?.email || "john.doe@example.com"}
+            {member?.email || 'john.doe@example.com'}
           </Text>
           <Text style={styles.userDetails}>
-            {member?.age ? `${member.age} years old` : ""} •{" "}
-            {member?.gender || ""}
+            {member?.age ? `${member.age} years old` : ''} •{' '}
+            {member?.gender || ''}
           </Text>
         </View>
 
@@ -187,19 +187,19 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: "#666",
+    color: '#666',
   },
   profileHeader: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingVertical: 30,
     paddingHorizontal: 20,
-    backgroundColor: "#f8f9fa",
+    backgroundColor: '#f8f9fa',
   },
   profileImage: {
     width: 100,
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderWidth: 3,
     borderColor: configs.colors.white,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -219,18 +219,18 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 24,
-    fontWeight: "600",
-    color: "#000",
+    fontWeight: '600',
+    color: '#000',
     marginBottom: 4,
   },
   userEmail: {
     fontSize: 16,
-    color: "#666",
+    color: '#666',
     marginBottom: 4,
   },
   userDetails: {
     fontSize: 14,
-    color: "#888",
+    color: '#888',
   },
   section: {
     paddingHorizontal: 20,
@@ -238,43 +238,43 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "600",
-    color: "#000",
+    fontWeight: '600',
+    color: '#000',
     marginBottom: 16,
   },
   optionItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
+    borderBottomColor: '#f0f0f0',
   },
   optionLeft: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   optionText: {
     fontSize: 16,
-    color: "#333",
+    color: '#333',
     marginLeft: 12,
   },
   logoutButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginHorizontal: 20,
     marginVertical: 20,
     paddingVertical: 16,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#ff4444",
+    borderColor: '#ff4444',
   },
   logoutText: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#ff4444",
+    fontWeight: '600',
+    color: '#ff4444',
     marginLeft: 8,
   },
 });

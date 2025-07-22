@@ -4,10 +4,10 @@ import {
   TextInput as RNTextInput,
   View,
   ViewStyle,
-} from "react-native";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import configs from "../config";
-import { useState } from "react";
+} from 'react-native';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import configs from '../config';
+import { useState } from 'react';
 
 interface TextInputProps {
   secureTextEntry?: boolean;
@@ -46,7 +46,7 @@ function TextInput({
       />
       {includeShowIcon && (
         <MaterialCommunityIcons
-          name={showSecureTextEntry ? "eye" : "eye-off"}
+          name={showSecureTextEntry ? 'eye' : 'eye-off'}
           size={24}
           style={[styles.icon, styles.showIcon]}
           onPress={() => {
@@ -60,14 +60,14 @@ function TextInput({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: configs.colors.gray0,
     borderRadius: 25,
     borderWidth: 1,
     borderColor: configs.colors.gray0,
     padding: 5,
-    width: "100%",
+    width: '100%',
   },
   textInput: {
     flex: 1,

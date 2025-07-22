@@ -35,22 +35,26 @@ A React Native mobile application for household task management and family coord
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd ohana-mobile
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Start the development server**
+
    ```bash
    npm start
    ```
 
 4. **Run on specific platforms**
+
    ```bash
    # iOS
    npm run ios
@@ -85,6 +89,7 @@ app/
 ## 🧪 Testing
 
 ### Run Tests
+
 ```bash
 # Run all tests
 npm test
@@ -97,6 +102,7 @@ npm run test:coverage
 ```
 
 ### Test Structure
+
 - Unit tests for utilities and hooks
 - Component tests for UI components
 - Integration tests for features
@@ -107,21 +113,25 @@ npm run test:coverage
 ### EAS Build (Recommended)
 
 1. **Install EAS CLI**
+
    ```bash
    npm install -g @expo/eas-cli
    ```
 
 2. **Login to Expo**
+
    ```bash
    eas login
    ```
 
 3. **Configure EAS**
+
    ```bash
    eas build:configure
    ```
 
 4. **Build for platforms**
+
    ```bash
    # Development build
    eas build --profile development --platform ios
@@ -151,6 +161,7 @@ npm run build:web
 ### App Store Deployment
 
 1. **Build production version**
+
    ```bash
    eas build --profile production --platform ios
    ```
@@ -163,6 +174,7 @@ npm run build:web
 ### Google Play Store Deployment
 
 1. **Build production version**
+
    ```bash
    eas build --profile production --platform android
    ```
@@ -215,11 +227,13 @@ const configs: Record<Environment, EnvironmentConfig> = {
 ## 📊 Monitoring & Analytics
 
 ### Error Tracking
+
 - Integrated error boundary for React errors
 - Comprehensive logging system
 - Crash reporting (configurable)
 
 ### Performance Monitoring
+
 - React Query for efficient data fetching
 - Optimized re-renders with proper memoization
 - Bundle size optimization
@@ -235,6 +249,7 @@ const configs: Record<Environment, EnvironmentConfig> = {
 ## 📈 Performance
 
 ### Optimization Strategies
+
 - Lazy loading of components
 - Image optimization
 - Efficient state management
@@ -242,6 +257,7 @@ const configs: Record<Environment, EnvironmentConfig> = {
 - Bundle splitting
 
 ### Performance Monitoring
+
 - React Query DevTools (development)
 - Performance profiling
 - Memory leak detection
@@ -264,6 +280,7 @@ const configs: Record<Environment, EnvironmentConfig> = {
 ### Commit Guidelines
 
 Follow conventional commits:
+
 - `feat:` New features
 - `fix:` Bug fixes
 - `docs:` Documentation changes
@@ -279,6 +296,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🆘 Support
 
 For support and questions:
+
 - Create an issue in the repository
 - Check the documentation
 - Review the troubleshooting guide

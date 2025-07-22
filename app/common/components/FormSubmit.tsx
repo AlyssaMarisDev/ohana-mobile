@@ -1,9 +1,9 @@
-import { StyleProp, StyleSheet, TextStyle } from "react-native";
-import { ViewStyle } from "react-native";
-import Button from "./Button";
-import Text from "./Text";
-import { useFormikContext } from "formik";
-import configs from "../config";
+import { StyleProp, StyleSheet, TextStyle } from 'react-native';
+import { ViewStyle } from 'react-native';
+import Button from './Button';
+import Text from './Text';
+import { useFormikContext } from 'formik';
+import configs from '../config';
 
 interface FormSubmitProps {
   title: string;

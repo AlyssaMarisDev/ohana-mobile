@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { useAuth } from "../auth/context/AuthContext";
-import LoginScreen from "../auth/screens/LoginScreen";
-import RegisterScreen from "../auth/screens/RegisterScreen";
-import HamburgerMenu from "../../common/components/HamburgerMenu";
-import Sidebar from "../sidebar/Sidebar";
-import { ActivityIndicator, View } from "react-native";
-import configs from "../../common/config";
-import TodayScreen from "../today/screens/TodayScreen";
-import ProfileScreen from "../profile/screens/ProfileScreen";
-import HouseholdTasksScreen from "../households/screens/HouseholdTasksScreen";
+import React, { useState } from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { useAuth } from '../auth/context/AuthContext';
+import LoginScreen from '../auth/screens/LoginScreen';
+import RegisterScreen from '../auth/screens/RegisterScreen';
+import HamburgerMenu from '../../common/components/HamburgerMenu';
+import Sidebar from '../sidebar/Sidebar';
+import { ActivityIndicator, View } from 'react-native';
+import configs from '../../common/config';
+import TodayScreen from '../today/screens/TodayScreen';
+import ProfileScreen from '../profile/screens/ProfileScreen';
+import HouseholdTasksScreen from '../households/screens/HouseholdTasksScreen';
 
 // Wrapper component that can access navigation
 function NavigationContent() {
@@ -31,23 +31,23 @@ function NavigationContent() {
 
   const handleSidebarProfilePress = () => {
     setIsSidebarVisible(false); // Close sidebar
-    navigation.navigate("Profile" as never); // Navigate to profile
+    navigation.navigate('Profile' as never); // Navigate to profile
   };
 
   const handleSidebarTodayPress = () => {
     setIsSidebarVisible(false); // Close sidebar
-    navigation.navigate("Today" as never); // Navigate to today
+    navigation.navigate('Today' as never); // Navigate to today
   };
 
   const handleSidebarHouseholdPress = (householdId: string) => {
     setIsSidebarVisible(false); // Close sidebar
-    (navigation as any).navigate("HouseholdTasks", { householdId }); // Navigate to household tasks
+    (navigation as any).navigate('HouseholdTasks', { householdId }); // Navigate to household tasks
   };
 
   return (
     <View style={{ flex: 1 }}>
       <Stack.Navigator
-        initialRouteName={isAuthenticated ? "Today" : "Login"}
+        initialRouteName={isAuthenticated ? 'Today' : 'Login'}
         screenOptions={{
           headerShown: isAuthenticated, // Only show header for authenticated screens
           headerLeft: () => <HamburgerMenu onPress={handleHamburgerPress} />,
@@ -57,8 +57,8 @@ function NavigationContent() {
           headerTransparent: false, // This ensures header takes up space
           headerTitleStyle: {
             fontSize: 20,
-            fontWeight: "600",
-            color: "#000",
+            fontWeight: '600',
+            color: '#000',
           },
           headerBackVisible: false, // Hide back button for cleaner look
           headerShadowVisible: false, // Remove the horizontal line/shadow
@@ -78,21 +78,21 @@ function NavigationContent() {
           name="Today"
           component={TodayScreen}
           options={{
-            title: "Today",
+            title: 'Today',
           }}
         />
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
           options={{
-            title: "Profile",
+            title: 'Profile',
           }}
         />
         <Stack.Screen
           name="HouseholdTasks"
           component={HouseholdTasksScreen}
           options={{
-            title: "Household Tasks",
+            title: 'Household Tasks',
           }}
         />
       </Stack.Navigator>

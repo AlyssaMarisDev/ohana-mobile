@@ -1,4 +1,4 @@
-import { authenticatedAxios } from "../../auth/utils/authenticatedAxios";
+import { authenticatedAxios } from '../../auth/utils/authenticatedAxios';
 
 // Types for member data
 export interface Member {
@@ -18,7 +18,7 @@ export const getMember = async (memberId: string): Promise<Member> => {
 // Update member by ID
 export const updateMember = async (
   memberId: string,
-  memberData: Omit<Member, "id" | "email">
+  memberData: Omit<Member, 'id' | 'email'>
 ): Promise<Member> => {
   const response = await authenticatedAxios.put(
     `/members/${memberId}`,

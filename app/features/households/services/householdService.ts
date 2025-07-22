@@ -1,4 +1,4 @@
-import { authenticatedAxios } from "../../auth/utils/authenticatedAxios";
+import { authenticatedAxios } from '../../auth/utils/authenticatedAxios';
 
 // Types for household data
 export interface Household {
@@ -10,6 +10,6 @@ export interface Household {
 
 // Get all households that the user has access to
 export const getHouseholds = async (): Promise<Household[]> => {
-  const response = await authenticatedAxios.get("/households");
+  const response = await authenticatedAxios.get('/households');
   return response.data;
 };

@@ -1,14 +1,14 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   updateTask,
   createTask,
   Task,
   TaskStatus,
   getTasksforHouseholds,
-} from "../services/taskService";
-import { useAuth } from "../../auth/context/AuthContext";
-import "react-native-get-random-values";
-import { v4 as uuidv4 } from "uuid";
+} from '../services/taskService';
+import { useAuth } from '../../auth/context/AuthContext';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 export const useTasksByHousehold = (
   householdId: string,
@@ -24,7 +24,7 @@ export const useTasksByHousehold = (
     error,
     refetch,
   } = useQuery({
-    queryKey: ["tasks", "household", householdId],
+    queryKey: ['tasks', 'household', householdId],
     queryFn: () => getTasksforHouseholds([householdId]),
     enabled: shouldFetch && isAuthenticated && !!householdId,
     staleTime: 1000 * 60 * 2, // 2 minutes
@@ -39,7 +39,7 @@ export const useTasksByHousehold = (
       return await createTask({
         id: taskId,
         title: taskData.title,
-        description: "",
+        description: '',
         dueDate: new Date().toISOString(),
         status: TaskStatus.PENDING,
         householdId: taskData.householdId,
@@ -47,15 +47,15 @@ export const useTasksByHousehold = (
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["tasks", "household", householdId],
+        queryKey: ['tasks', 'household', householdId],
       });
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
-    onError: (err) => {
-      console.error("Task creation failed:", err);
+    onError: err => {
+      console.error('Task creation failed:', err);
       alert(
         `Failed to create task: ${
-          err instanceof Error ? err.message : "Unknown error"
+          err instanceof Error ? err.message : 'Unknown error'
         }`
       );
     },
@@ -68,7 +68,7 @@ export const useTasksByHousehold = (
       data,
     }: {
       taskId: string;
-      data: Omit<Task, "id" | "createdBy" | "householdId">;
+      data: Omit<Task, 'id' | 'createdBy' | 'householdId'>;
     }) => {
       return await updateTask(taskId, data);
     },
@@ -77,22 +77,22 @@ export const useTasksByHousehold = (
     onMutate: async ({ taskId, data }) => {
       // Cancel any outgoing refetches
       await queryClient.cancelQueries({
-        queryKey: ["tasks", "household", householdId],
+        queryKey: ['tasks', 'household', householdId],
       });
 
       // Snapshot the previous value
       const previousTasks = queryClient.getQueryData([
-        "tasks",
-        "household",
+        'tasks',
+        'household',
         householdId,
       ]) as Task[] | undefined;
 
       // Optimistically update to the new value
       queryClient.setQueryData(
-        ["tasks", "household", householdId],
+        ['tasks', 'household', householdId],
         (old: Task[] | undefined) => {
           if (!old) return old;
-          return old.map((task) =>
+          return old.map(task =>
             task.id === taskId ? { ...task, ...data } : task
           );
         }
@@ -108,23 +108,23 @@ export const useTasksByHousehold = (
       variables,
       context: { previousTasks?: Task[] } | undefined
     ) => {
-      console.error("Task update failed:", err);
+      console.error('Task update failed:', err);
       if (context?.previousTasks) {
         queryClient.setQueryData(
-          ["tasks", "household", householdId],
+          ['tasks', 'household', householdId],
           context.previousTasks
         );
       }
       // Show error to user
       alert(
         `Failed to update task: ${
-          err instanceof Error ? err.message : "Unknown error"
+          err instanceof Error ? err.message : 'Unknown error'
         }`
       );
     },
   });
 
-  const updateTaskData = (task: Omit<Task, "createdBy" | "householdId">) => {
+  const updateTaskData = (task: Omit<Task, 'createdBy' | 'householdId'>) => {
     updateTaskMutation.mutate({
       taskId: task.id,
       data: task,

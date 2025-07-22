@@ -1,9 +1,9 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import TaskPreview from "./TaskPreview";
-import Text from "../../../common/components/Text";
-import { Task } from "../services/taskService";
-import configs from "../../../common/config";
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import TaskPreview from './TaskPreview';
+import Text from '../../../common/components/Text';
+import { Task } from '../services/taskService';
+import configs from '../../../common/config';
 
 interface TaskListBoxProps {
   title: string;
@@ -37,7 +37,7 @@ function TaskList({
             (a, b) =>
               new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
           )
-          .map((task) => (
+          .map(task => (
             <TaskPreview
               key={task.id}
               task={task}
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   sectionText: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 10,
     marginLeft: 5,
   },
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     minHeight: 50,
   },
   task: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     padding: 10,
   },
 });

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Modal,
   View,
@@ -8,14 +8,14 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import Text from "../../../common/components/Text";
-import TextInput from "../../../common/components/TextInput";
-import Button from "../../../common/components/Button";
-import HouseholdSelector from "../../households/components/HouseholdSelector";
-import { Household } from "../../households/services/householdService";
-import configs from "../../../common/config";
+} from 'react-native';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Text from '../../../common/components/Text';
+import TextInput from '../../../common/components/TextInput';
+import Button from '../../../common/components/Button';
+import HouseholdSelector from '../../households/components/HouseholdSelector';
+import { Household } from '../../households/services/householdService';
+import configs from '../../../common/config';
 
 interface CreateTaskModalProps {
   visible: boolean;
@@ -34,7 +34,7 @@ function CreateTaskModal({
   isLoadingHouseholds = false,
   preSelectedHouseholdId,
 }: CreateTaskModalProps) {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const [selectedHouseholdId, setSelectedHouseholdId] = useState<string | null>(
     preSelectedHouseholdId || null
   );
@@ -47,14 +47,14 @@ function CreateTaskModal({
   const handleSubmit = () => {
     if (title.trim() && selectedHouseholdId) {
       onSubmit(title.trim(), selectedHouseholdId);
-      setTitle("");
+      setTitle('');
       setSelectedHouseholdId(preSelectedHouseholdId || null);
       onClose();
     }
   };
 
   const handleClose = () => {
-    setTitle("");
+    setTitle('');
     setSelectedHouseholdId(preSelectedHouseholdId || null);
     onClose();
   };
@@ -71,7 +71,7 @@ function CreateTaskModal({
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView
           style={styles.container}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           <TouchableWithoutFeedback onPress={() => {}}>
             <View style={styles.modalContainer}>
@@ -114,7 +114,7 @@ function CreateTaskModal({
                     !isFormValid && styles.disabledButton,
                   ]}
                 >
-                  {"Create Task"}
+                  {'Create Task'}
                 </Button>
               </View>
             </View>
@@ -128,8 +128,8 @@ function CreateTaskModal({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "flex-end",
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
   },
   modalContainer: {
     backgroundColor: configs.colors.white,
@@ -138,17 +138,17 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 40,
     paddingHorizontal: 20,
-    maxHeight: "60%",
+    maxHeight: '60%',
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 20,
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: configs.colors.black,
   },
   closeButton: {

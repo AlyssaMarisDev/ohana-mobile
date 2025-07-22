@@ -1,7 +1,7 @@
-import { StyleProp, ViewStyle, StyleSheet, View } from "react-native";
+import { StyleProp, ViewStyle, StyleSheet, View } from 'react-native';
 // import { SafeAreaView } from "react-native-safe-area-context";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import configs from "../config";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import configs from '../config';
 
 type ScreenProps = {
   children: React.ReactNode;

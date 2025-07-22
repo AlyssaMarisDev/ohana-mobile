@@ -1,3 +1,3 @@
-import configs from "./configs";
+import configs from './configs';
 
 export default configs;

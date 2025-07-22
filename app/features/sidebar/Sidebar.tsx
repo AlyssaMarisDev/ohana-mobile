@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   Text,
@@ -8,11 +8,11 @@ import {
   Dimensions,
   Image,
   ScrollView,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import configs from "../../common/config";
-import { useMembers } from "../members/hooks/useMembers";
-import { useHouseholds } from "../households/hooks/useHouseholds";
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import configs from '../../common/config';
+import { useMembers } from '../members/hooks/useMembers';
+import { useHouseholds } from '../households/hooks/useHouseholds';
 
 type SidebarProps = {
   isVisible: boolean;
@@ -22,7 +22,7 @@ type SidebarProps = {
   onHouseholdPress: (householdId: string) => void;
 };
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 
 const Sidebar: React.FC<SidebarProps> = ({
   isVisible,
@@ -90,11 +90,11 @@ const Sidebar: React.FC<SidebarProps> = ({
           >
             <View style={styles.profileContainer}>
               <Image
-                source={require("../../../assets/icon.png")} // Stock profile image
+                source={require('../../../assets/icon.png')} // Stock profile image
                 style={styles.profileImage}
               />
               <Text style={styles.userName}>
-                {member?.name || "Loading..."}
+                {member?.name || 'Loading...'}
               </Text>
             </View>
           </TouchableOpacity>
@@ -120,7 +120,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             {householdsLoading ? (
               <Text style={styles.loadingText}>Loading households...</Text>
             ) : households.length > 0 ? (
-              households.map((household) => (
+              households.map(household => (
                 <TouchableOpacity
                   key={household.id}
                   style={styles.householdItem}
@@ -142,7 +142,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
 const styles = StyleSheet.create({
   overlay: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
@@ -150,21 +150,21 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   backdrop: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   sidebar: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     width: width * 0.8, // 80% of screen width
-    height: "100%",
+    height: '100%',
     backgroundColor: configs.colors.white,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 2,
       height: 0,
@@ -182,8 +182,8 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   profileContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   profileImage: {
     width: 50,
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
     borderWidth: 2,
     borderColor: configs.colors.white,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -203,28 +203,28 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 18,
-    fontWeight: "600",
-    color: "#000",
+    fontWeight: '600',
+    color: '#000',
     flex: 1,
   },
   menuSection: {
     paddingHorizontal: 20,
   },
   menuItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
+    borderBottomColor: '#f0f0f0',
   },
   menuItemLeft: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   menuItemText: {
     fontSize: 16,
-    color: "#333",
+    color: '#333',
     marginLeft: 12,
   },
   householdsSection: {
@@ -234,29 +234,29 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "600",
-    color: "#333",
+    fontWeight: '600',
+    color: '#333',
     marginBottom: 16,
   },
   householdItem: {
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
+    borderBottomColor: '#f0f0f0',
   },
   householdName: {
     fontSize: 16,
-    fontWeight: "500",
-    color: "#333",
+    fontWeight: '500',
+    color: '#333',
   },
   loadingText: {
     fontSize: 14,
-    color: "#666",
-    fontStyle: "italic",
+    color: '#666',
+    fontStyle: 'italic',
   },
   emptyText: {
     fontSize: 14,
-    color: "#666",
-    fontStyle: "italic",
+    color: '#666',
+    fontStyle: 'italic',
   },
 });
 

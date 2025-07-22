@@ -1,4 +1,4 @@
-import baseAxios from "../utils/baseAxios";
+import baseAxios from '../utils/baseAxios';
 
 interface AuthResponse {
   accessToken: string;

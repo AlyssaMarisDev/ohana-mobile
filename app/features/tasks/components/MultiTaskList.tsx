@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   StyleSheet,
   ActivityIndicator,
   View,
   ScrollView,
   RefreshControl,
-} from "react-native";
-import TaskList from "./TaskList";
-import Text from "../../../common/components/Text";
-import FloatingActionButton from "../../../common/components/FloatingActionButton";
-import CreateTaskModal from "./CreateTaskModal";
-import UpdateTaskModal from "./UpdateTaskModal";
-import { Task } from "../services/taskService";
-import { Household } from "../../households/services/householdService";
-import configs from "../../../common/config";
+} from 'react-native';
+import TaskList from './TaskList';
+import Text from '../../../common/components/Text';
+import FloatingActionButton from '../../../common/components/FloatingActionButton';
+import CreateTaskModal from './CreateTaskModal';
+import UpdateTaskModal from './UpdateTaskModal';
+import { Task } from '../services/taskService';
+import { Household } from '../../households/services/householdService';
+import configs from '../../../common/config';
 
 interface TaskListProps {
   tasks: Task[];
@@ -22,7 +22,7 @@ interface TaskListProps {
   onToggleTask: (task: Task) => void;
   onUpdateTask: (
     taskId: string,
-    data: Omit<Task, "id" | "createdBy" | "householdId">
+    data: Omit<Task, 'id' | 'createdBy' | 'householdId'>
   ) => void;
   onCreateTask: (title: string, householdId: string) => void;
   households: Household[];
@@ -55,7 +55,7 @@ function MultiTaskList({
     try {
       await onRefresh();
     } catch (error) {
-      console.error("Error refreshing tasks:", error);
+      console.error('Error refreshing tasks:', error);
     } finally {
       setRefreshing(false);
     }
@@ -72,7 +72,7 @@ function MultiTaskList({
 
   const handleUpdateTaskSubmit = (
     taskId: string,
-    data: Omit<Task, "id" | "createdBy" | "householdId">
+    data: Omit<Task, 'id' | 'createdBy' | 'householdId'>
   ) => {
     onUpdateTask(taskId, data);
     setIsUpdateModalVisible(false);
@@ -84,15 +84,15 @@ function MultiTaskList({
     setSelectedTask(null);
   };
 
-  const incompleteTasks = tasks.filter((task) => task.status !== "COMPLETED");
-  const completeTasks = tasks.filter((task) => task.status === "COMPLETED");
+  const incompleteTasks = tasks.filter(task => task.status !== 'COMPLETED');
+  const completeTasks = tasks.filter(task => task.status === 'COMPLETED');
 
   if (isLoading && !refreshing) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator
           size="large"
-          color={configs.colors.primary || "#0000ff"}
+          color={configs.colors.primary || '#0000ff'}
         />
         <Text style={styles.loadingText}>Loading tasks...</Text>
       </View>
@@ -107,8 +107,8 @@ function MultiTaskList({
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            colors={[configs.colors.primary || "#0000ff"]}
-            tintColor={configs.colors.primary || "#0000ff"}
+            colors={[configs.colors.primary || '#0000ff']}
+            tintColor={configs.colors.primary || '#0000ff'}
           />
         }
       >
@@ -167,33 +167,33 @@ function MultiTaskList({
 const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: "#666",
+    color: '#666',
   },
   titleText: {
     fontSize: 28,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 20,
     marginLeft: 5,
     color: configs.colors.black,
   },
   emptyContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingTop: 50,
   },
   emptyText: {
     fontSize: 16,
-    color: "#666",
+    color: '#666',
   },
   fab: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 30,
     right: 30,
   },

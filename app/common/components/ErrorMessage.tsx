@@ -1,6 +1,6 @@
-import Text from "./Text";
-import configs from "../config";
-import { StyleSheet } from "react-native";
+import Text from './Text';
+import configs from '../config';
+import { StyleSheet } from 'react-native';
 
 interface OErrorMessageProps {
   error: string;

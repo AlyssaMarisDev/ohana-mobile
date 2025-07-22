@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   View,
@@ -8,20 +8,20 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import Text from "../../../common/components/Text";
-import TextInput from "../../../common/components/TextInput";
-import Button from "../../../common/components/Button";
-import { Task } from "../services/taskService";
-import configs from "../../../common/config";
+} from 'react-native';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Text from '../../../common/components/Text';
+import TextInput from '../../../common/components/TextInput';
+import Button from '../../../common/components/Button';
+import { Task } from '../services/taskService';
+import configs from '../../../common/config';
 
 interface UpdateTaskModalProps {
   visible: boolean;
   onClose: () => void;
   onSubmit: (
     taskId: string,
-    data: Omit<Task, "id" | "createdBy" | "householdId">
+    data: Omit<Task, 'id' | 'createdBy' | 'householdId'>
   ) => void;
   task: Task | null;
 }
@@ -32,16 +32,16 @@ function UpdateTaskModal({
   onSubmit,
   task,
 }: UpdateTaskModalProps) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [dueDate, setDueDate] = useState('');
 
   // Update form when task changes
   useEffect(() => {
     if (task) {
       setTitle(task.title);
       setDescription(task.description);
-      setDueDate(task.dueDate.split("T")[0]); // Extract date part only
+      setDueDate(task.dueDate.split('T')[0]); // Extract date part only
     }
   }, [task]);
 
@@ -73,7 +73,7 @@ function UpdateTaskModal({
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView
           style={styles.container}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           <TouchableWithoutFeedback onPress={() => {}}>
             <View style={styles.modalContainer}>
@@ -123,7 +123,7 @@ function UpdateTaskModal({
                     !isFormValid && styles.disabledButton,
                   ]}
                 >
-                  {"Update Task"}
+                  {'Update Task'}
                 </Button>
               </View>
             </View>
@@ -137,8 +137,8 @@ function UpdateTaskModal({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "flex-end",
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
   },
   modalContainer: {
     backgroundColor: configs.colors.white,
@@ -147,17 +147,17 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 40,
     paddingHorizontal: 20,
-    maxHeight: "60%",
+    maxHeight: '60%',
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 20,
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: configs.colors.black,
   },
   closeButton: {

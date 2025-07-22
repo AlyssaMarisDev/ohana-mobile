@@ -1,6 +1,6 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getMember, updateMember, Member } from "../services/memberService";
-import { useAuth } from "../../auth/context/AuthContext";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getMember, updateMember, Member } from '../services/memberService';
+import { useAuth } from '../../auth/context/AuthContext';
 
 export const useMembers = (shouldFetch: boolean = true) => {
   const queryClient = useQueryClient();
@@ -13,7 +13,7 @@ export const useMembers = (shouldFetch: boolean = true) => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["member", memberId],
+    queryKey: ['member', memberId],
     queryFn: () => getMember(memberId!),
     enabled: shouldFetch && isAuthenticated && !!memberId,
     staleTime: 1000 * 60 * 5, // 5 minutes
@@ -26,7 +26,7 @@ export const useMembers = (shouldFetch: boolean = true) => {
       data,
     }: {
       memberId: string;
-      data: Omit<Member, "id" | "email">;
+      data: Omit<Member, 'id' | 'email'>;
     }) => {
       return await updateMember(memberId, data);
     },
@@ -34,16 +34,16 @@ export const useMembers = (shouldFetch: boolean = true) => {
     // Optimistic update
     onMutate: async ({ memberId, data }) => {
       // Cancel any outgoing refetches
-      await queryClient.cancelQueries({ queryKey: ["member", memberId] });
+      await queryClient.cancelQueries({ queryKey: ['member', memberId] });
 
       // Snapshot the previous value
-      const previousMember = queryClient.getQueryData(["member", memberId]) as
+      const previousMember = queryClient.getQueryData(['member', memberId]) as
         | Member
         | undefined;
 
       // Optimistically update to the new value
       queryClient.setQueryData(
-        ["member", memberId],
+        ['member', memberId],
         (old: Member | undefined) => {
           if (!old) return old;
           return { ...old, ...data };
@@ -60,17 +60,17 @@ export const useMembers = (shouldFetch: boolean = true) => {
       variables,
       context: { previousMember?: Member } | undefined
     ) => {
-      console.error("Member update failed:", err);
+      console.error('Member update failed:', err);
       if (context?.previousMember) {
         queryClient.setQueryData(
-          ["member", variables.memberId],
+          ['member', variables.memberId],
           context.previousMember
         );
       }
       // Show error to user
       alert(
         `Failed to update member: ${
-          err instanceof Error ? err.message : "Unknown error"
+          err instanceof Error ? err.message : 'Unknown error'
         }`
       );
     },
@@ -78,14 +78,14 @@ export const useMembers = (shouldFetch: boolean = true) => {
     // Always refetch after error or success to ensure data consistency
     onSettled: (data, error, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["member", variables.memberId],
+        queryKey: ['member', variables.memberId],
       });
     },
   });
 
-  const updateMemberData = (data: Omit<Member, "id" | "email">) => {
+  const updateMemberData = (data: Omit<Member, 'id' | 'email'>) => {
     if (!memberId) {
-      console.error("No member ID available for update");
+      console.error('No member ID available for update');
       return;
     }
 

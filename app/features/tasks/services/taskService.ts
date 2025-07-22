@@ -1,4 +1,4 @@
-import { authenticatedAxios } from "../../auth/utils/authenticatedAxios";
+import { authenticatedAxios } from '../../auth/utils/authenticatedAxios';
 
 // Types for task data
 export interface Task {
@@ -12,15 +12,15 @@ export interface Task {
 }
 
 export enum TaskStatus {
-  PENDING = "PENDING",
-  IN_PROGRESS = "IN_PROGRESS",
-  COMPLETED = "COMPLETED",
-  CANCELLED = "CANCELLED",
+  PENDING = 'PENDING',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
 }
 
 // Get all tasks for the authenticated user
 export const getTasks = async (): Promise<Task[]> => {
-  const response = await authenticatedAxios.get("/tasks");
+  const response = await authenticatedAxios.get('/tasks');
   return response.data;
 };
 
@@ -29,7 +29,7 @@ export const getTasksforHouseholds = async (
   householdIds: string[]
 ): Promise<Task[]> => {
   const response = await authenticatedAxios.get(
-    `/tasks?householdIds=${householdIds.join(",")}`
+    `/tasks?householdIds=${householdIds.join(',')}`
   );
   return response.data;
 };
@@ -42,18 +42,18 @@ export const getTask = async (taskId: string): Promise<Task> => {
 
 // Create a new task
 export const createTask = async (
-  taskData: Omit<Task, "createdBy">
+  taskData: Omit<Task, 'createdBy'>
 ): Promise<Task> => {
-  const response = await authenticatedAxios.post("/tasks", taskData);
+  const response = await authenticatedAxios.post('/tasks', taskData);
   return response.data;
 };
 
 // Update a task
 export const updateTask = async (
   taskId: string,
-  taskData: Omit<Task, "id" | "createdBy" | "householdId">
+  taskData: Omit<Task, 'id' | 'createdBy' | 'householdId'>
 ): Promise<Task> => {
-  console.log("Updating task:", taskId, taskData);
+  console.log('Updating task:', taskId, taskData);
   const response = await authenticatedAxios.put(`/tasks/${taskId}`, taskData);
   return response.data;
 };

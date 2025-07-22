@@ -1,16 +1,16 @@
-import React, { useEffect } from "react";
-import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
-import Screen from "../../../common/components/Screen";
-import MultiTaskList from "../../tasks/components/MultiTaskList";
-import { useTasksByHousehold } from "../../tasks/hooks/useTasksByHousehold";
-import { useHouseholds } from "../hooks/useHouseholds";
-import { Task, TaskStatus } from "../../tasks/services/taskService";
+import React, { useEffect } from 'react';
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
+import Screen from '../../../common/components/Screen';
+import MultiTaskList from '../../tasks/components/MultiTaskList';
+import { useTasksByHousehold } from '../../tasks/hooks/useTasksByHousehold';
+import { useHouseholds } from '../hooks/useHouseholds';
+import { Task, TaskStatus } from '../../tasks/services/taskService';
 
 type HouseholdTasksRouteProp = RouteProp<
   {
     HouseholdTasks: { householdId: string };
   },
-  "HouseholdTasks"
+  'HouseholdTasks'
 >;
 
 function HouseholdTasksScreen() {
@@ -50,15 +50,15 @@ function HouseholdTasksScreen() {
 
   const handleUpdateTask = (
     taskId: string,
-    data: Omit<Task, "id" | "createdBy" | "householdId">
+    data: Omit<Task, 'id' | 'createdBy' | 'householdId'>
   ) => {
-    const task = tasks.find((t) => t.id === taskId);
+    const task = tasks.find(t => t.id === taskId);
     if (task) {
       updateTaskData({ ...task, ...data });
     }
   };
 
-  const household = households.find((h) => h.id === householdId);
+  const household = households.find(h => h.id === householdId);
 
   // Update header title when household data is loaded
   useEffect(() => {
@@ -70,7 +70,7 @@ function HouseholdTasksScreen() {
   }, [household, navigation]);
 
   return (
-    <Screen style={{ paddingHorizontal: "5%" }}>
+    <Screen style={{ paddingHorizontal: '5%' }}>
       <MultiTaskList
         tasks={tasks}
         isLoading={isLoadingTasks}

@@ -1,9 +1,9 @@
-import React from "react";
-import Screen from "../../../common/components/Screen";
-import TaskList from "../../tasks/components/MultiTaskList";
-import { useTasks } from "../../tasks/hooks/useTasks";
-import { useHouseholds } from "../../households/hooks/useHouseholds";
-import { Task, TaskStatus } from "../../tasks/services/taskService";
+import React from 'react';
+import Screen from '../../../common/components/Screen';
+import TaskList from '../../tasks/components/MultiTaskList';
+import { useTasks } from '../../tasks/hooks/useTasks';
+import { useHouseholds } from '../../households/hooks/useHouseholds';
+import { Task, TaskStatus } from '../../tasks/services/taskService';
 
 function TodayScreen() {
   const {
@@ -37,16 +37,16 @@ function TodayScreen() {
 
   const handleUpdateTask = (
     taskId: string,
-    data: Omit<Task, "id" | "createdBy" | "householdId">
+    data: Omit<Task, 'id' | 'createdBy' | 'householdId'>
   ) => {
-    const task = tasks.find((t) => t.id === taskId);
+    const task = tasks.find(t => t.id === taskId);
     if (task) {
       updateTaskData({ ...task, ...data });
     }
   };
 
   return (
-    <Screen style={{ paddingHorizontal: "5%" }}>
+    <Screen style={{ paddingHorizontal: '5%' }}>
       <TaskList
         tasks={tasks}
         isLoading={isLoadingTasks}

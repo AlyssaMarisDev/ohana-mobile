@@ -102,27 +102,27 @@ function MyComponent() {
 ### Making Authenticated API Calls
 
 ```typescript
-import { apiClient } from "../utils/apiClient";
+import { apiClient } from '../utils/apiClient';
 
 // The apiClient automatically includes the access token and handles refresh
 const getUserData = async () => {
   try {
-    const response = await apiClient.get("/user/profile");
+    const response = await apiClient.get('/user/profile');
     return response.data;
   } catch (error) {
-    console.error("API call failed:", error);
+    console.error('API call failed:', error);
   }
 };
 
 // Or use the example functions
-import { exampleApiCalls } from "../utils/apiClient";
+import { exampleApiCalls } from '../utils/apiClient';
 
 const getTasks = async () => {
   try {
     const tasks = await exampleApiCalls.getTasks();
     return tasks;
   } catch (error) {
-    console.error("Failed to get tasks:", error);
+    console.error('Failed to get tasks:', error);
   }
 };
 ```
@@ -130,7 +130,7 @@ const getTasks = async () => {
 ### Manual Token Access
 
 ```typescript
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from '../context/AuthContext';
 
 function MyComponent() {
   const { getAccessToken } = useAuth();
@@ -139,10 +139,10 @@ function MyComponent() {
     const token = await getAccessToken();
     if (token) {
       // Use token for custom requests
-      const response = await fetch("/api/endpoint", {
+      const response = await fetch('/api/endpoint', {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
     }

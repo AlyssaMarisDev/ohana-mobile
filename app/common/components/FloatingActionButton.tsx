@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 import {
   TouchableOpacity,
   StyleSheet,
   ViewStyle,
   StyleProp,
-} from "react-native";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import configs from "../config";
+} from 'react-native';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import configs from '../config';
 
 interface FloatingActionButtonProps {
   onPress: () => void;
@@ -47,10 +47,10 @@ function FloatingActionButton({
 const styles = StyleSheet.create({
   fab: {
     backgroundColor: configs.colors.primary,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     elevation: 8,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 4,

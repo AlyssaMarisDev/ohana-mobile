@@ -1,18 +1,18 @@
-import Screen from "../../../common/components/Screen";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
-import Form from "../../../common/components/Form";
-import FormField from "../../../common/components/FormField";
-import * as Yup from "yup";
-import configs from "../../../common/config";
-import FormSubmit from "../../../common/components/FormSubmit";
-import Text from "../../../common/components/Text";
-import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import Screen from '../../../common/components/Screen';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import Form from '../../../common/components/Form';
+import FormField from '../../../common/components/FormField';
+import * as Yup from 'yup';
+import configs from '../../../common/config';
+import FormSubmit from '../../../common/components/FormSubmit';
+import Text from '../../../common/components/Text';
+import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string().required("Password is required"),
+  email: Yup.string().email('Invalid email').required('Email is required'),
+  password: Yup.string().required('Password is required'),
 });
 
 function LoginScreen() {
@@ -25,10 +25,10 @@ function LoginScreen() {
     try {
       await login(values.email, values.password);
       setError(null);
-      navigation.navigate("Today" as never);
+      navigation.navigate('Today' as never);
     } catch (error: any) {
       setError(
-        error.response?.data?.message || error.message || "Login failed"
+        error.response?.data?.message || error.message || 'Login failed'
       );
     }
   };
@@ -36,12 +36,12 @@ function LoginScreen() {
   return (
     <Screen style={styles.container}>
       <Image
-        source={require("../../../../assets/logo.png")}
+        source={require('../../../../assets/logo.png')}
         style={styles.logo}
         resizeMode="contain"
       />
       <Form
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ email: '', password: '' }}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
@@ -64,7 +64,7 @@ function LoginScreen() {
       <View style={styles.registerContainer}>
         <Text style={styles.registerText}>Don't have an account?</Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate("Register" as never)}
+          onPress={() => navigation.navigate('Register' as never)}
           style={styles.registerLink}
         >
           <Text style={styles.link}>Register</Text>
@@ -76,8 +76,8 @@ function LoginScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: "5%",
-    paddingTop: "30%",
+    paddingHorizontal: '5%',
+    paddingTop: '30%',
   },
   passwordInput: {
     marginTop: 15,
@@ -85,9 +85,9 @@ const styles = StyleSheet.create({
   logo: {
     width: 150,
     height: 150,
-    alignSelf: "center",
-    marginTop: "15%",
-    marginBottom: "5%",
+    alignSelf: 'center',
+    marginTop: '15%',
+    marginBottom: '5%',
   },
   buttonText: {
     color: configs.colors.white,
@@ -97,11 +97,11 @@ const styles = StyleSheet.create({
   },
   link: {
     color: configs.colors.secondary,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 16,
   },
   registerText: {
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 16,
   },
   registerLink: {
@@ -109,13 +109,13 @@ const styles = StyleSheet.create({
   },
   registerContainer: {
     marginTop: 15,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
   errorText: {
-    color: "red",
-    textAlign: "center",
+    color: 'red',
+    textAlign: 'center',
     marginTop: 10,
   },
 });

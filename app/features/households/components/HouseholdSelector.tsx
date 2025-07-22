@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,10 +6,10 @@ import {
   StyleSheet,
   Modal,
   ScrollView,
-} from "react-native";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { Household } from "../services/householdService";
-import configs from "../../../common/config";
+} from 'react-native';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { Household } from '../services/householdService';
+import configs from '../../../common/config';
 
 interface HouseholdSelectorProps {
   households: Household[];
@@ -26,9 +26,7 @@ function HouseholdSelector({
 }: HouseholdSelectorProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const selectedHousehold = households.find(
-    (h) => h.id === selectedHouseholdId
-  );
+  const selectedHousehold = households.find(h => h.id === selectedHouseholdId);
 
   const handleSelectHousehold = (householdId: string) => {
     onSelectHousehold(householdId);
@@ -50,7 +48,7 @@ function HouseholdSelector({
             style={styles.icon}
           />
           <Text style={styles.selectorText}>
-            {selectedHousehold ? selectedHousehold.name : "Select a household"}
+            {selectedHousehold ? selectedHousehold.name : 'Select a household'}
           </Text>
         </View>
         <MaterialCommunityIcons
@@ -83,7 +81,7 @@ function HouseholdSelector({
             </View>
 
             <ScrollView style={styles.householdList}>
-              {households.map((household) => (
+              {households.map(household => (
                 <TouchableOpacity
                   key={household.id}
                   style={[
@@ -121,19 +119,19 @@ function HouseholdSelector({
 
 const styles = StyleSheet.create({
   selector: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: configs.colors.gray0,
     borderRadius: 25,
     borderWidth: 1,
     borderColor: configs.colors.gray0,
     padding: 15,
-    width: "100%",
+    width: '100%',
   },
   selectorContent: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     flex: 1,
   },
   icon: {
@@ -146,26 +144,26 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "flex-end",
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
   },
   modalContainer: {
     backgroundColor: configs.colors.white,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    maxHeight: "60%",
+    maxHeight: '60%',
   },
   modalHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: configs.colors.gray0,
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
     color: configs.colors.black,
   },
   closeButton: {
@@ -175,9 +173,9 @@ const styles = StyleSheet.create({
     maxHeight: 400,
   },
   householdOption: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: configs.colors.gray0,
@@ -192,7 +190,7 @@ const styles = StyleSheet.create({
   },
   selectedHouseholdText: {
     color: configs.colors.primary,
-    fontWeight: "500",
+    fontWeight: '500',
   },
 });
 

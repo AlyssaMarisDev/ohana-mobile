@@ -1,5 +1,5 @@
-import axios from "axios";
-import { API_CONFIG } from "../../../common/config/constants";
+import axios from 'axios';
+import { API_CONFIG } from '../../../common/config/constants';
 
 const instance = axios.create({
   baseURL: API_CONFIG.FULL_URL,

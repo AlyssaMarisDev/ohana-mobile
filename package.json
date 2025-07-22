@@ -16,6 +16,9 @@
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "type-check": "tsc --noEmit",
+    "prettier:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "prettier:format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "format": "npm run prettier:format && npm run lint:fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"

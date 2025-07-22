@@ -1,12 +1,12 @@
-import { Text as RNText, StyleSheet, StyleProp, TextStyle } from "react-native";
-import configs from "../config";
+import { Text as RNText, StyleSheet, StyleProp, TextStyle } from 'react-native';
+import configs from '../config';
 
 type TextProps = {
   children: React.ReactNode;
   style?: StyleProp<TextStyle>;
   numberOfLines?: number;
-  ellipsizeMode?: "head" | "middle" | "tail" | "clip";
-  align?: "auto" | "left" | "right" | "center" | "justify";
+  ellipsizeMode?: 'head' | 'middle' | 'tail' | 'clip';
+  align?: 'auto' | 'left' | 'right' | 'center' | 'justify';
 };
 
 function Text({ children, style, numberOfLines, ellipsizeMode }: TextProps) {

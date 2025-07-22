@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import { getHouseholds } from "../services/householdService";
-import { useAuth } from "../../auth/context/AuthContext";
-import { useGlobalState } from "../../../common/context/GlobalStateContext";
-import { useEffect } from "react";
+import { useQuery } from '@tanstack/react-query';
+import { getHouseholds } from '../services/householdService';
+import { useAuth } from '../../auth/context/AuthContext';
+import { useGlobalState } from '../../../common/context/GlobalStateContext';
+import { useEffect } from 'react';
 
 export const useHouseholds = (shouldFetch: boolean = true) => {
   const { isAuthenticated } = useAuth();
@@ -15,7 +15,7 @@ export const useHouseholds = (shouldFetch: boolean = true) => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["households"],
+    queryKey: ['households'],
     queryFn: getHouseholds,
     enabled: shouldFetch && isAuthenticated,
     staleTime: 1000 * 60 * 5, // 5 minutes

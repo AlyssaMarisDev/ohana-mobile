@@ -1,26 +1,26 @@
-import tokenManager from "./tokenManager";
-import baseAxios from "./baseAxios";
+import tokenManager from './tokenManager';
+import baseAxios from './baseAxios';
 
 // Create an axios instance with automatic token refresh
 export const createAuthenticatedAxios = () => {
   // Add request interceptor to include access token
   baseAxios.interceptors.request.use(
-    async (config) => {
+    async config => {
       const accessToken = await tokenManager.getValidAccessToken();
       if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
       }
       return config;
     },
-    (error) => {
+    error => {
       return Promise.reject(error);
     }
   );
 
   // Add response interceptor to handle 401 errors
   baseAxios.interceptors.response.use(
-    (response) => response,
-    async (error) => {
+    response => response,
+    async error => {
       const originalRequest = error.config;
 
       if (error.response?.status === 401 && !originalRequest._retry) {
@@ -33,7 +33,7 @@ export const createAuthenticatedAxios = () => {
             return baseAxios(originalRequest);
           }
         } catch (refreshError) {
-          console.error("Token refresh failed:", refreshError);
+          console.error('Token refresh failed:', refreshError);
           await tokenManager.clearTokens();
         }
       }

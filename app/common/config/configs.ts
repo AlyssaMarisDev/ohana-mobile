@@ -1,5 +1,5 @@
-import colors from "./colors";
-import text from "./text";
+import colors from './colors';
+import text from './text';
 
 export default {
   colors,

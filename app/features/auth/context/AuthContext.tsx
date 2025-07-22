@@ -4,14 +4,14 @@ import React, {
   useState,
   useEffect,
   ReactNode,
-} from "react";
-import tokenManager from "../utils/tokenManager";
+} from 'react';
+import tokenManager from '../utils/tokenManager';
 import {
   login as apiLogin,
   register as apiRegister,
-} from "../services/authService";
-import { useGlobalState } from "../../../common/context/GlobalStateContext";
-import { useQueryClient } from "@tanstack/react-query";
+} from '../services/authService';
+import { useGlobalState } from '../../../common/context/GlobalStateContext';
+import { useQueryClient } from '@tanstack/react-query';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const decoded = tokenManager.decodeToken(token);
       return decoded?.userId || null;
     } catch (error) {
-      console.error("Error extracting member ID from token:", error);
+      console.error('Error extracting member ID from token:', error);
       return null;
     }
   };
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         queryClient.clear();
       }
     } catch (error) {
-      console.error("Error checking auth status:", error);
+      console.error('Error checking auth status:', error);
       setIsAuthenticated(false);
       setMemberId(null);
       clearAllState();
@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setMemberId(userId);
       setIsAuthenticated(true);
     } catch (error) {
-      console.error("Login error:", error);
+      console.error('Login error:', error);
       throw error;
     }
   };
@@ -110,7 +110,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setMemberId(userId);
       setIsAuthenticated(true);
     } catch (error) {
-      console.error("Register error:", error);
+      console.error('Register error:', error);
       throw error;
     }
   };
@@ -124,7 +124,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Clear React Query cache
       queryClient.clear();
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error('Logout error:', error);
       // Even if logout fails, clear local state
       setIsAuthenticated(false);
       setMemberId(null);
@@ -157,6 +157,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used within an AuthProvider");
+  if (!context) throw new Error('useAuth must be used within an AuthProvider');
   return context;
 };

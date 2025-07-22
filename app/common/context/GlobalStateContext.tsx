@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Member } from "../../features/members/services/memberService";
-import { Household } from "../../features/households/services/householdService";
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { Member } from '../../features/members/services/memberService';
+import { Household } from '../../features/households/services/householdService';
 
 type GlobalStateType = {
   member: Member | null;
@@ -53,6 +53,6 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
 export const useGlobalState = () => {
   const context = useContext(GlobalStateContext);
   if (!context)
-    throw new Error("useGlobalState must be used within GlobalStateProvider");
+    throw new Error('useGlobalState must be used within GlobalStateProvider');
   return context;
 };
