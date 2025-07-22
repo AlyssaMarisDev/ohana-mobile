@@ -70,10 +70,8 @@
   - [ ] Enable tree shaking
 
 - [ ] **Runtime Performance**
-  - [ ] Implement lazy loading
   - [ ] Add performance monitoring
   - [ ] Optimize re-renders
-  - [ ] Add memory leak detection
 
 ### Testing
 
