@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { jwtDecode } from 'jwt-decode';
-import { refresh as apiRefresh } from '../services/AuthService';
+import { authService } from '../services/AuthService';
 import { enhancedLogger } from '@/app/common/utils/logger';
 
 interface JWTPayload {
@@ -34,69 +34,6 @@ export class TokenManager {
     return TokenManager.instance;
   }
 
-  // Store tokens in AsyncStorage
-  async storeTokens(accessToken: string, refreshToken: string): Promise<void> {
-    try {
-      await Promise.all([
-        AsyncStorage.setItem(ACCESS_TOKEN_KEY, accessToken),
-        AsyncStorage.setItem(REFRESH_TOKEN_KEY, refreshToken),
-      ]);
-    } catch (error) {
-      console.error('Error storing tokens:', error);
-      throw error;
-    }
-  }
-
-  // Get stored tokens
-  async getTokens(): Promise<{
-    accessToken: string | null;
-    refreshToken: string | null;
-  }> {
-    try {
-      const [accessToken, refreshToken] = await Promise.all([
-        AsyncStorage.getItem(ACCESS_TOKEN_KEY),
-        AsyncStorage.getItem(REFRESH_TOKEN_KEY),
-      ]);
-      return { accessToken, refreshToken };
-    } catch (error) {
-      console.error('Error getting tokens:', error);
-      return { accessToken: null, refreshToken: null };
-    }
-  }
-
-  // Clear stored tokens
-  async clearTokens(): Promise<void> {
-    try {
-      await Promise.all([
-        AsyncStorage.removeItem(ACCESS_TOKEN_KEY),
-        AsyncStorage.removeItem(REFRESH_TOKEN_KEY),
-      ]);
-    } catch (error) {
-      console.error('Error clearing tokens:', error);
-      throw error;
-    }
-  }
-
-  // Decode JWT token
-  decodeToken(token: string): JWTPayload | null {
-    try {
-      const decoded = jwtDecode(token);
-      return decoded as JWTPayload;
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      return null;
-    }
-  }
-
-  // Check if token is expired
-  isTokenExpired(token: string): boolean {
-    const decoded = this.decodeToken(token);
-    if (!decoded) return true;
-
-    const currentTime = Math.floor(Date.now() / 1000);
-    return decoded.exp <= currentTime;
-  }
-
   // Get valid access token (refresh if needed)
   async getValidAccessToken(): Promise<string | null> {
     const { accessToken, refreshToken } = await this.getTokens();
@@ -125,9 +62,77 @@ export class TokenManager {
       return newTokens.accessToken;
     } catch (error: any) {
       enhancedLogger.error('Error refreshing access token:', error);
-      await this.clearTokens();
+      // Only clear tokens if the error is a 401 (Unauthorized)
+      if (error?.response?.status === 401) {
+        await this.clearTokens();
+        enhancedLogger.info('Cleared tokens due to 401 during refresh');
+      }
+      // For other errors (network/server), do not clear tokens
       return null;
     }
+  }
+
+  // Decode JWT token
+  decodeToken(token: string): JWTPayload | null {
+    try {
+      const decoded = jwtDecode(token);
+      return decoded as JWTPayload;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  }
+
+  // Store tokens in AsyncStorage
+  async storeTokens(accessToken: string, refreshToken: string): Promise<void> {
+    try {
+      await Promise.all([
+        AsyncStorage.setItem(ACCESS_TOKEN_KEY, accessToken),
+        AsyncStorage.setItem(REFRESH_TOKEN_KEY, refreshToken),
+      ]);
+    } catch (error) {
+      console.error('Error storing tokens:', error);
+      throw error;
+    }
+  }
+
+  // Get stored tokens
+  private async getTokens(): Promise<{
+    accessToken: string | null;
+    refreshToken: string | null;
+  }> {
+    try {
+      const [accessToken, refreshToken] = await Promise.all([
+        AsyncStorage.getItem(ACCESS_TOKEN_KEY),
+        AsyncStorage.getItem(REFRESH_TOKEN_KEY),
+      ]);
+      return { accessToken, refreshToken };
+    } catch (error) {
+      console.error('Error getting tokens:', error);
+      return { accessToken: null, refreshToken: null };
+    }
+  }
+
+  // Clear stored tokens
+  async clearTokens(): Promise<void> {
+    try {
+      await Promise.all([
+        AsyncStorage.removeItem(ACCESS_TOKEN_KEY),
+        AsyncStorage.removeItem(REFRESH_TOKEN_KEY),
+      ]);
+    } catch (error) {
+      console.error('Error clearing tokens:', error);
+      throw error;
+    }
+  }
+
+  // Check if token is expired
+  private isTokenExpired(token: string): boolean {
+    const decoded = this.decodeToken(token);
+    if (!decoded) return true;
+
+    const currentTime = Math.floor(Date.now() / 1000);
+    return decoded.exp <= currentTime;
   }
 
   // Refresh access token using refresh token
@@ -151,7 +156,7 @@ export class TokenManager {
 
   private async performRefresh(refreshToken: string): Promise<TokenResponse> {
     try {
-      const tokens = await apiRefresh(refreshToken);
+      const tokens = await authService.refresh(refreshToken);
 
       // Store the new tokens
       await this.storeTokens(tokens.accessToken, tokens.refreshToken);

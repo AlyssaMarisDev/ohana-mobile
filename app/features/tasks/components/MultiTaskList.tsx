@@ -14,6 +14,7 @@ import UpdateTaskModal from './UpdateTaskModal';
 import { Task } from '../services/TaskService';
 import { Household } from '../../households/services/HouseholdService';
 import configs from '../../../common/config';
+import { useTasks } from '../hooks/useTasks';
 
 interface TaskListProps {
   tasks: Task[];
@@ -45,6 +46,7 @@ function MultiTaskList({
   showHousehold = false,
   preSelectedHouseholdId,
 }: TaskListProps) {
+  const { deleteTask } = useTasks();
   const [refreshing, setRefreshing] = useState(false);
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
@@ -80,6 +82,12 @@ function MultiTaskList({
   };
 
   const handleUpdateModalClose = () => {
+    setIsUpdateModalVisible(false);
+    setSelectedTask(null);
+  };
+
+  const handleDeleteTask = (taskId: string) => {
+    deleteTask(taskId);
     setIsUpdateModalVisible(false);
     setSelectedTask(null);
   };
@@ -159,6 +167,7 @@ function MultiTaskList({
         onClose={handleUpdateModalClose}
         onSubmit={handleUpdateTaskSubmit}
         task={selectedTask}
+        onDelete={handleDeleteTask}
       />
     </>
   );

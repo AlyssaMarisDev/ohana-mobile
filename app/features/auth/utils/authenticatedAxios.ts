@@ -35,7 +35,6 @@ export const createAuthenticatedAxios = () => {
           }
         } catch (refreshError: any) {
           enhancedLogger.error('Token refresh failed:', refreshError);
-          await tokenManager.clearTokens();
         }
       }
 

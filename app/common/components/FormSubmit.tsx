@@ -59,19 +59,19 @@ const styles = StyleSheet.create({
   authButton: {
     // Authentication button styling (large, prominent)
     height: 50,
-    borderRadius: 25,
+    borderRadius: 10,
     marginTop: 10,
   },
   modalButton: {
     // Modal button styling (compact, clean)
     height: 44,
-    borderRadius: 8,
+    borderRadius: 10,
     marginTop: 8,
   },
   inlineButton: {
     // Inline button styling (very compact)
     height: 36,
-    borderRadius: 6,
+    borderRadius: 10,
     marginTop: 4,
   },
   defaultButtonText: {

@@ -99,6 +99,24 @@ export const useTasks = () => {
     },
   });
 
+  // Delete task mutation
+  const deleteTaskMutation = useMutation({
+    mutationFn: async (taskId: string) => {
+      return await taskService.deleteTask(taskId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
+    onError: err => {
+      console.error('Task deletion failed:', err);
+      alert(
+        `Failed to delete task: ${
+          err instanceof Error ? err.message : 'Unknown error'
+        }`
+      );
+    },
+  });
+
   const updateTaskData = (task: Omit<Task, 'createdBy' | 'householdId'>) => {
     updateTaskMutation.mutate({
       taskId: task.id,
@@ -110,6 +128,10 @@ export const useTasks = () => {
     createTaskMutation.mutate({ title, householdId });
   };
 
+  const deleteTask = (taskId: string) => {
+    deleteTaskMutation.mutate(taskId);
+  };
+
   return {
     tasks,
     isLoading,
@@ -117,5 +139,6 @@ export const useTasks = () => {
     updateTaskData,
     createNewTask,
     refetch,
+    deleteTask,
   };
 };

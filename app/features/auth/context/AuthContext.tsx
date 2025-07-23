@@ -6,10 +6,7 @@ import React, {
   ReactNode,
 } from 'react';
 import tokenManager from '../utils/tokenManager';
-import {
-  login as apiLogin,
-  register as apiRegister,
-} from '../services/AuthService';
+import { authService } from '../services/AuthService';
 import { useGlobalState } from '../../../common/context/GlobalStateContext';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -79,7 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const authData = await apiLogin(email, password);
+      const authData = await authService.login(email, password);
       // Store tokens automatically
       await tokenManager.storeTokens(
         authData.accessToken,
@@ -98,7 +95,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const register = async (name: string, email: string, password: string) => {
     try {
-      const authData = await apiRegister(name, email, password);
+      const authData = await authService.register(name, email, password);
       // Store tokens automatically
       await tokenManager.storeTokens(
         authData.accessToken,

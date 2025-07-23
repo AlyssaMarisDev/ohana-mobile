@@ -15,6 +15,10 @@ import TextInput from '../../../common/components/TextInput';
 import Button from '../../../common/components/Button';
 import { Task } from '../services/TaskService';
 import configs from '../../../common/config';
+import {
+  ActionMenu,
+  ActionMenuItem,
+} from '../../../common/components/ActionMenu';
 
 interface UpdateTaskModalProps {
   visible: boolean;
@@ -24,6 +28,7 @@ interface UpdateTaskModalProps {
     data: Omit<Task, 'id' | 'createdBy' | 'householdId'>
   ) => void;
   task: Task | null;
+  onDelete?: (taskId: string) => void;
 }
 
 function UpdateTaskModal({
@@ -31,10 +36,12 @@ function UpdateTaskModal({
   onClose,
   onSubmit,
   task,
+  onDelete,
 }: UpdateTaskModalProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const [menuVisible, setMenuVisible] = useState(false);
 
   // Update form when task changes
   useEffect(() => {
@@ -61,6 +68,14 @@ function UpdateTaskModal({
     onClose();
   };
 
+  const handleDelete = () => {
+    if (task && onDelete) {
+      onDelete(task.id);
+      setMenuVisible(false);
+      onClose();
+    }
+  };
+
   const isFormValid = title.trim() && dueDate;
 
   return (
@@ -79,16 +94,29 @@ function UpdateTaskModal({
             <View style={styles.modalContainer}>
               <View style={styles.header}>
                 <Text style={styles.title}>Update Task</Text>
-                <TouchableOpacity
-                  onPress={handleClose}
-                  style={styles.closeButton}
-                >
-                  <MaterialCommunityIcons
-                    name="close"
-                    size={24}
-                    color={configs.colors.gray3}
-                  />
-                </TouchableOpacity>
+                <View style={{ position: 'relative' }}>
+                  <TouchableOpacity
+                    onPress={() => setMenuVisible(v => !v)}
+                    style={styles.menuButton}
+                  >
+                    <MaterialCommunityIcons
+                      name="dots-vertical"
+                      size={28}
+                      color={configs.colors.gray3}
+                    />
+                  </TouchableOpacity>
+                  <ActionMenu
+                    visible={menuVisible}
+                    onRequestClose={() => setMenuVisible(false)}
+                  >
+                    <ActionMenuItem
+                      title="Delete Task"
+                      icon={<MaterialCommunityIcons name="delete" size={20} />}
+                      color={configs.colors.danger}
+                      onPress={handleDelete}
+                    />
+                  </ActionMenu>
+                </View>
               </View>
 
               <View style={styles.content}>
@@ -163,6 +191,9 @@ const styles = StyleSheet.create({
   closeButton: {
     padding: 5,
   },
+  menuButton: {
+    padding: 5,
+  },
   content: {
     gap: 20,
   },
@@ -174,6 +205,10 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     backgroundColor: configs.colors.gray1,
+  },
+  deleteButton: {
+    backgroundColor: configs.colors.danger,
+    marginTop: 10,
   },
 });
 
