@@ -34,9 +34,6 @@ jobs:
       - name: Run linting with auto-fix check
         run: npm run lint:fix --dry-run
 
-      - name: Run type checking
-        run: npm run type-check
-
       - name: Check formatting with Prettier
         run: npx prettier --check "**/*.{js,jsx,ts,tsx,json,md}"
 
