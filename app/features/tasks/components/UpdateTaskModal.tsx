@@ -88,7 +88,14 @@ function UpdateTaskModal({
   };
 
   const handleClose = () => {
+    // Close menu if open
+    setMenuVisible(false);
     onClose();
+  };
+
+  const handleBackdropPress = () => {
+    setMenuVisible(false);
+    handleClose();
   };
 
   const handleDelete = () => {
@@ -117,7 +124,7 @@ function UpdateTaskModal({
       <View style={styles.container}>
         <TouchableOpacity
           style={styles.backdrop}
-          onPress={handleClose}
+          onPress={handleBackdropPress}
           activeOpacity={1}
         />
         <Animated.View
@@ -128,77 +135,83 @@ function UpdateTaskModal({
             },
           ]}
         >
-          <View style={styles.header}>
-            <Text style={styles.title}>Update Task</Text>
-            <View style={{ position: 'relative' }}>
-              <TouchableOpacity
-                onPress={() => setMenuVisible(v => !v)}
-                style={styles.menuButton}
-              >
-                <MaterialCommunityIcons
-                  name="dots-vertical"
-                  size={28}
-                  color={configs.colors.gray3}
-                />
-              </TouchableOpacity>
-              <ActionMenu
-                visible={menuVisible}
-                onRequestClose={() => setMenuVisible(false)}
-              >
-                <ActionMenuItem
-                  title="Delete Task"
-                  icon={<MaterialCommunityIcons name="delete" size={20} />}
-                  color={configs.colors.danger}
-                  onPress={handleDelete}
-                />
-              </ActionMenu>
+          <TouchableOpacity
+            style={styles.modalContent}
+            onPress={() => setMenuVisible(false)}
+            activeOpacity={1}
+          >
+            <View style={styles.header}>
+              <Text style={styles.title}>Update Task</Text>
+              <View style={{ position: 'relative' }}>
+                <TouchableOpacity
+                  onPress={() => setMenuVisible(v => !v)}
+                  style={styles.menuButton}
+                >
+                  <MaterialCommunityIcons
+                    name="dots-vertical"
+                    size={28}
+                    color={configs.colors.gray3}
+                  />
+                </TouchableOpacity>
+                <ActionMenu
+                  visible={menuVisible}
+                  onRequestClose={() => setMenuVisible(false)}
+                >
+                  <ActionMenuItem
+                    title="Delete Task"
+                    icon={<MaterialCommunityIcons name="delete" size={20} />}
+                    color={configs.colors.danger}
+                    onPress={handleDelete}
+                  />
+                </ActionMenu>
+              </View>
             </View>
-          </View>
 
-          <View style={styles.content}>
-            <TextInput
-              placeholder="Enter task title"
-              value={title}
-              onChangeText={setTitle}
-              icon="format-title"
-              style={styles.input}
-            />
-
-            <TextInput
-              placeholder="Enter task description (optional)"
-              value={description}
-              onChangeText={setDescription}
-              icon="text"
-              style={styles.input}
-            />
-
-            <TextInput
-              placeholder="Due date (YYYY-MM-DD)"
-              value={dueDate}
-              onChangeText={setDueDate}
-              icon="calendar"
-              style={styles.input}
-            />
-
-            {task && (
-              <TagSelector
-                householdId={task.householdId}
-                selectedTagIds={selectedTagIds}
-                onTagToggle={handleTagToggle}
-                maxHeight={100}
+            <View style={styles.content}>
+              <TextInput
+                placeholder="Enter task title"
+                value={title}
+                onChangeText={setTitle}
+                icon="format-title"
+                style={styles.input}
               />
-            )}
 
-            <Button
-              onPress={isFormValid ? handleSubmit : () => {}}
-              style={[
-                styles.submitButton,
-                !isFormValid && styles.disabledButton,
-              ]}
-            >
-              {'Update Task'}
-            </Button>
-          </View>
+              <TextInput
+                placeholder="Enter task description (optional)"
+                value={description}
+                onChangeText={setDescription}
+                icon="text"
+                style={styles.input}
+              />
+
+              <TextInput
+                placeholder="Due date (YYYY-MM-DD)"
+                value={dueDate}
+                onChangeText={setDueDate}
+                icon="calendar"
+                style={styles.input}
+              />
+
+              {task && (
+                <TagSelector
+                  householdId={task.householdId}
+                  selectedTagIds={selectedTagIds}
+                  onTagToggle={handleTagToggle}
+                  maxHeight={100}
+                />
+              )}
+
+              <Button
+                onPress={isFormValid ? handleSubmit : () => {}}
+                style={[
+                  styles.submitButton,
+                  !isFormValid && styles.disabledButton,
+                ]}
+              >
+                {'Update Task'}
+              </Button>
+            </View>
+          </TouchableOpacity>
         </Animated.View>
       </View>
     </Modal>
@@ -226,6 +239,9 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     paddingHorizontal: 20,
     maxHeight: '60%',
+  },
+  modalContent: {
+    width: '100%',
   },
   header: {
     flexDirection: 'row',

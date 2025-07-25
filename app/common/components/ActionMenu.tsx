@@ -63,11 +63,7 @@ export const ActionMenu = ({
   style,
 }: ActionMenuProps) => {
   if (!visible) return null;
-  return (
-    <TouchableWithoutFeedback onPress={onRequestClose}>
-      <View style={[styles.dropdownMenu, style]}>{children}</View>
-    </TouchableWithoutFeedback>
-  );
+  return <View style={[styles.dropdownMenu, style]}>{children}</View>;
 };
 
 const styles = StyleSheet.create({
