@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
   registerText: {
     textAlign: 'center',
     fontSize: 16,
+    color: configs.colors.textSecondary,
   },
   registerLink: {
     marginLeft: 5,
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   errorText: {
-    color: 'red',
+    color: configs.colors.danger,
     textAlign: 'center',
     marginTop: 10,
   },
