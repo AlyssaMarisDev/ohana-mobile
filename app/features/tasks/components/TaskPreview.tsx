@@ -14,6 +14,7 @@ import { Task } from '../services/TaskService';
 import { useGlobalState } from '../../../common/context/GlobalStateContext';
 import { useTags } from '../../tags/hooks/useTags';
 import { Tag } from '../../tags/components/Tag';
+import configs from '../../../common/config';
 
 type TaskPreviewProps = {
   task: Task;
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   text: {
-    color: colors.white,
+    color: configs.colors.textPrimary,
   },
   contentContainer: {
     flex: 1,
@@ -181,8 +182,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    color: colors.white,
-    marginTop: 3,
+    color: configs.colors.textPrimary,
     marginBottom: 2,
     fontWeight: 'bold',
   },
@@ -205,12 +205,12 @@ const styles = StyleSheet.create({
   },
   dueDate: {
     fontSize: 12,
-    color: colors.white,
+    color: configs.colors.textSecondary,
     opacity: 0.8,
   },
   householdName: {
     fontSize: 12,
-    color: colors.white,
+    color: configs.colors.textSecondary,
     opacity: 0.8,
     textAlign: 'right',
     flexShrink: 1,

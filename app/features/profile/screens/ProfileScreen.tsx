@@ -99,14 +99,14 @@ function ProfileScreen() {
               <Ionicons
                 name="person-outline"
                 size={20}
-                color={configs.colors.white}
+                color={configs.colors.textPrimary}
               />
               <Text style={styles.optionText}>Edit Profile</Text>
             </View>
             <Ionicons
               name="chevron-forward"
               size={20}
-              color={configs.colors.gray2}
+              color={configs.colors.textSecondary}
             />
           </TouchableOpacity>
 
@@ -115,14 +115,14 @@ function ProfileScreen() {
               <Ionicons
                 name="mail-outline"
                 size={20}
-                color={configs.colors.white}
+                color={configs.colors.textPrimary}
               />
               <Text style={styles.optionText}>Change Email</Text>
             </View>
             <Ionicons
               name="chevron-forward"
               size={20}
-              color={configs.colors.gray2}
+              color={configs.colors.textSecondary}
             />
           </TouchableOpacity>
 
@@ -131,14 +131,14 @@ function ProfileScreen() {
               <Ionicons
                 name="lock-closed-outline"
                 size={20}
-                color={configs.colors.white}
+                color={configs.colors.textPrimary}
               />
               <Text style={styles.optionText}>Change Password</Text>
             </View>
             <Ionicons
               name="chevron-forward"
               size={20}
-              color={configs.colors.gray2}
+              color={configs.colors.textSecondary}
             />
           </TouchableOpacity>
         </View>
@@ -151,14 +151,14 @@ function ProfileScreen() {
               <Ionicons
                 name="notifications-outline"
                 size={20}
-                color={configs.colors.white}
+                color={configs.colors.textPrimary}
               />
               <Text style={styles.optionText}>Notifications</Text>
             </View>
             <Ionicons
               name="chevron-forward"
               size={20}
-              color={configs.colors.gray2}
+              color={configs.colors.textSecondary}
             />
           </TouchableOpacity>
 
@@ -167,14 +167,14 @@ function ProfileScreen() {
               <Ionicons
                 name="color-palette-outline"
                 size={20}
-                color={configs.colors.white}
+                color={configs.colors.textPrimary}
               />
               <Text style={styles.optionText}>Appearance</Text>
             </View>
             <Ionicons
               name="chevron-forward"
               size={20}
-              color={configs.colors.gray2}
+              color={configs.colors.textSecondary}
             />
           </TouchableOpacity>
         </View>
@@ -187,14 +187,14 @@ function ProfileScreen() {
               <Ionicons
                 name="help-circle-outline"
                 size={20}
-                color={configs.colors.white}
+                color={configs.colors.textPrimary}
               />
               <Text style={styles.optionText}>Help & Support</Text>
             </View>
             <Ionicons
               name="chevron-forward"
               size={20}
-              color={configs.colors.gray2}
+              color={configs.colors.textSecondary}
             />
           </TouchableOpacity>
 
@@ -203,14 +203,14 @@ function ProfileScreen() {
               <Ionicons
                 name="document-text-outline"
                 size={20}
-                color={configs.colors.white}
+                color={configs.colors.textPrimary}
               />
               <Text style={styles.optionText}>Terms of Service</Text>
             </View>
             <Ionicons
               name="chevron-forward"
               size={20}
-              color={configs.colors.gray2}
+              color={configs.colors.textSecondary}
             />
           </TouchableOpacity>
 
@@ -219,14 +219,14 @@ function ProfileScreen() {
               <Ionicons
                 name="shield-checkmark-outline"
                 size={20}
-                color={configs.colors.white}
+                color={configs.colors.textPrimary}
               />
               <Text style={styles.optionText}>Privacy Policy</Text>
             </View>
             <Ionicons
               name="chevron-forward"
               size={20}
-              color={configs.colors.gray2}
+              color={configs.colors.textSecondary}
             />
           </TouchableOpacity>
         </View>
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: configs.colors.white,
+    color: configs.colors.textPrimary,
   },
   profileHeader: {
     alignItems: 'center',
@@ -281,17 +281,17 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 24,
     fontWeight: '600',
-    color: configs.colors.white,
+    color: configs.colors.textPrimary,
     marginBottom: 4,
   },
   userEmail: {
     fontSize: 16,
-    color: configs.colors.gray2,
+    color: configs.colors.textSecondary,
     marginBottom: 4,
   },
   userDetails: {
     fontSize: 14,
-    color: configs.colors.gray2,
+    color: configs.colors.textSecondary,
   },
   section: {
     paddingHorizontal: 20,
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: configs.colors.white,
+    color: configs.colors.textPrimary,
     marginBottom: 16,
   },
   optionItem: {
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 16,
-    color: configs.colors.white,
+    color: configs.colors.textPrimary,
     marginLeft: 12,
   },
   logoutButton: {

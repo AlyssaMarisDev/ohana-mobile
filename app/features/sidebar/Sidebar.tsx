@@ -110,14 +110,14 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <Ionicons
                   name="today-outline"
                   size={20}
-                  color={configs.colors.white}
+                  color={configs.colors.textPrimary}
                 />
                 <Text style={styles.menuItemText}>Today</Text>
               </View>
               <Ionicons
                 name="chevron-forward"
                 size={16}
-                color={configs.colors.gray2}
+                color={configs.colors.textSecondary}
               />
             </TouchableOpacity>
           </View>
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 18,
     fontWeight: '600',
-    color: configs.colors.white,
+    color: configs.colors.textPrimary,
     flex: 1,
   },
   menuSection: {
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     fontSize: 16,
-    color: configs.colors.white,
+    color: configs.colors.textPrimary,
     marginLeft: 12,
   },
   householdsSection: {
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: configs.colors.white,
+    color: configs.colors.textPrimary,
     marginBottom: 16,
   },
   householdItem: {
@@ -254,16 +254,16 @@ const styles = StyleSheet.create({
   householdName: {
     fontSize: 16,
     fontWeight: '500',
-    color: configs.colors.white,
+    color: configs.colors.textPrimary,
   },
   loadingText: {
     fontSize: 14,
-    color: configs.colors.gray2,
+    color: configs.colors.textSecondary,
     fontStyle: 'italic',
   },
   emptyText: {
     fontSize: 14,
-    color: configs.colors.gray2,
+    color: configs.colors.textSecondary,
     fontStyle: 'italic',
   },
 });

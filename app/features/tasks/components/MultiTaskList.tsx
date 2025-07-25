@@ -184,14 +184,14 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#666',
+    color: configs.colors.textSecondary,
   },
   titleText: {
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 20,
     marginLeft: 5,
-    color: configs.colors.black,
+    color: configs.colors.textPrimary,
   },
   emptyContainer: {
     flex: 1,
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: '#666',
+    color: configs.colors.textSecondary,
   },
   fab: {
     position: 'absolute',

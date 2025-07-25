@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: configs.colors.white,
+    color: configs.colors.textPrimary,
     marginBottom: 8,
   },
   tagContainer: {
@@ -102,19 +102,19 @@ const styles = StyleSheet.create({
   },
   selectedCount: {
     fontSize: 12,
-    color: configs.colors.white,
+    color: configs.colors.textPrimary,
     marginTop: 4,
     textAlign: 'center',
   },
   loadingText: {
     textAlign: 'center',
-    color: configs.colors.white,
+    color: configs.colors.textSecondary,
     fontStyle: 'italic',
     padding: 16,
   },
   emptyText: {
     textAlign: 'center',
-    color: configs.colors.white,
+    color: configs.colors.textSecondary,
     fontStyle: 'italic',
     padding: 16,
   },

@@ -157,7 +157,7 @@ function UpdateTaskModal({
                   <MaterialCommunityIcons
                     name="dots-vertical"
                     size={28}
-                    color={configs.colors.white}
+                    color={configs.colors.textPrimary}
                   />
                 </TouchableOpacity>
                 <ActionMenu
@@ -167,7 +167,7 @@ function UpdateTaskModal({
                   <ActionMenuItem
                     title="Delete Task"
                     icon={<MaterialCommunityIcons name="delete" size={20} />}
-                    color={configs.colors.danger}
+                    color={configs.colors.gray5}
                     onPress={handleDelete}
                   />
                 </ActionMenu>

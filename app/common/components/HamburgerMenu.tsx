@@ -14,7 +14,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ onPress }) => {
       onPress={onPress}
       activeOpacity={0.7}
     >
-      <Ionicons name="menu" size={24} color={configs.white} />
+      <Ionicons name="menu" size={24} color={configs.textPrimary} />
     </TouchableOpacity>
   );
 };

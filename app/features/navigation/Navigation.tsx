@@ -58,7 +58,7 @@ function NavigationContent() {
           headerTitleStyle: {
             fontSize: 20,
             fontWeight: '600',
-            color: configs.colors.white,
+            color: configs.colors.textPrimary,
           },
           headerBackVisible: false, // Hide back button for cleaner look
           headerShadowVisible: false, // Remove the horizontal line/shadow
