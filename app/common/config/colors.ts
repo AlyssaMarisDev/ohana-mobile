@@ -11,6 +11,16 @@ export default {
   gray3: '#666',
   gray4: '#333',
   gray5: '#222',
+
+  // Background and foreground colors
+  background: '#0d0d0d',
+  foreground: '#212121',
+  foreground2: '#252525',
+
+  // Text colors
+  textPrimary: '#fff',
+  textSecondary: '#999',
+
   tagColors: [
     '#FF6B6B', // Bright red - excellent contrast
     '#4ECDC4', // Bright teal - very readable

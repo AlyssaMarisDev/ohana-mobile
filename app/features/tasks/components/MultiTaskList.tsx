@@ -130,7 +130,6 @@ function MultiTaskList({
           onToggleTask={onToggleTask}
           onUpdateTask={handleUpdateTask}
           showHousehold={showHousehold}
-          backgroundColor={configs.colors.gray5}
         />
 
         <TaskList
@@ -139,7 +138,6 @@ function MultiTaskList({
           onToggleTask={onToggleTask}
           onUpdateTask={handleUpdateTask}
           showHousehold={showHousehold}
-          backgroundColor={configs.colors.gray5}
         />
 
         {tasks.length === 0 && !isLoading && (

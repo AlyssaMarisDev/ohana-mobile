@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContainer: {
-    backgroundColor: configs.colors.gray5,
+    backgroundColor: configs.colors.foreground,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingTop: 20,

@@ -40,24 +40,33 @@ function TaskPreview({
 }: TaskPreviewProps) {
   const { households } = useGlobalState();
   const { data: tags } = useTags(task.householdId);
-  const today = new Date();
   const taskDueDate = new Date(task.dueDate);
-
-  const isToday =
-    taskDueDate.toLocaleDateString() === today.toLocaleDateString();
-  const isTomorrow =
-    taskDueDate.toLocaleDateString() ===
-    new Date(today.getTime() + 24 * 60 * 60 * 1000).toLocaleDateString();
-  const isInPast = taskDueDate.getTime() < today.getTime();
   const isCompleted = task.status === 'COMPLETED';
 
-  const doByString = isToday
-    ? 'Today'
-    : isTomorrow
-      ? 'Tomorrow'
-      : isInPast
-        ? 'Overdue'
-        : taskDueDate.toLocaleDateString();
+  // Function to format date as "July 25th"
+  const formatDate = (date: Date) => {
+    const month = date.toLocaleDateString('en-US', { month: 'long' });
+    const day = date.getDate();
+    const suffix = getDaySuffix(day);
+    return `${month} ${day}${suffix}`;
+  };
+
+  // Function to get day suffix (st, nd, rd, th)
+  const getDaySuffix = (day: number) => {
+    if (day >= 11 && day <= 13) return 'th';
+    switch (day % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }
+  };
+
+  const doByString = formatDate(taskDueDate);
 
   const household = households.find(h => h.id === task.householdId);
 

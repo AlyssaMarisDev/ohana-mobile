@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: width * 0.8, // 80% of screen width
     height: '100%',
-    backgroundColor: configs.colors.gray5,
+    backgroundColor: configs.colors.background,
     shadowColor: '#000',
     shadowOffset: {
       width: 2,

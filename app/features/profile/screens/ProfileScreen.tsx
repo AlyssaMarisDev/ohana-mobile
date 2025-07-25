@@ -244,7 +244,7 @@ function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 0,
-    backgroundColor: configs.colors.gray5,
+    backgroundColor: configs.colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 30,
     paddingHorizontal: 20,
-    backgroundColor: configs.colors.gray4,
+    backgroundColor: configs.colors.foreground,
   },
   profileImage: {
     width: 100,

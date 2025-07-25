@@ -52,7 +52,7 @@ function NavigationContent() {
           headerShown: isAuthenticated, // Only show header for authenticated screens
           headerLeft: () => <HamburgerMenu onPress={handleHamburgerPress} />,
           headerStyle: {
-            backgroundColor: configs.colors.gray4,
+            backgroundColor: configs.colors.background,
           },
           headerTransparent: false, // This ensures header takes up space
           headerTitleStyle: {
