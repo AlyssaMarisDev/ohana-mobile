@@ -58,7 +58,13 @@ export const useTasks = () => {
       data,
     }: {
       taskId: string;
-      data: Omit<Task, 'id' | 'createdBy' | 'householdId'>;
+      data: {
+        title: string;
+        description: string;
+        dueDate: string;
+        status: TaskStatus;
+        tagIds: string[];
+      };
     }) => {
       return await taskService.updateTask(taskId, data);
     },
@@ -76,9 +82,12 @@ export const useTasks = () => {
       // Optimistically update to the new value
       queryClient.setQueryData(['tasks'], (old: Task[] | undefined) => {
         if (!old) return old;
-        return old.map(task =>
-          task.id === taskId ? { ...task, ...data } : task
-        );
+        return old.map(task => {
+          if (task.id === taskId) {
+            return { ...task, ...data };
+          }
+          return task;
+        });
       });
 
       // Return a context object with the snapshotted value
@@ -101,6 +110,11 @@ export const useTasks = () => {
           err instanceof Error ? err.message : 'Unknown error'
         }`
       );
+    },
+
+    // On success, invalidate queries to get fresh data from server
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
   });
 
@@ -125,7 +139,13 @@ export const useTasks = () => {
   const updateTaskData = (task: Omit<Task, 'createdBy' | 'householdId'>) => {
     updateTaskMutation.mutate({
       taskId: task.id,
-      data: task,
+      data: {
+        title: task.title,
+        description: task.description,
+        dueDate: task.dueDate,
+        status: task.status,
+        tagIds: task.tagIds || [],
+      },
     });
   };
 

@@ -130,7 +130,7 @@ function MultiTaskList({
           onToggleTask={onToggleTask}
           onUpdateTask={handleUpdateTask}
           showHousehold={showHousehold}
-          backgroundColor={configs.colors.primary}
+          backgroundColor={configs.colors.gray4}
         />
 
         <TaskList

@@ -12,6 +12,14 @@ export interface Task {
   tagIds: string[];
 }
 
+export interface TaskUpdateData {
+  title: string;
+  description: string;
+  dueDate: string;
+  status: TaskStatus;
+  tagIds: string[];
+}
+
 export enum TaskStatus {
   PENDING = 'PENDING',
   IN_PROGRESS = 'IN_PROGRESS',
@@ -43,10 +51,7 @@ export class TaskService extends BaseService {
     return response.data;
   }
 
-  async updateTask(
-    taskId: string,
-    taskData: Omit<Task, 'id' | 'createdBy' | 'householdId'>
-  ): Promise<Task> {
+  async updateTask(taskId: string, taskData: TaskUpdateData): Promise<Task> {
     const response = await this.put(`/tasks/${taskId}`, taskData);
     return response.data;
   }

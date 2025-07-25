@@ -14,7 +14,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Text from '../../../common/components/Text';
 import TextInput from '../../../common/components/TextInput';
 import Button from '../../../common/components/Button';
-import { Task } from '../services/TaskService';
+import { Task, TaskUpdateData } from '../services/TaskService';
 import { TagSelector } from '../../tags/components/TagSelector';
 import configs from '../../../common/config';
 import {
@@ -25,10 +25,7 @@ import {
 interface UpdateTaskModalProps {
   visible: boolean;
   onClose: () => void;
-  onSubmit: (
-    taskId: string,
-    data: Omit<Task, 'id' | 'createdBy' | 'householdId'>
-  ) => void;
+  onSubmit: (taskId: string, data: TaskUpdateData) => void;
   task: Task | null;
   onDelete?: (taskId: string) => void;
 }
@@ -56,6 +53,16 @@ function UpdateTaskModal({
       setSelectedTagIds(task.tagIds || []);
     }
   }, [task]);
+
+  // Also update form when modal becomes visible
+  useEffect(() => {
+    if (visible && task) {
+      setTitle(task.title);
+      setDescription(task.description);
+      setDueDate(task.dueDate.split('T')[0]); // Extract date part only
+      setSelectedTagIds(task.tagIds || []);
+    }
+  }, [visible, task]);
 
   // Handle animation when visibility changes
   useEffect(() => {

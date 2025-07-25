@@ -67,7 +67,13 @@ export const useTasksByHousehold = (
       data,
     }: {
       taskId: string;
-      data: Omit<Task, 'id' | 'createdBy' | 'householdId'>;
+      data: {
+        title: string;
+        description: string;
+        dueDate: string;
+        status: TaskStatus;
+        tagIds: string[];
+      };
     }) => {
       return await taskService.updateTask(taskId, data);
     },
@@ -91,9 +97,12 @@ export const useTasksByHousehold = (
         ['tasks', 'household', householdId],
         (old: Task[] | undefined) => {
           if (!old) return old;
-          return old.map(task =>
-            task.id === taskId ? { ...task, ...data } : task
-          );
+          return old.map(task => {
+            if (task.id === taskId) {
+              return { ...task, ...data };
+            }
+            return task;
+          });
         }
       );
 
@@ -121,12 +130,26 @@ export const useTasksByHousehold = (
         }`
       );
     },
+
+    // On success, invalidate queries to get fresh data from server
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['tasks', 'household', householdId],
+      });
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
   });
 
   const updateTaskData = (task: Omit<Task, 'createdBy' | 'householdId'>) => {
     updateTaskMutation.mutate({
       taskId: task.id,
-      data: task,
+      data: {
+        title: task.title,
+        description: task.description,
+        dueDate: task.dueDate,
+        status: task.status,
+        tagIds: task.tagIds || [],
+      },
     });
   };
 
