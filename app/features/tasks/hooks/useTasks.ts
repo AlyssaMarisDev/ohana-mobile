@@ -23,7 +23,11 @@ export const useTasks = () => {
 
   // Create task mutation
   const createTaskMutation = useMutation({
-    mutationFn: async (taskData: { title: string; householdId: string }) => {
+    mutationFn: async (taskData: {
+      title: string;
+      householdId: string;
+      tagIds: string[];
+    }) => {
       return await taskService.createTask({
         id: uuidv4(),
         title: taskData.title,
@@ -31,6 +35,7 @@ export const useTasks = () => {
         dueDate: new Date().toISOString(),
         status: TaskStatus.PENDING,
         householdId: taskData.householdId,
+        tagIds: taskData.tagIds,
       });
     },
     onSuccess: () => {
@@ -124,8 +129,12 @@ export const useTasks = () => {
     });
   };
 
-  const createNewTask = (title: string, householdId: string) => {
-    createTaskMutation.mutate({ title, householdId });
+  const createNewTask = (
+    title: string,
+    householdId: string,
+    tagIds: string[] = []
+  ) => {
+    createTaskMutation.mutate({ title, householdId, tagIds });
   };
 
   const deleteTask = (taskId: string) => {

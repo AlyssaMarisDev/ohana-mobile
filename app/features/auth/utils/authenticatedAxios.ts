@@ -24,6 +24,12 @@ export const createAuthenticatedAxios = () => {
     async error => {
       const originalRequest = error.config;
 
+      // Don't retry timeout errors
+      if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+        enhancedLogger.error('Request timeout in interceptor', error);
+        return Promise.reject(error);
+      }
+
       if (error.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
 

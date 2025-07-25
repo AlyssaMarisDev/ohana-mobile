@@ -25,11 +25,19 @@ export class EnhancedLogger {
   private logger = logger;
 
   debug(message: string, data?: any): void {
-    this.logger.debug(message, data);
+    if (data) {
+      this.logger.debug(message, data);
+    } else {
+      this.logger.debug(message);
+    }
   }
 
   info(message: string, data?: any): void {
-    this.logger.info(message, data);
+    if (data) {
+      this.logger.info(message, data);
+    } else {
+      this.logger.info(message);
+    }
   }
 
   warn(message: string, data?: any, error?: Error): void {
@@ -42,6 +50,7 @@ export class EnhancedLogger {
           }
         : undefined,
     };
+
     this.logger.warn(message, logData);
   }
 
@@ -55,6 +64,7 @@ export class EnhancedLogger {
           }
         : undefined,
     };
+
     this.logger.error(message, logData);
 
     // Send to crash reporting if enabled

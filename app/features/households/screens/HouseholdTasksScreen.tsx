@@ -44,8 +44,12 @@ function HouseholdTasksScreen() {
     updateTaskData({ ...task, status: newStatus });
   };
 
-  const handleCreateTask = (title: string, taskHouseholdId: string) => {
-    createNewTask(title, taskHouseholdId);
+  const handleCreateTask = (
+    title: string,
+    taskHouseholdId: string,
+    tagIds: string[]
+  ) => {
+    createNewTask(title, taskHouseholdId, tagIds);
   };
 
   const handleUpdateTask = (

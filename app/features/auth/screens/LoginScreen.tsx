@@ -9,6 +9,7 @@ import Text from '../../../common/components/Text';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { enhancedLogger } from '@/app/common/utils/logger';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
@@ -21,7 +22,6 @@ function LoginScreen() {
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (values: { email: string; password: string }) => {
-    console.log(values);
     try {
       await login(values.email, values.password);
       setError(null);

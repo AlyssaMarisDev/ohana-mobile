@@ -15,12 +15,13 @@ import TextInput from '../../../common/components/TextInput';
 import Button from '../../../common/components/Button';
 import HouseholdSelector from '../../households/components/HouseholdSelector';
 import { Household } from '../../households/services/HouseholdService';
+import { TagSelector } from '../../tags/components/TagSelector';
 import configs from '../../../common/config';
 
 interface CreateTaskModalProps {
   visible: boolean;
   onClose: () => void;
-  onSubmit: (title: string, householdId: string) => void;
+  onSubmit: (title: string, householdId: string, tagIds: string[]) => void;
   households: Household[];
   isLoadingHouseholds?: boolean;
   preSelectedHouseholdId?: string;
@@ -38,6 +39,7 @@ function CreateTaskModal({
   const [selectedHouseholdId, setSelectedHouseholdId] = useState<string | null>(
     preSelectedHouseholdId || null
   );
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
 
   // Update selected household when preSelectedHouseholdId changes
   React.useEffect(() => {
@@ -46,9 +48,10 @@ function CreateTaskModal({
 
   const handleSubmit = () => {
     if (title.trim() && selectedHouseholdId) {
-      onSubmit(title.trim(), selectedHouseholdId);
+      onSubmit(title.trim(), selectedHouseholdId, selectedTagIds);
       setTitle('');
       setSelectedHouseholdId(preSelectedHouseholdId || null);
+      setSelectedTagIds([]);
       onClose();
     }
   };
@@ -56,7 +59,14 @@ function CreateTaskModal({
   const handleClose = () => {
     setTitle('');
     setSelectedHouseholdId(preSelectedHouseholdId || null);
+    setSelectedTagIds([]);
     onClose();
+  };
+
+  const handleTagToggle = (tagId: string) => {
+    setSelectedTagIds(prev =>
+      prev.includes(tagId) ? prev.filter(id => id !== tagId) : [...prev, tagId]
+    );
   };
 
   const isFormValid = title.trim() && selectedHouseholdId;
@@ -106,6 +116,13 @@ function CreateTaskModal({
                     isLoading={isLoadingHouseholds}
                   />
                 )}
+
+                <TagSelector
+                  householdId={selectedHouseholdId || undefined}
+                  selectedTagIds={selectedTagIds}
+                  onTagToggle={handleTagToggle}
+                  maxHeight={100}
+                />
 
                 <Button
                   onPress={isFormValid ? handleSubmit : () => {}}

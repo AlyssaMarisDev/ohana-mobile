@@ -14,6 +14,7 @@ import Text from '../../../common/components/Text';
 import TextInput from '../../../common/components/TextInput';
 import Button from '../../../common/components/Button';
 import { Task } from '../services/TaskService';
+import { TagSelector } from '../../tags/components/TagSelector';
 import configs from '../../../common/config';
 import {
   ActionMenu,
@@ -41,6 +42,7 @@ function UpdateTaskModal({
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [menuVisible, setMenuVisible] = useState(false);
 
   // Update form when task changes
@@ -49,6 +51,7 @@ function UpdateTaskModal({
       setTitle(task.title);
       setDescription(task.description);
       setDueDate(task.dueDate.split('T')[0]); // Extract date part only
+      setSelectedTagIds(task.tagIds || []);
     }
   }, [task]);
 
@@ -59,6 +62,7 @@ function UpdateTaskModal({
         description: description.trim(),
         dueDate: new Date(dueDate).toISOString(),
         status: task.status,
+        tagIds: selectedTagIds,
       });
       onClose();
     }
@@ -74,6 +78,12 @@ function UpdateTaskModal({
       setMenuVisible(false);
       onClose();
     }
+  };
+
+  const handleTagToggle = (tagId: string) => {
+    setSelectedTagIds(prev =>
+      prev.includes(tagId) ? prev.filter(id => id !== tagId) : [...prev, tagId]
+    );
   };
 
   const isFormValid = title.trim() && dueDate;
@@ -143,6 +153,15 @@ function UpdateTaskModal({
                   icon="calendar"
                   style={styles.input}
                 />
+
+                {task && (
+                  <TagSelector
+                    householdId={task.householdId}
+                    selectedTagIds={selectedTagIds}
+                    onTagToggle={handleTagToggle}
+                    maxHeight={100}
+                  />
+                )}
 
                 <Button
                   onPress={isFormValid ? handleSubmit : () => {}}

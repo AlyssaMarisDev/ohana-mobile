@@ -9,6 +9,7 @@ export interface Task {
   status: TaskStatus;
   createdBy: string;
   householdId: string;
+  tagIds: string[];
 }
 
 export enum TaskStatus {

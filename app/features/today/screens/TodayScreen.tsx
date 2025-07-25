@@ -31,8 +31,12 @@ function TodayScreen() {
     updateTaskData({ ...task, status: newStatus });
   };
 
-  const handleCreateTask = (title: string, householdId: string) => {
-    createNewTask(title, householdId);
+  const handleCreateTask = (
+    title: string,
+    householdId: string,
+    tagIds: string[]
+  ) => {
+    createNewTask(title, householdId, tagIds);
   };
 
   const handleUpdateTask = (

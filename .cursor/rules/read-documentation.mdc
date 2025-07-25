@@ -1,0 +1,9 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+- Read this file before making or suggesting changes to project
+
+@AI_AGENT_GUIDE.md

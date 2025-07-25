@@ -38,7 +38,6 @@ function RegisterScreen() {
     email: string;
     password: string;
   }) => {
-    console.log(values);
     try {
       await register(values.name, values.email, values.password);
       setError(null);

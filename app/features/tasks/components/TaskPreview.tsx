@@ -12,11 +12,14 @@ import React from 'react';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Task } from '../services/TaskService';
 import { useGlobalState } from '../../../common/context/GlobalStateContext';
+import { useTags } from '../../tags/hooks/useTags';
+import { Tag } from '../../tags/components/Tag';
 
 type TaskPreviewProps = {
   task: Task;
   showDueDate?: boolean;
   showHousehold?: boolean;
+  showTags?: boolean;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   textColor?: string;
@@ -28,6 +31,7 @@ function TaskPreview({
   task,
   showDueDate = true,
   showHousehold = false,
+  showTags = true,
   style,
   textStyle,
   textColor,
@@ -35,6 +39,7 @@ function TaskPreview({
   onUpdateTask,
 }: TaskPreviewProps) {
   const { households } = useGlobalState();
+  const { data: tags } = useTags(task.householdId);
   const today = new Date();
   const taskDueDate = new Date(task.dueDate);
 
@@ -55,6 +60,9 @@ function TaskPreview({
         : taskDueDate.toLocaleDateString();
 
   const household = households.find(h => h.id === task.householdId);
+
+  // Filter tags to only show the ones assigned to this task
+  const taskTags = tags?.filter(tag => task.tagIds?.includes(tag.id)) || [];
 
   const handleCheckboxPress = () => {
     if (onPress) {
@@ -108,6 +116,22 @@ function TaskPreview({
         >
           {task.title}
         </Text>
+
+        {showTags && taskTags.length > 0 && (
+          <View style={styles.tagsContainer}>
+            {taskTags.slice(0, 3).map(tag => (
+              <Tag key={tag.id} tag={tag} size="small" />
+            ))}
+            {taskTags.length > 3 && (
+              <Text
+                style={[styles.moreTags, { color: textColor || colors.white }]}
+              >
+                +{taskTags.length - 3}
+              </Text>
+            )}
+          </View>
+        )}
+
         {showDueDate && (
           <View style={styles.bottomRow}>
             <Text
@@ -151,6 +175,18 @@ const styles = StyleSheet.create({
     color: colors.white,
     marginBottom: 2,
     fontWeight: 'bold',
+  },
+  tagsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 4,
+    gap: 4,
+  },
+  moreTags: {
+    fontSize: 10,
+    opacity: 0.7,
+    alignSelf: 'center',
+    marginLeft: 2,
   },
   bottomRow: {
     flexDirection: 'row',

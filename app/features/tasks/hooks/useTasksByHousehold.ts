@@ -26,7 +26,11 @@ export const useTasksByHousehold = (
 
   // Create task mutation
   const createTaskMutation = useMutation({
-    mutationFn: async (taskData: { title: string; householdId: string }) => {
+    mutationFn: async (taskData: {
+      title: string;
+      householdId: string;
+      tagIds: string[];
+    }) => {
       // Generate a UUID for the task ID
       const taskId = uuidv4();
 
@@ -37,6 +41,7 @@ export const useTasksByHousehold = (
         dueDate: new Date().toISOString(),
         status: TaskStatus.PENDING,
         householdId: taskData.householdId,
+        tagIds: taskData.tagIds,
       });
     },
     onSuccess: () => {
@@ -125,8 +130,12 @@ export const useTasksByHousehold = (
     });
   };
 
-  const createNewTask = (title: string, taskHouseholdId: string) => {
-    createTaskMutation.mutate({ title, householdId: taskHouseholdId });
+  const createNewTask = (
+    title: string,
+    taskHouseholdId: string,
+    tagIds: string[] = []
+  ) => {
+    createTaskMutation.mutate({ title, householdId: taskHouseholdId, tagIds });
   };
 
   return {

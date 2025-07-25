@@ -25,7 +25,7 @@ interface TaskListProps {
     taskId: string,
     data: Omit<Task, 'id' | 'createdBy' | 'householdId'>
   ) => void;
-  onCreateTask: (title: string, householdId: string) => void;
+  onCreateTask: (title: string, householdId: string, tagIds: string[]) => void;
   households: Household[];
   isLoadingHouseholds?: boolean;
   showCreateButton?: boolean;
@@ -63,8 +63,12 @@ function MultiTaskList({
     }
   };
 
-  const handleCreateTask = (title: string, householdId: string) => {
-    onCreateTask(title, householdId);
+  const handleCreateTask = (
+    title: string,
+    householdId: string,
+    tagIds: string[]
+  ) => {
+    onCreateTask(title, householdId, tagIds);
   };
 
   const handleUpdateTask = (task: Task) => {
