@@ -96,26 +96,50 @@ function ProfileScreen() {
 
           <TouchableOpacity style={styles.optionItem}>
             <View style={styles.optionLeft}>
-              <Ionicons name="person-outline" size={20} color="#666" />
+              <Ionicons
+                name="person-outline"
+                size={20}
+                color={configs.colors.white}
+              />
               <Text style={styles.optionText}>Edit Profile</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#ccc" />
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={configs.colors.gray2}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.optionItem}>
             <View style={styles.optionLeft}>
-              <Ionicons name="mail-outline" size={20} color="#666" />
+              <Ionicons
+                name="mail-outline"
+                size={20}
+                color={configs.colors.white}
+              />
               <Text style={styles.optionText}>Change Email</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#ccc" />
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={configs.colors.gray2}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.optionItem}>
             <View style={styles.optionLeft}>
-              <Ionicons name="lock-closed-outline" size={20} color="#666" />
+              <Ionicons
+                name="lock-closed-outline"
+                size={20}
+                color={configs.colors.white}
+              />
               <Text style={styles.optionText}>Change Password</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#ccc" />
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={configs.colors.gray2}
+            />
           </TouchableOpacity>
         </View>
 
@@ -124,18 +148,34 @@ function ProfileScreen() {
 
           <TouchableOpacity style={styles.optionItem}>
             <View style={styles.optionLeft}>
-              <Ionicons name="notifications-outline" size={20} color="#666" />
+              <Ionicons
+                name="notifications-outline"
+                size={20}
+                color={configs.colors.white}
+              />
               <Text style={styles.optionText}>Notifications</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#ccc" />
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={configs.colors.gray2}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.optionItem}>
             <View style={styles.optionLeft}>
-              <Ionicons name="color-palette-outline" size={20} color="#666" />
+              <Ionicons
+                name="color-palette-outline"
+                size={20}
+                color={configs.colors.white}
+              />
               <Text style={styles.optionText}>Appearance</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#ccc" />
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={configs.colors.gray2}
+            />
           </TouchableOpacity>
         </View>
 
@@ -144,18 +184,34 @@ function ProfileScreen() {
 
           <TouchableOpacity style={styles.optionItem}>
             <View style={styles.optionLeft}>
-              <Ionicons name="help-circle-outline" size={20} color="#666" />
+              <Ionicons
+                name="help-circle-outline"
+                size={20}
+                color={configs.colors.white}
+              />
               <Text style={styles.optionText}>Help & Support</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#ccc" />
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={configs.colors.gray2}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.optionItem}>
             <View style={styles.optionLeft}>
-              <Ionicons name="document-text-outline" size={20} color="#666" />
+              <Ionicons
+                name="document-text-outline"
+                size={20}
+                color={configs.colors.white}
+              />
               <Text style={styles.optionText}>Terms of Service</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#ccc" />
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={configs.colors.gray2}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.optionItem}>
@@ -163,11 +219,15 @@ function ProfileScreen() {
               <Ionicons
                 name="shield-checkmark-outline"
                 size={20}
-                color="#666"
+                color={configs.colors.white}
               />
               <Text style={styles.optionText}>Privacy Policy</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#ccc" />
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={configs.colors.gray2}
+            />
           </TouchableOpacity>
         </View>
 
@@ -184,6 +244,7 @@ function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 0,
+    backgroundColor: configs.colors.gray5,
   },
   loadingContainer: {
     flex: 1,
@@ -193,13 +254,13 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#666',
+    color: configs.colors.white,
   },
   profileHeader: {
     alignItems: 'center',
     paddingVertical: 30,
     paddingHorizontal: 20,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: configs.colors.gray4,
   },
   profileImage: {
     width: 100,
@@ -220,17 +281,17 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 24,
     fontWeight: '600',
-    color: '#000',
+    color: configs.colors.white,
     marginBottom: 4,
   },
   userEmail: {
     fontSize: 16,
-    color: '#666',
+    color: configs.colors.gray2,
     marginBottom: 4,
   },
   userDetails: {
     fontSize: 14,
-    color: '#888',
+    color: configs.colors.gray2,
   },
   section: {
     paddingHorizontal: 20,
@@ -239,7 +300,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#000',
+    color: configs.colors.white,
     marginBottom: 16,
   },
   optionItem: {
@@ -248,7 +309,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: configs.colors.gray4,
   },
   optionLeft: {
     flexDirection: 'row',
@@ -256,7 +317,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 16,
-    color: '#333',
+    color: configs.colors.white,
     marginLeft: 12,
   },
   logoutButton: {
@@ -266,7 +327,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 20,
     paddingVertical: 16,
-    backgroundColor: '#fff',
+    backgroundColor: configs.colors.gray4,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#ff4444',

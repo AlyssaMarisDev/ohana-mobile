@@ -43,7 +43,7 @@ export const Tag: React.FC<TagProps> = ({
         style={[
           styles.text,
           { fontSize: sizeStyles[size].fontSize },
-          isSelected ? { color: 'white' } : { color: tag.color },
+          isSelected ? { color: 'black' } : { color: tag.color },
         ]}
       >
         {tag.name}

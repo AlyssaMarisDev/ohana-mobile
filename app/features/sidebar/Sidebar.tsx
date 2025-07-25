@@ -107,10 +107,18 @@ const Sidebar: React.FC<SidebarProps> = ({
               activeOpacity={0.7}
             >
               <View style={styles.menuItemLeft}>
-                <Ionicons name="today-outline" size={20} color="#666" />
+                <Ionicons
+                  name="today-outline"
+                  size={20}
+                  color={configs.colors.white}
+                />
                 <Text style={styles.menuItemText}>Today</Text>
               </View>
-              <Ionicons name="chevron-forward" size={16} color="#ccc" />
+              <Ionicons
+                name="chevron-forward"
+                size={16}
+                color={configs.colors.gray2}
+              />
             </TouchableOpacity>
           </View>
 
@@ -163,7 +171,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: width * 0.8, // 80% of screen width
     height: '100%',
-    backgroundColor: configs.colors.white,
+    backgroundColor: configs.colors.gray5,
     shadowColor: '#000',
     shadowOffset: {
       width: 2,
@@ -204,7 +212,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#000',
+    color: configs.colors.white,
     flex: 1,
   },
   menuSection: {
@@ -216,7 +224,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: configs.colors.gray4,
   },
   menuItemLeft: {
     flexDirection: 'row',
@@ -224,7 +232,7 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     fontSize: 16,
-    color: '#333',
+    color: configs.colors.white,
     marginLeft: 12,
   },
   householdsSection: {
@@ -235,27 +243,27 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: configs.colors.white,
     marginBottom: 16,
   },
   householdItem: {
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: configs.colors.gray4,
   },
   householdName: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333',
+    color: configs.colors.white,
   },
   loadingText: {
     fontSize: 14,
-    color: '#666',
+    color: configs.colors.gray2,
     fontStyle: 'italic',
   },
   emptyText: {
     fontSize: 14,
-    color: '#666',
+    color: configs.colors.gray2,
     fontStyle: 'italic',
   },
 });

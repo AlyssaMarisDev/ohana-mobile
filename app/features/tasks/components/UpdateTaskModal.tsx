@@ -157,7 +157,7 @@ function UpdateTaskModal({
                   <MaterialCommunityIcons
                     name="dots-vertical"
                     size={28}
-                    color={configs.colors.gray3}
+                    color={configs.colors.white}
                   />
                 </TouchableOpacity>
                 <ActionMenu
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContainer: {
-    backgroundColor: configs.colors.white,
+    backgroundColor: configs.colors.gray5,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingTop: 20,
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: configs.colors.black,
+    color: configs.colors.white,
   },
   closeButton: {
     padding: 5,

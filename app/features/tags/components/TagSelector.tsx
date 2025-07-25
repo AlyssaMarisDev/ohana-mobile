@@ -75,12 +75,6 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
           })}
         </View>
       </ScrollView>
-      {selectedTagIds.length > 0 && (
-        <Text style={styles.selectedCount}>
-          {selectedTagIds.length} tag{selectedTagIds.length !== 1 ? 's' : ''}{' '}
-          selected
-        </Text>
-      )}
     </View>
   );
 };
@@ -92,7 +86,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: configs.colors.black,
+    color: configs.colors.white,
     marginBottom: 8,
   },
   tagContainer: {
@@ -108,19 +102,19 @@ const styles = StyleSheet.create({
   },
   selectedCount: {
     fontSize: 12,
-    color: configs.colors.gray3,
+    color: configs.colors.white,
     marginTop: 4,
     textAlign: 'center',
   },
   loadingText: {
     textAlign: 'center',
-    color: configs.colors.gray3,
+    color: configs.colors.white,
     fontStyle: 'italic',
     padding: 16,
   },
   emptyText: {
     textAlign: 'center',
-    color: configs.colors.gray3,
+    color: configs.colors.white,
     fontStyle: 'italic',
     padding: 16,
   },

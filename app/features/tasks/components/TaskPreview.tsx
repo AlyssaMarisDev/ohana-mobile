@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     color: colors.white,
+    marginTop: 3,
     marginBottom: 2,
     fontWeight: 'bold',
   },
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   checkIcon: {
-    marginTop: 2,
+    // Removed marginTop to align with title
   },
   disabled: {
     opacity: 0.6,

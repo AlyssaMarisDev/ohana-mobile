@@ -21,7 +21,7 @@ function TaskList({
   onToggleTask,
   onUpdateTask,
   showHousehold = false,
-  backgroundColor = configs.colors.primary,
+  backgroundColor = configs.colors.gray5,
   textColor = configs.colors.white,
 }: TaskListBoxProps) {
   if (tasks.length === 0) {

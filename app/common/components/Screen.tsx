@@ -19,7 +19,7 @@ function Screen({ children, style }: ScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: configs.colors.white,
+    backgroundColor: configs.colors.gray4,
   },
 });
 
