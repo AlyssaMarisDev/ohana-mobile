@@ -113,13 +113,6 @@ function CreateTaskModal({
         >
           <View style={styles.header}>
             <Text style={styles.title}>Create New Task</Text>
-            <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-              <MaterialCommunityIcons
-                name="close"
-                size={24}
-                color={configs.colors.gray3}
-              />
-            </TouchableOpacity>
           </View>
 
           <View style={styles.content}>
