@@ -67,17 +67,9 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
               <TouchableOpacity
                 key={tag.id}
                 onPress={() => onTagToggle(tag.id)}
-                style={[
-                  styles.tagWrapper,
-                  isSelected && styles.selectedTagWrapper,
-                ]}
+                style={styles.tagWrapper}
               >
-                <Tag tag={tag} size="small" />
-                {isSelected && (
-                  <View style={styles.checkmark}>
-                    <Text style={styles.checkmarkText}>✓</Text>
-                  </View>
-                )}
+                <Tag tag={tag} size="small" isSelected={isSelected} />
               </TouchableOpacity>
             );
           })}
@@ -104,11 +96,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   tagContainer: {
-    borderWidth: 1,
-    borderColor: configs.colors.gray2,
-    borderRadius: 8,
-    padding: 8,
-    backgroundColor: configs.colors.white,
+    // Removed border and background to eliminate the box
   },
   tagGrid: {
     flexDirection: 'row',
@@ -117,27 +105,6 @@ const styles = StyleSheet.create({
   },
   tagWrapper: {
     position: 'relative',
-  },
-  selectedTagWrapper: {
-    opacity: 0.8,
-  },
-  checkmark: {
-    position: 'absolute',
-    top: -4,
-    right: -4,
-    backgroundColor: configs.colors.primary,
-    borderRadius: 10,
-    width: 20,
-    height: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: configs.colors.white,
-  },
-  checkmarkText: {
-    color: configs.colors.white,
-    fontSize: 12,
-    fontWeight: 'bold',
   },
   selectedCount: {
     fontSize: 12,

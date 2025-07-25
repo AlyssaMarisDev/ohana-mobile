@@ -1,11 +1,17 @@
+import axios from 'axios';
 import tokenManager from './tokenManager';
-import baseAxios from '../../../common/utils/baseAxios';
 import { enhancedLogger } from '@/app/common/utils/logger';
+import { API_CONFIG } from '@/app/common/config/constants';
 
 // Create an axios instance with automatic token refresh
 export const createAuthenticatedAxios = () => {
+  const axiosInstance = axios.create({
+    baseURL: API_CONFIG.FULL_URL,
+    timeout: 5000,
+  });
+
   // Add request interceptor to include access token
-  baseAxios.interceptors.request.use(
+  axiosInstance.interceptors.request.use(
     async config => {
       const accessToken = await tokenManager.getValidAccessToken();
       if (accessToken) {
@@ -19,7 +25,7 @@ export const createAuthenticatedAxios = () => {
   );
 
   // Add response interceptor to handle 401 errors
-  baseAxios.interceptors.response.use(
+  axiosInstance.interceptors.response.use(
     response => response,
     async error => {
       const originalRequest = error.config;
@@ -37,7 +43,7 @@ export const createAuthenticatedAxios = () => {
           const newAccessToken = await tokenManager.getValidAccessToken();
           if (newAccessToken) {
             originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-            return baseAxios(originalRequest);
+            return axiosInstance(originalRequest);
           }
         } catch (refreshError: any) {
           enhancedLogger.error('Token refresh failed:', refreshError);
@@ -48,7 +54,7 @@ export const createAuthenticatedAxios = () => {
     }
   );
 
-  return baseAxios;
+  return axiosInstance;
 };
 
 // Export a default instance for convenience

@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Modal,
   ScrollView,
 } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -24,20 +23,26 @@ function HouseholdSelector({
   onSelectHousehold,
   isLoading = false,
 }: HouseholdSelectorProps) {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const selectedHousehold = households.find(h => h.id === selectedHouseholdId);
 
   const handleSelectHousehold = (householdId: string) => {
     onSelectHousehold(householdId);
-    setIsModalVisible(false);
+    setIsDropdownOpen(false);
+  };
+
+  const toggleDropdown = () => {
+    if (!isLoading) {
+      setIsDropdownOpen(!isDropdownOpen);
+    }
   };
 
   return (
-    <>
+    <View style={styles.container}>
       <TouchableOpacity
         style={styles.selector}
-        onPress={() => setIsModalVisible(true)}
+        onPress={toggleDropdown}
         disabled={isLoading}
       >
         <View style={styles.selectorContent}>
@@ -52,72 +57,60 @@ function HouseholdSelector({
           </Text>
         </View>
         <MaterialCommunityIcons
-          name="chevron-down"
+          name={isDropdownOpen ? 'chevron-up' : 'chevron-down'}
           size={20}
           color={configs.colors.gray3}
         />
       </TouchableOpacity>
 
-      <Modal
-        visible={isModalVisible}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setIsModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Select Household</Text>
+      {isDropdownOpen && (
+        <View style={styles.dropdownContainer}>
+          <ScrollView
+            style={styles.dropdownList}
+            showsVerticalScrollIndicator={false}
+            nestedScrollEnabled={true}
+          >
+            {households.map(household => (
               <TouchableOpacity
-                onPress={() => setIsModalVisible(false)}
-                style={styles.closeButton}
+                key={household.id}
+                style={[
+                  styles.householdOption,
+                  selectedHouseholdId === household.id &&
+                    styles.selectedHousehold,
+                ]}
+                onPress={() => handleSelectHousehold(household.id)}
               >
-                <MaterialCommunityIcons
-                  name="close"
-                  size={24}
-                  color={configs.colors.gray3}
-                />
-              </TouchableOpacity>
-            </View>
-
-            <ScrollView style={styles.householdList}>
-              {households.map(household => (
-                <TouchableOpacity
-                  key={household.id}
+                <Text
                   style={[
-                    styles.householdOption,
+                    styles.householdOptionText,
                     selectedHouseholdId === household.id &&
-                      styles.selectedHousehold,
+                      styles.selectedHouseholdText,
                   ]}
-                  onPress={() => handleSelectHousehold(household.id)}
                 >
-                  <Text
-                    style={[
-                      styles.householdOptionText,
-                      selectedHouseholdId === household.id &&
-                        styles.selectedHouseholdText,
-                    ]}
-                  >
-                    {household.name}
-                  </Text>
-                  {selectedHouseholdId === household.id && (
-                    <MaterialCommunityIcons
-                      name="check"
-                      size={20}
-                      color={configs.colors.primary}
-                    />
-                  )}
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
+                  {household.name}
+                </Text>
+                {selectedHouseholdId === household.id && (
+                  <MaterialCommunityIcons
+                    name="check"
+                    size={20}
+                    color={configs.colors.primary}
+                  />
+                )}
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
-      </Modal>
-    </>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    position: 'relative',
+    zIndex: 1,
+  },
   selector: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -142,35 +135,25 @@ const styles = StyleSheet.create({
     color: configs.colors.gray4,
     flex: 1,
   },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
-  },
-  modalContainer: {
+  dropdownContainer: {
     backgroundColor: configs.colors.white,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    maxHeight: '60%',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: configs.colors.gray0,
+    marginTop: 5,
+    maxHeight: 200,
+    width: '100%',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: configs.colors.gray0,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: configs.colors.black,
-  },
-  closeButton: {
-    padding: 5,
-  },
-  householdList: {
-    maxHeight: 400,
+  dropdownList: {
+    maxHeight: 200,
   },
   householdOption: {
     flexDirection: 'row',

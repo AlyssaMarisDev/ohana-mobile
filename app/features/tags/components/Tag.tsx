@@ -6,12 +6,14 @@ interface TagProps {
   tag: TagType;
   size?: 'small' | 'medium' | 'large';
   onPress?: () => void;
+  isSelected?: boolean;
 }
 
 export const Tag: React.FC<TagProps> = ({
   tag,
   size = 'medium',
   onPress: _onPress,
+  isSelected = false,
 }) => {
   const sizeStyles = {
     small: { paddingHorizontal: 6, paddingVertical: 2, fontSize: 12 },
@@ -23,11 +25,27 @@ export const Tag: React.FC<TagProps> = ({
     <View
       style={[
         styles.container,
-        { backgroundColor: tag.color },
         sizeStyles[size],
+        isSelected
+          ? {
+              backgroundColor: tag.color,
+              borderWidth: 1,
+              borderColor: tag.color,
+            }
+          : {
+              backgroundColor: 'transparent',
+              borderWidth: 1,
+              borderColor: tag.color,
+            },
       ]}
     >
-      <Text style={[styles.text, { fontSize: sizeStyles[size].fontSize }]}>
+      <Text
+        style={[
+          styles.text,
+          { fontSize: sizeStyles[size].fontSize },
+          isSelected ? { color: 'white' } : { color: tag.color },
+        ]}
+      >
         {tag.name}
       </Text>
     </View>

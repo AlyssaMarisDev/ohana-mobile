@@ -1,5 +1,6 @@
+import { API_CONFIG } from '@/app/common/config/constants';
 import { BaseService } from '@/app/common/utils/BaseService';
-import baseAxios from '@/app/common/utils/baseAxios';
+import axios from 'axios';
 
 interface AuthResponse {
   accessToken: string;
@@ -9,7 +10,12 @@ interface AuthResponse {
 
 export class AuthService extends BaseService {
   constructor() {
-    super(baseAxios);
+    const axiosInstance = axios.create({
+      baseURL: API_CONFIG.FULL_URL,
+      timeout: 5000,
+    });
+
+    super(axiosInstance);
   }
 
   async login(email: string, password: string): Promise<AuthResponse> {

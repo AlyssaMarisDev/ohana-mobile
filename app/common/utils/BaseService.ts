@@ -34,13 +34,6 @@ export class BaseService {
     const timeout = config?.timeout || this.axiosInstance.defaults.timeout;
 
     try {
-      enhancedLogger.info('Pre api call', {
-        url,
-        timeout: `${timeout}ms`,
-        data: data ? 'present' : 'none',
-        config: config ? 'present' : 'none',
-      });
-
       const response = await this.axiosInstance.post<T>(url, data, config);
       enhancedLogger.info('Response', response);
       const duration = Date.now() - start;
