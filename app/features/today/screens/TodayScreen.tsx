@@ -1,27 +1,13 @@
 import React from 'react';
 import Screen from '../../../common/components/Screen';
 import TodayTaskList from '../components/TodayTaskList';
-import { useTasks } from '../../tasks/hooks/useTasks';
+import { useTodayTasks } from '../hooks/useTodayTasks';
 import { useHouseholds } from '../../households/hooks/useHouseholds';
 import { Task, TaskStatus } from '../../tasks/services/TaskService';
 
 function TodayScreen() {
-  const {
-    tasks,
-    isLoading: isLoadingTasks,
-    refetch: refetchTasks,
-    updateTaskData,
-    createNewTask,
-  } = useTasks();
-  const {
-    households,
-    isLoading: isLoadingHouseholds,
-    refetch: refetchHouseholds,
-  } = useHouseholds(true);
-
-  const onRefresh = async () => {
-    await Promise.all([refetchTasks(), refetchHouseholds()]);
-  };
+  const { updateTaskData, createNewTask } = useTodayTasks();
+  const { households, isLoading: isLoadingHouseholds } = useHouseholds(true);
 
   const toggleTaskCompletion = (task: Task) => {
     const newStatus =
@@ -43,18 +29,12 @@ function TodayScreen() {
     taskId: string,
     data: Omit<Task, 'id' | 'createdBy' | 'householdId'>
   ) => {
-    const task = tasks.find(t => t.id === taskId);
-    if (task) {
-      updateTaskData({ ...task, ...data });
-    }
+    updateTaskData({ id: taskId, ...data } as Task);
   };
 
   return (
     <Screen style={{ paddingHorizontal: '5%' }}>
       <TodayTaskList
-        tasks={tasks}
-        isLoading={isLoadingTasks}
-        onRefresh={onRefresh}
         onToggleTask={toggleTaskCompletion}
         onUpdateTask={handleUpdateTask}
         onCreateTask={handleCreateTask}

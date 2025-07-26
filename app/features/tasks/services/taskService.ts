@@ -21,6 +21,12 @@ export interface TaskUpdateData {
   tagIds: string[];
 }
 
+export interface TaskFilterParams {
+  householdIds?: string[];
+  dueDateFrom?: string;
+  dueDateTo?: string;
+}
+
 export enum TaskStatus {
   PENDING = 'PENDING',
   IN_PROGRESS = 'IN_PROGRESS',
@@ -33,11 +39,31 @@ export class TaskService extends BaseService {
     super(authenticatedAxios);
   }
 
-  async getTasks(householdIds?: string[]): Promise<Task[]> {
-    let url = '/tasks';
-    if (householdIds?.length) {
-      url += `?householdIds=${householdIds.join(',')}`;
+  async getTasks(params?: TaskFilterParams | string[]): Promise<Task[]> {
+    const queryParams = new URLSearchParams();
+
+    // Handle both old format (string[]) and new format (TaskFilterParams)
+    if (Array.isArray(params)) {
+      // Legacy format: getTasks(householdIds: string[])
+      if (params.length) {
+        queryParams.append('householdIds', params.join(','));
+      }
+    } else if (params) {
+      // New format: getTasks(params: TaskFilterParams)
+      if (params.householdIds?.length) {
+        queryParams.append('householdIds', params.householdIds.join(','));
+      }
+
+      if (params.dueDateFrom) {
+        queryParams.append('dueDateFrom', params.dueDateFrom);
+      }
+
+      if (params.dueDateTo) {
+        queryParams.append('dueDateTo', params.dueDateTo);
+      }
     }
+
+    const url = `/tasks${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
     const response = await this.get(url);
     return response.data;
   }

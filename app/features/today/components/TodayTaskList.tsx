@@ -14,13 +14,9 @@ import UpdateTaskModal from '../../tasks/components/UpdateTaskModal';
 import { Task } from '../../tasks/services/TaskService';
 import { Household } from '../../households/services/HouseholdService';
 import configs from '../../../common/config';
-import { useTasks } from '../../tasks/hooks/useTasks';
 import { useTodayTasks } from '../hooks/useTodayTasks';
 
 interface TodayTaskListProps {
-  tasks: Task[];
-  isLoading: boolean;
-  onRefresh: () => Promise<void>;
   onToggleTask: (task: Task) => void;
   onUpdateTask: (
     taskId: string,
@@ -35,9 +31,6 @@ interface TodayTaskListProps {
 }
 
 function TodayTaskList({
-  tasks,
-  isLoading,
-  onRefresh,
   onToggleTask,
   onUpdateTask,
   onCreateTask,
@@ -47,8 +40,8 @@ function TodayTaskList({
   showHousehold = false,
   preSelectedHouseholdId,
 }: TodayTaskListProps) {
-  const { deleteTask } = useTasks();
-  const { incompleteTasks, completedTasks } = useTodayTasks(tasks);
+  const { incompleteTasks, completedTasks, isLoading, refetch, deleteTask } =
+    useTodayTasks();
   const [refreshing, setRefreshing] = useState(false);
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
@@ -57,7 +50,7 @@ function TodayTaskList({
   const handleRefresh = async () => {
     setRefreshing(true);
     try {
-      await onRefresh();
+      await refetch();
     } catch (error) {
       console.error('Error refreshing tasks:', error);
     } finally {
@@ -82,7 +75,9 @@ function TodayTaskList({
     taskId: string,
     data: Omit<Task, 'id' | 'createdBy' | 'householdId'>
   ) => {
-    onUpdateTask(taskId, data);
+    if (selectedTask) {
+      onUpdateTask(taskId, { ...selectedTask, ...data });
+    }
     setIsUpdateModalVisible(false);
     setSelectedTask(null);
   };
