@@ -7,10 +7,8 @@ import {
   View,
 } from 'react-native';
 import Text from '../../../common/components/Text';
-import colors from '../../../common/config/colors';
-import React from 'react';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { Task } from '../services/TaskService';
+import { Task, TaskStatus } from '../services/TaskService';
 import { useGlobalState } from '../../../common/context/GlobalStateContext';
 import { useTags } from '../../tags/hooks/useTags';
 import { Tag } from '../../tags/components/Tag';
@@ -42,7 +40,10 @@ function TaskPreview({
   const { households } = useGlobalState();
   const { data: tags } = useTags(task.householdId);
   const taskDueDate = new Date(task.dueDate);
-  const isCompleted = task.status === 'COMPLETED';
+  const isCompleted = task.status === TaskStatus.COMPLETED;
+  const actualTextColor = isCompleted
+    ? configs.colors.textSecondary
+    : textColor;
 
   // Function to format date as "July 25th"
   const formatDate = (date: Date) => {
@@ -87,7 +88,13 @@ function TaskPreview({
   };
 
   return (
-    <View style={[styles.container, style]}>
+    <View
+      style={[
+        styles.container,
+        style,
+        isCompleted && styles.completedContainer,
+      ]}
+    >
       <TouchableOpacity
         onPress={handleCheckboxPress}
         activeOpacity={0.8}
@@ -97,14 +104,14 @@ function TaskPreview({
           <MaterialCommunityIcons
             name="checkbox-marked"
             size={22}
-            color={textColor || colors.white}
+            color={actualTextColor}
             style={styles.checkIcon}
           />
         ) : (
           <MaterialCommunityIcons
             name="checkbox-blank-outline"
             size={22}
-            color={textColor || colors.white}
+            color={actualTextColor}
             style={styles.checkIcon}
           />
         )}
@@ -116,11 +123,7 @@ function TaskPreview({
         activeOpacity={0.8}
       >
         <Text
-          style={[
-            styles.title,
-            textStyle,
-            { color: textColor || colors.white },
-          ]}
+          style={[styles.title, textStyle, { color: actualTextColor }]}
           numberOfLines={1}
           ellipsizeMode="tail"
         >
@@ -134,7 +137,12 @@ function TaskPreview({
             ))}
             {taskTags.length > 3 && (
               <Text
-                style={[styles.moreTags, { color: textColor || colors.white }]}
+                style={[
+                  styles.moreTags,
+                  {
+                    color: actualTextColor,
+                  },
+                ]}
               >
                 +{taskTags.length - 3}
               </Text>
@@ -145,7 +153,12 @@ function TaskPreview({
         {showDueDate && (
           <View style={styles.bottomRow}>
             <Text
-              style={[styles.dueDate, { color: textColor || colors.white }]}
+              style={[
+                styles.dueDate,
+                {
+                  color: actualTextColor,
+                },
+              ]}
               numberOfLines={1}
             >
               {doByString}
@@ -154,7 +167,9 @@ function TaskPreview({
               <Text
                 style={[
                   styles.householdName,
-                  { color: textColor || colors.white },
+                  {
+                    color: actualTextColor,
+                  },
                 ]}
                 numberOfLines={1}
               >
@@ -223,6 +238,9 @@ const styles = StyleSheet.create({
   },
   checkboxContainer: {
     padding: 5,
+  },
+  completedContainer: {
+    opacity: 0.6,
   },
 });
 

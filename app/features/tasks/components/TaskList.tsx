@@ -22,7 +22,7 @@ function TaskList({
   onUpdateTask,
   showHousehold = false,
   backgroundColor = configs.colors.foreground,
-  textColor = configs.colors.white,
+  textColor = configs.colors.textPrimary,
 }: TaskListBoxProps) {
   if (tasks.length === 0) {
     return null;
