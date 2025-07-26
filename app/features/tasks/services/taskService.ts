@@ -7,6 +7,7 @@ export interface Task {
   description: string;
   dueDate: string;
   status: TaskStatus;
+  completedAt?: string;
   createdBy: string;
   householdId: string;
   tagIds: string[];

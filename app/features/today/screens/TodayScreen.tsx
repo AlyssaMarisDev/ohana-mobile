@@ -1,6 +1,6 @@
 import React from 'react';
 import Screen from '../../../common/components/Screen';
-import TaskList from '../../tasks/components/MultiTaskList';
+import TodayTaskList from '../components/TodayTaskList';
 import { useTasks } from '../../tasks/hooks/useTasks';
 import { useHouseholds } from '../../households/hooks/useHouseholds';
 import { Task, TaskStatus } from '../../tasks/services/TaskService';
@@ -51,7 +51,7 @@ function TodayScreen() {
 
   return (
     <Screen style={{ paddingHorizontal: '5%' }}>
-      <TaskList
+      <TodayTaskList
         tasks={tasks}
         isLoading={isLoadingTasks}
         onRefresh={onRefresh}
