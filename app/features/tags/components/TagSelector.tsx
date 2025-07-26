@@ -6,13 +6,13 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { useTags } from '../hooks/useTags';
+import { useHouseholdTags } from '../hooks/useHouseholdTags';
 import { Tag } from './Tag';
 import ErrorMessage from '../../../common/components/ErrorMessage';
 import configs from '../../../common/config';
 
 interface TagSelectorProps {
-  householdId?: string;
+  householdId: string;
   selectedTagIds: string[];
   onTagToggle: (tagId: string) => void;
   maxHeight?: number;
@@ -24,7 +24,7 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
   onTagToggle,
   maxHeight = 120,
 }) => {
-  const { data: tags, isLoading, error } = useTags(householdId);
+  const { data: tags, isLoading, error } = useHouseholdTags(householdId);
 
   if (isLoading) {
     return (

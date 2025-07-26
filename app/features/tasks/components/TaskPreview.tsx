@@ -10,7 +10,7 @@ import Text from '../../../common/components/Text';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Task, TaskStatus } from '../services/TaskService';
 import { useGlobalState } from '../../../common/context/GlobalStateContext';
-import { useTags } from '../../tags/hooks/useTags';
+import { useTodayTags } from '../../tags/hooks/useTodayTags';
 import { Tag } from '../../tags/components/Tag';
 import configs from '../../../common/config';
 
@@ -38,7 +38,7 @@ function TaskPreview({
   onUpdateTask,
 }: TaskPreviewProps) {
   const { households } = useGlobalState();
-  const { data: tags } = useTags(task.householdId);
+  const { data: tags } = useTodayTags(task.householdId);
   const taskDueDate = new Date(task.dueDate);
   const isCompleted = task.status === TaskStatus.COMPLETED;
   const actualTextColor = isCompleted

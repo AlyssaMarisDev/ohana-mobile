@@ -16,14 +16,9 @@ export class TagService extends BaseService {
     super(authenticatedAxios);
   }
 
-  async getTags(householdId?: string): Promise<Tag[]> {
-    const url = householdId ? `/tags?householdid=${householdId}` : '/tags';
+  async getTags(householdId: string): Promise<Tag[]> {
+    const url = `/households/${householdId}/tags`;
     const response = await this.get<TagsResponse>(url);
     return response.data.tags;
-  }
-
-  // Keep the old method for backward compatibility
-  async getTagsForHousehold(householdId: string): Promise<Tag[]> {
-    return this.getTags(householdId);
   }
 }

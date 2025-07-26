@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { useTags } from '../hooks/useTags';
+import { useTodayTags } from '../hooks/useTodayTags';
 import { Tag } from './Tag';
 import ErrorMessage from '../../../common/components/ErrorMessage';
 
@@ -17,7 +17,7 @@ export const TagList: React.FC<TagListProps> = ({
   onTagPress,
   maxTags,
 }) => {
-  const { data: tags, isLoading, error } = useTags(householdId);
+  const { data: tags, isLoading, error } = useTodayTags(householdId);
 
   if (isLoading) {
     return (

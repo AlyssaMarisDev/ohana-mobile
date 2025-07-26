@@ -133,12 +133,14 @@ function CreateTaskModal({
               />
             )}
 
-            <TagSelector
-              householdId={selectedHouseholdId || undefined}
-              selectedTagIds={selectedTagIds}
-              onTagToggle={handleTagToggle}
-              maxHeight={100}
-            />
+            {selectedHouseholdId && (
+              <TagSelector
+                householdId={selectedHouseholdId}
+                selectedTagIds={selectedTagIds}
+                onTagToggle={handleTagToggle}
+                maxHeight={100}
+              />
+            )}
 
             <Button
               onPress={isFormValid ? handleSubmit : () => {}}
