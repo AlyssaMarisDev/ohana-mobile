@@ -11,6 +11,7 @@ import configs from '../../common/config';
 import TodayScreen from '../today/screens/TodayScreen';
 import ProfileScreen from '../profile/screens/ProfileScreen';
 import HouseholdTasksScreen from '../households/screens/HouseholdTasksScreen';
+import HouseholdDetailScreen from '../households/screens/HouseholdDetailScreen';
 
 // Wrapper component that can access navigation
 function NavigationContent() {
@@ -53,6 +54,11 @@ function NavigationContent() {
   };
 
   const handleSidebarHouseholdPress = (householdId: string) => {
+    setIsSidebarVisible(false); // Close sidebar
+    (navigation as any).navigate('HouseholdDetail', { householdId }); // Navigate to household detail
+  };
+
+  const handleSidebarHouseholdTasksPress = (householdId: string) => {
     setIsSidebarVisible(false); // Close sidebar
     (navigation as any).navigate('HouseholdTasks', { householdId }); // Navigate to household tasks
   };
@@ -102,6 +108,13 @@ function NavigationContent() {
           }}
         />
         <Stack.Screen
+          name="HouseholdDetail"
+          component={HouseholdDetailScreen}
+          options={{
+            title: 'Household Detail',
+          }}
+        />
+        <Stack.Screen
           name="HouseholdTasks"
           component={HouseholdTasksScreen}
           options={{
@@ -117,6 +130,7 @@ function NavigationContent() {
         onProfilePress={handleSidebarProfilePress}
         onTodayPress={handleSidebarTodayPress}
         onHouseholdPress={handleSidebarHouseholdPress}
+        onHouseholdTasksPress={handleSidebarHouseholdTasksPress}
       />
     </View>
   );

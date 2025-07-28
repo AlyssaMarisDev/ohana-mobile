@@ -20,6 +20,7 @@ type SidebarProps = {
   onProfilePress: () => void;
   onTodayPress: () => void;
   onHouseholdPress: (householdId: string) => void;
+  onHouseholdTasksPress: (householdId: string) => void;
 };
 
 const { width } = Dimensions.get('window');
@@ -30,10 +31,14 @@ const Sidebar: React.FC<SidebarProps> = ({
   onProfilePress,
   onTodayPress,
   onHouseholdPress,
+  onHouseholdTasksPress,
 }) => {
   const slideAnim = React.useRef(new Animated.Value(-width)).current;
   const { member } = useMembers(isVisible);
   const { households, isLoading: householdsLoading } = useHouseholds(isVisible);
+  const [expandedHouseholds, setExpandedHouseholds] = React.useState<
+    Set<string>
+  >(new Set());
 
   React.useEffect(() => {
     if (isVisible) {
@@ -59,6 +64,26 @@ const Sidebar: React.FC<SidebarProps> = ({
   const handleTodayPress = () => {
     onClose(); // Close the sidebar
     onTodayPress(); // Navigate to today
+  };
+
+  const toggleHouseholdDropdown = (householdId: string) => {
+    const newExpanded = new Set(expandedHouseholds);
+    if (newExpanded.has(householdId)) {
+      newExpanded.delete(householdId);
+    } else {
+      newExpanded.add(householdId);
+    }
+    setExpandedHouseholds(newExpanded);
+  };
+
+  const handleHouseholdPress = (householdId: string) => {
+    onClose(); // Close the sidebar
+    onHouseholdPress(householdId); // Navigate to household detail
+  };
+
+  const handleHouseholdTasksPress = (householdId: string) => {
+    onClose(); // Close the sidebar
+    onHouseholdTasksPress(householdId); // Navigate to household tasks
   };
 
   if (!isVisible) return null;
@@ -128,16 +153,67 @@ const Sidebar: React.FC<SidebarProps> = ({
             {householdsLoading ? (
               <Text style={styles.loadingText}>Loading households...</Text>
             ) : households.length > 0 ? (
-              households.map(household => (
-                <TouchableOpacity
-                  key={household.id}
-                  style={styles.householdItem}
-                  onPress={() => onHouseholdPress(household.id)}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.householdName}>{household.name}</Text>
-                </TouchableOpacity>
-              ))
+              households.map(household => {
+                const isExpanded = expandedHouseholds.has(household.id);
+                return (
+                  <View key={household.id} style={styles.householdContainer}>
+                    <View style={styles.householdHeader}>
+                      <TouchableOpacity
+                        style={styles.dropdownButton}
+                        onPress={() => toggleHouseholdDropdown(household.id)}
+                        activeOpacity={0.7}
+                      >
+                        <Ionicons
+                          name={isExpanded ? 'chevron-down' : 'chevron-forward'}
+                          size={16}
+                          color={configs.colors.textSecondary}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.householdNameButton}
+                        onPress={() => handleHouseholdPress(household.id)}
+                        activeOpacity={0.7}
+                      >
+                        <View style={styles.householdNameLeft}>
+                          <Text style={styles.householdName}>
+                            {household.name}
+                          </Text>
+                        </View>
+                        <Ionicons
+                          name="chevron-forward"
+                          size={16}
+                          color={configs.colors.textSecondary}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                    {isExpanded && (
+                      <View style={styles.dropdownContent}>
+                        <TouchableOpacity
+                          style={styles.dropdownItem}
+                          onPress={() =>
+                            handleHouseholdTasksPress(household.id)
+                          }
+                          activeOpacity={0.7}
+                        >
+                          <View style={styles.dropdownItemLeft}>
+                            <Ionicons
+                              name="today-outline"
+                              size={16}
+                              color={configs.colors.textSecondary}
+                            />
+                            <Text style={styles.dropdownItemText}>Today</Text>
+                          </View>
+                          <Ionicons
+                            name="chevron-forward"
+                            size={16}
+                            color={configs.colors.textSecondary}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </View>
+                );
+              })
             ) : (
               <Text style={styles.emptyText}>No households found</Text>
             )}
@@ -246,15 +322,53 @@ const styles = StyleSheet.create({
     color: configs.colors.textPrimary,
     marginBottom: 16,
   },
-  householdItem: {
-    paddingVertical: 12,
+  householdContainer: {
     borderBottomWidth: 1,
     borderBottomColor: configs.colors.gray4,
+  },
+  householdHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
+  dropdownButton: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  householdNameButton: {
+    flex: 1,
+    paddingVertical: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  householdNameLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   householdName: {
     fontSize: 16,
     fontWeight: '500',
     color: configs.colors.textPrimary,
+  },
+  dropdownContent: {
+    backgroundColor: configs.colors.background,
+  },
+  dropdownItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingLeft: 32,
+  },
+  dropdownItemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dropdownItemText: {
+    fontSize: 14,
+    color: configs.colors.textPrimary,
+    marginLeft: 8,
   },
   loadingText: {
     fontSize: 14,
