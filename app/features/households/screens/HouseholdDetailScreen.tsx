@@ -1,7 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import Screen from '../../../common/components/Screen';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import Text from '../../../common/components/Text';
 import { useHouseholds } from '../hooks/useHouseholds';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,8 +25,13 @@ function HouseholdDetailScreen() {
   const route = useRoute<HouseholdDetailRouteProp>();
   const navigation = useNavigation();
   const { householdId } = route.params;
+  const [refreshing, setRefreshing] = useState(false);
 
-  const { households, isLoading: isLoadingHouseholds } = useHouseholds(false);
+  const {
+    households,
+    isLoading: isLoadingHouseholds,
+    refetch: refetchHouseholds,
+  } = useHouseholds(false);
 
   const household = households.find(h => h.id === householdId);
 
@@ -40,6 +52,21 @@ function HouseholdDetailScreen() {
     (navigation as any).navigate('HouseholdTags', { householdId });
   };
 
+  const handleViewMembers = () => {
+    (navigation as any).navigate('HouseholdMembers', { householdId });
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await refetchHouseholds();
+    } catch (error) {
+      console.error('Error refreshing household data:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   if (isLoadingHouseholds) {
     return (
       <Screen style={styles.container}>
@@ -58,134 +85,155 @@ function HouseholdDetailScreen() {
 
   return (
     <Screen style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Household Information</Text>
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Name:</Text>
-            <Text style={styles.value}>{household.name}</Text>
-          </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[configs.colors.primary]}
+            tintColor={configs.colors.primary}
+          />
+        }
+      >
+        {/* Household Header */}
+        <View style={styles.householdHeader}>
+          <Image
+            source={require('../../../../assets/icon.png')}
+            style={styles.householdImage}
+          />
+          <Text style={styles.householdName}>{household.name}</Text>
           {household.description && (
-            <View style={styles.infoRow}>
-              <Text style={styles.label}>Description:</Text>
-              <Text style={styles.value}>{household.description}</Text>
-            </View>
+            <Text style={styles.householdDescription}>
+              {household.description}
+            </Text>
           )}
         </View>
 
+        {/* Household Options */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Navigation</Text>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={handleViewTasks}
-            activeOpacity={0.7}
-          >
-            <View style={styles.actionButtonContent}>
+          <Text style={styles.sectionTitle}>Management</Text>
+
+          <TouchableOpacity style={styles.optionItem} onPress={handleViewTasks}>
+            <View style={styles.optionLeft}>
               <Ionicons
                 name="list-outline"
-                size={24}
-                color={configs.colors.primary}
-              />
-              <View style={styles.actionButtonText}>
-                <Text style={styles.actionButtonTitle}>View Tasks</Text>
-                <Text style={styles.actionButtonSubtitle}>
-                  Manage tasks for this household
-                </Text>
-              </View>
-              <Ionicons
-                name="chevron-forward"
                 size={20}
-                color={configs.colors.textSecondary}
+                color={configs.colors.textPrimary}
               />
+              <Text style={styles.optionText}>View Tasks</Text>
             </View>
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={configs.colors.textSecondary}
+            />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={handleViewTags}
-            activeOpacity={0.7}
-          >
-            <View style={styles.actionButtonContent}>
+
+          <TouchableOpacity style={styles.optionItem} onPress={handleViewTags}>
+            <View style={styles.optionLeft}>
               <Ionicons
                 name="pricetag-outline"
-                size={24}
-                color={configs.colors.primary}
-              />
-              <View style={styles.actionButtonText}>
-                <Text style={styles.actionButtonTitle}>View Tags</Text>
-                <Text style={styles.actionButtonSubtitle}>
-                  Manage tags for this household
-                </Text>
-              </View>
-              <Ionicons
-                name="chevron-forward"
                 size={20}
-                color={configs.colors.textSecondary}
+                color={configs.colors.textPrimary}
               />
+              <Text style={styles.optionText}>View Tags</Text>
             </View>
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={configs.colors.textSecondary}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.optionItem}
+            onPress={handleViewMembers}
+          >
+            <View style={styles.optionLeft}>
+              <Ionicons
+                name="people-outline"
+                size={20}
+                color={configs.colors.textPrimary}
+              />
+              <Text style={styles.optionText}>View Members</Text>
+            </View>
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={configs.colors.textSecondary}
+            />
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: '5%',
+    padding: 0,
+    backgroundColor: configs.colors.background,
   },
-  content: {
-    flex: 1,
-    paddingTop: 20,
-  },
-  section: {
-    marginBottom: 30,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: configs.colors.textPrimary,
-    marginBottom: 16,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    marginBottom: 12,
-    alignItems: 'flex-start',
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: configs.colors.textSecondary,
-    width: 100,
-    marginRight: 10,
-  },
-  value: {
-    fontSize: 16,
-    color: configs.colors.textPrimary,
-    flex: 1,
-  },
-  actionButton: {
-    backgroundColor: configs.colors.foreground,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-  },
-  actionButtonContent: {
-    flexDirection: 'row',
+  householdHeader: {
     alignItems: 'center',
+    paddingVertical: 30,
+    paddingHorizontal: 20,
+    backgroundColor: configs.colors.foreground,
   },
-  actionButtonText: {
-    flex: 1,
-    marginLeft: 12,
+  householdImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 16,
+    borderWidth: 3,
+    borderColor: configs.colors.white,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  actionButtonTitle: {
-    fontSize: 16,
+  householdName: {
+    fontSize: 24,
     fontWeight: '600',
     color: configs.colors.textPrimary,
     marginBottom: 4,
   },
-  actionButtonSubtitle: {
-    fontSize: 14,
+  householdDescription: {
+    fontSize: 16,
     color: configs.colors.textSecondary,
+    textAlign: 'center',
+  },
+  section: {
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: configs.colors.textPrimary,
+    marginBottom: 16,
+  },
+  optionItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: configs.colors.gray4,
+  },
+  optionLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  optionText: {
+    fontSize: 16,
+    color: configs.colors.textPrimary,
+    marginLeft: 12,
   },
   loadingText: {
     fontSize: 16,

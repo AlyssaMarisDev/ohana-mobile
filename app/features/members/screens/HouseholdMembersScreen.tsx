@@ -4,32 +4,29 @@ import Screen from '../../../common/components/Screen';
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
   FlatList,
+  Image,
   RefreshControl,
 } from 'react-native';
 import Text from '../../../common/components/Text';
 import { useHouseholds } from '../../households/hooks/useHouseholds';
-import { useHouseholdTags } from '../hooks/useHouseholdTags';
+import { useHouseholdMembers } from '../hooks/useHouseholdMembers';
 import { Ionicons } from '@expo/vector-icons';
 import configs from '../../../common/config';
-import { Tag } from '../services/TagService';
-import CreateTagModal from '../components/CreateTagModal';
+import { Member } from '../services/MemberService';
 
-type HouseholdTagsRouteProp = RouteProp<
+type HouseholdMembersRouteProp = RouteProp<
   {
-    HouseholdTags: { householdId: string };
+    HouseholdMembers: { householdId: string };
   },
-  'HouseholdTags'
+  'HouseholdMembers'
 >;
 
-function HouseholdTagsScreen() {
-  const route = useRoute<HouseholdTagsRouteProp>();
+function HouseholdMembersScreen() {
+  const route = useRoute<HouseholdMembersRouteProp>();
   const navigation = useNavigation();
   const { householdId } = route.params;
   const [refreshing, setRefreshing] = useState(false);
-  const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
-  const [isCreatingTag, setIsCreatingTag] = useState(false);
 
   const {
     households,
@@ -38,11 +35,11 @@ function HouseholdTagsScreen() {
   } = useHouseholds(false);
 
   const {
-    data: tags = [],
-    isLoading: isLoadingTags,
-    error: tagsError,
-    refetch: refetchTags,
-  } = useHouseholdTags(householdId);
+    data: members = [],
+    isLoading: isLoadingMembers,
+    error: membersError,
+    refetch: refetchMembers,
+  } = useHouseholdMembers(householdId, true);
 
   const household = households.find(h => h.id === householdId);
 
@@ -50,7 +47,7 @@ function HouseholdTagsScreen() {
   useEffect(() => {
     if (household) {
       (navigation as any).setOptions({
-        title: `${household.name} Tags`,
+        title: `${household.name} Members`,
       });
     }
   }, [household, navigation]);
@@ -58,7 +55,7 @@ function HouseholdTagsScreen() {
   const onRefresh = async () => {
     setRefreshing(true);
     try {
-      await Promise.all([refetchHouseholds(), refetchTags()]);
+      await Promise.all([refetchHouseholds(), refetchMembers()]);
     } catch (error) {
       console.error('Error refreshing data:', error);
     } finally {
@@ -66,32 +63,26 @@ function HouseholdTagsScreen() {
     }
   };
 
-  const handleCreateTag = async (tagData: { name: string; color: string }) => {
-    setIsCreatingTag(true);
-    try {
-      // TODO: Implement tag creation API call
-      console.log('Creating tag:', tagData);
-      // After successful creation, refresh the tags list
-      await refetchTags();
-      setIsCreateModalVisible(false);
-    } catch (error) {
-      console.error('Error creating tag:', error);
-    } finally {
-      setIsCreatingTag(false);
-    }
-  };
-
-  const renderTag = ({ item }: { item: Tag }) => (
-    <View style={styles.tagItem}>
-      <View style={[styles.tagColor, { backgroundColor: item.color }]} />
-      <Text style={styles.tagName}>{item.name}</Text>
+  const renderMember = ({ item }: { item: Member }) => (
+    <View style={styles.memberItem}>
+      <Image
+        source={require('../../../../assets/icon.png')}
+        style={styles.memberImage}
+      />
+      <View style={styles.memberInfo}>
+        <Text style={styles.memberName}>{item.name}</Text>
+        <Text style={styles.memberDetails}>
+          {item.age ? `${item.age} years old` : ''} • {item.gender || ''}
+        </Text>
+        <Text style={styles.memberEmail}>{item.email}</Text>
+      </View>
     </View>
   );
 
-  if (isLoadingHouseholds || isLoadingTags) {
+  if (isLoadingHouseholds || isLoadingMembers) {
     return (
       <Screen style={styles.container}>
-        <Text style={styles.loadingText}>Loading tags...</Text>
+        <Text style={styles.loadingText}>Loading members...</Text>
       </Screen>
     );
   }
@@ -104,10 +95,10 @@ function HouseholdTagsScreen() {
     );
   }
 
-  if (tagsError) {
+  if (membersError) {
     return (
       <Screen style={styles.container}>
-        <Text style={styles.errorText}>Failed to load tags</Text>
+        <Text style={styles.errorText}>Failed to load members</Text>
       </Screen>
     );
   }
@@ -116,22 +107,14 @@ function HouseholdTagsScreen() {
     <Screen style={styles.container}>
       <View style={styles.content}>
         <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Tags</Text>
-            <TouchableOpacity
-              style={styles.createButton}
-              onPress={() => setIsCreateModalVisible(true)}
-            >
-              <Ionicons name="add" size={20} color={configs.colors.primary} />
-            </TouchableOpacity>
-          </View>
-          {tags.length > 0 ? (
+          <Text style={styles.sectionTitle}>Members</Text>
+          {members.length > 0 ? (
             <FlatList
-              data={tags}
-              renderItem={renderTag}
+              data={members}
+              renderItem={renderMember}
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.tagsList}
+              contentContainerStyle={styles.membersList}
               refreshControl={
                 <RefreshControl
                   refreshing={refreshing}
@@ -144,25 +127,18 @@ function HouseholdTagsScreen() {
           ) : (
             <View style={styles.emptyContainer}>
               <Ionicons
-                name="pricetag-outline"
+                name="people-outline"
                 size={48}
                 color={configs.colors.textSecondary}
               />
-              <Text style={styles.emptyText}>No tags found</Text>
+              <Text style={styles.emptyText}>No members found</Text>
               <Text style={styles.emptySubtext}>
-                Tags will appear here when they are created for this household.
+                Members will appear here when they join this household.
               </Text>
             </View>
           )}
         </View>
       </View>
-
-      <CreateTagModal
-        isVisible={isCreateModalVisible}
-        onClose={() => setIsCreateModalVisible(false)}
-        onSubmit={handleCreateTag}
-        isLoading={isCreatingTag}
-      />
     </Screen>
   );
 }
@@ -178,43 +154,48 @@ const styles = StyleSheet.create({
   section: {
     flex: 1,
   },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '600',
     color: configs.colors.textPrimary,
+    marginBottom: 16,
   },
-  createButton: {
-    padding: 8,
-    borderRadius: 20,
-    backgroundColor: configs.colors.foreground,
-  },
-  tagsList: {
+  membersList: {
     paddingBottom: 20,
   },
-  tagItem: {
+  memberItem: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: configs.colors.foreground,
-    borderRadius: 8,
+    borderRadius: 12,
     padding: 16,
     marginBottom: 12,
   },
-  tagColor: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    marginRight: 12,
+  memberImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 16,
+    borderWidth: 2,
+    borderColor: configs.colors.white,
   },
-  tagName: {
-    fontSize: 16,
+  memberInfo: {
+    flex: 1,
+  },
+  memberName: {
+    fontSize: 18,
+    fontWeight: '600',
     color: configs.colors.textPrimary,
-    fontWeight: '500',
+    marginBottom: 4,
+  },
+  memberDetails: {
+    fontSize: 14,
+    color: configs.colors.textSecondary,
+    marginBottom: 2,
+  },
+  memberEmail: {
+    fontSize: 14,
+    color: configs.colors.textSecondary,
   },
   emptyContainer: {
     flex: 1,
@@ -249,4 +230,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HouseholdTagsScreen;
+export default HouseholdMembersScreen;

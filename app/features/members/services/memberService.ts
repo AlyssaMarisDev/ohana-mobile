@@ -26,6 +26,11 @@ export class MemberService extends BaseService {
     const response = await this.put(`/members/${memberId}`, memberData);
     return response.data;
   }
+
+  async getHouseholdMembers(householdId: string): Promise<Member[]> {
+    const response = await this.get(`/households/${householdId}/members`);
+    return response.data;
+  }
 }
 
 export const memberService = new MemberService();

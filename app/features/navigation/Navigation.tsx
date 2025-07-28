@@ -13,6 +13,7 @@ import ProfileScreen from '../profile/screens/ProfileScreen';
 import HouseholdTasksScreen from '../households/screens/HouseholdTasksScreen';
 import HouseholdDetailScreen from '../households/screens/HouseholdDetailScreen';
 import HouseholdTagsScreen from '../tags/screens/HouseholdTagsScreen';
+import HouseholdMembersScreen from '../members/screens/HouseholdMembersScreen';
 
 // Wrapper component that can access navigation
 function NavigationContent() {
@@ -127,6 +128,18 @@ function NavigationContent() {
           component={HouseholdTagsScreen}
           options={{
             title: 'Household Tags',
+            headerLeft: undefined, // Remove hamburger menu
+            headerBackVisible: true, // Show back button
+            headerTintColor: configs.colors.textPrimary, // Set back button color
+            headerBackButtonDisplayMode: 'minimal',
+            headerBackButtonMenuEnabled: false,
+          }}
+        />
+        <Stack.Screen
+          name="HouseholdMembers"
+          component={HouseholdMembersScreen}
+          options={{
+            title: 'Household Members',
             headerLeft: undefined, // Remove hamburger menu
             headerBackVisible: true, // Show back button
             headerTintColor: configs.colors.textPrimary, // Set back button color
