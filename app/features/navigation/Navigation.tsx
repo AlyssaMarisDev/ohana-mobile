@@ -19,7 +19,20 @@ function NavigationContent() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const navigation = useNavigation();
 
-  if (isLoading) return <ActivityIndicator size="large" color="#0000ff" />;
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: configs.colors.background,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <ActivityIndicator size="large" color={configs.colors.primary} />
+      </View>
+    );
+  }
 
   const handleHamburgerPress = () => {
     setIsSidebarVisible(true);
