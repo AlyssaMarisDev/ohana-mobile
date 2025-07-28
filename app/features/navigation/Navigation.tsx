@@ -12,6 +12,7 @@ import TodayScreen from '../today/screens/TodayScreen';
 import ProfileScreen from '../profile/screens/ProfileScreen';
 import HouseholdTasksScreen from '../households/screens/HouseholdTasksScreen';
 import HouseholdDetailScreen from '../households/screens/HouseholdDetailScreen';
+import HouseholdTagsScreen from '../tags/screens/HouseholdTagsScreen';
 
 // Wrapper component that can access navigation
 function NavigationContent() {
@@ -119,6 +120,13 @@ function NavigationContent() {
           component={HouseholdTasksScreen}
           options={{
             title: 'Household Tasks',
+          }}
+        />
+        <Stack.Screen
+          name="HouseholdTags"
+          component={HouseholdTagsScreen}
+          options={{
+            title: 'Household Tags',
           }}
         />
       </Stack.Navigator>

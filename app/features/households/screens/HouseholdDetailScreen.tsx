@@ -36,6 +36,10 @@ function HouseholdDetailScreen() {
     (navigation as any).navigate('HouseholdTasks', { householdId });
   };
 
+  const handleViewTags = () => {
+    (navigation as any).navigate('HouseholdTags', { householdId });
+  };
+
   if (isLoadingHouseholds) {
     return (
       <Screen style={styles.container}>
@@ -70,7 +74,7 @@ function HouseholdDetailScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Actions</Text>
+          <Text style={styles.sectionTitle}>Navigation</Text>
           <TouchableOpacity
             style={styles.actionButton}
             onPress={handleViewTasks}
@@ -86,6 +90,30 @@ function HouseholdDetailScreen() {
                 <Text style={styles.actionButtonTitle}>View Tasks</Text>
                 <Text style={styles.actionButtonSubtitle}>
                   Manage tasks for this household
+                </Text>
+              </View>
+              <Ionicons
+                name="chevron-forward"
+                size={20}
+                color={configs.colors.textSecondary}
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={handleViewTags}
+            activeOpacity={0.7}
+          >
+            <View style={styles.actionButtonContent}>
+              <Ionicons
+                name="pricetag-outline"
+                size={24}
+                color={configs.colors.primary}
+              />
+              <View style={styles.actionButtonText}>
+                <Text style={styles.actionButtonTitle}>View Tags</Text>
+                <Text style={styles.actionButtonSubtitle}>
+                  Manage tags for this household
                 </Text>
               </View>
               <Ionicons
