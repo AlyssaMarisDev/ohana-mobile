@@ -127,6 +127,11 @@ function NavigationContent() {
           component={HouseholdTagsScreen}
           options={{
             title: 'Household Tags',
+            headerLeft: undefined, // Remove hamburger menu
+            headerBackVisible: true, // Show back button
+            headerTintColor: configs.colors.textPrimary, // Set back button color
+            headerBackButtonDisplayMode: 'minimal',
+            headerBackButtonMenuEnabled: false,
           }}
         />
       </Stack.Navigator>
