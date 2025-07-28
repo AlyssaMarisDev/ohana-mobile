@@ -127,7 +127,7 @@ function HouseholdTagsScreen() {
           </View>
           {tags.length > 0 ? (
             <FlatList
-              data={tags}
+              data={[...tags].sort((a, b) => a.name.localeCompare(b.name))}
               renderItem={renderTag}
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
