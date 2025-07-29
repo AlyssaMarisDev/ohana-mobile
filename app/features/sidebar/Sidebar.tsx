@@ -40,6 +40,14 @@ const Sidebar: React.FC<SidebarProps> = ({
     Set<string>
   >(new Set());
 
+  // Default all household dropdowns to open when households are loaded
+  React.useEffect(() => {
+    if (households.length > 0 && expandedHouseholds.size === 0) {
+      const householdIds = new Set(households.map(household => household.id));
+      setExpandedHouseholds(householdIds);
+    }
+  }, [households]);
+
   React.useEffect(() => {
     if (isVisible) {
       Animated.timing(slideAnim, {
@@ -171,7 +179,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={styles.householdNameButton}
-                        onPress={() => handleHouseholdPress(household.id)}
+                        onPress={() => toggleHouseholdDropdown(household.id)}
                         activeOpacity={0.7}
                       >
                         <View style={styles.householdNameLeft}>
@@ -179,11 +187,17 @@ const Sidebar: React.FC<SidebarProps> = ({
                             {household.name}
                           </Text>
                         </View>
-                        <Ionicons
-                          name="chevron-forward"
-                          size={16}
-                          color={configs.colors.textSecondary}
-                        />
+                        <TouchableOpacity
+                          style={styles.gearButton}
+                          onPress={() => handleHouseholdPress(household.id)}
+                          activeOpacity={0.7}
+                        >
+                          <Ionicons
+                            name="settings-outline"
+                            size={16}
+                            color={configs.colors.textSecondary}
+                          />
+                        </TouchableOpacity>
                       </TouchableOpacity>
                     </View>
                     {isExpanded && (
@@ -369,6 +383,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: configs.colors.textPrimary,
     marginLeft: 8,
+  },
+  gearButton: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
   loadingText: {
     fontSize: 14,
