@@ -59,21 +59,19 @@ function CreateTagModal({
   return (
     <Modal
       visible={isVisible}
-      animationType="slide"
-      transparent={true}
+      transparent
+      animationType="none"
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={styles.backdrop}
+          onPress={onClose}
+          activeOpacity={1}
+        />
         <View style={styles.modalContainer}>
           <View style={styles.header}>
             <Text style={styles.title}>Create New Tag</Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Ionicons
-                name="close"
-                size={24}
-                color={configs.colors.textPrimary}
-              />
-            </TouchableOpacity>
           </View>
 
           <Form
@@ -131,11 +129,18 @@ function CreateTagModal({
 }
 
 const styles = StyleSheet.create({
-  overlay: {
+  container: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  backdrop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContainer: {
     backgroundColor: configs.colors.background,
@@ -146,7 +151,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
   },

@@ -37,4 +37,9 @@ export class TagService extends BaseService {
     const response = await this.put<Tag>(url, tagData);
     return response.data;
   }
+
+  async deleteTag(householdId: string, tagId: string): Promise<void> {
+    const url = `/households/${householdId}/tags/${tagId}`;
+    await this.delete(url);
+  }
 }

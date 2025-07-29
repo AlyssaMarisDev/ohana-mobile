@@ -33,6 +33,7 @@ function HouseholdTagsScreen() {
   const [isCreatingTag, setIsCreatingTag] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [isEditingTag, setIsEditingTag] = useState(false);
+  const [isDeletingTag, setIsDeletingTag] = useState(false);
   const [editingTag, setEditingTag] = useState<Tag | undefined>(undefined);
 
   const {
@@ -100,6 +101,24 @@ function HouseholdTagsScreen() {
       console.error('Error updating tag:', error);
     } finally {
       setIsEditingTag(false);
+    }
+  };
+
+  const handleDeleteTag = async () => {
+    if (!editingTag) return;
+
+    setIsDeletingTag(true);
+    try {
+      const tagService = new TagService();
+      await tagService.deleteTag(householdId, editingTag.id);
+      // After successful deletion, refresh the tags list
+      await refetchTags();
+      setIsEditModalVisible(false);
+      setEditingTag(undefined);
+    } catch (error) {
+      console.error('Error deleting tag:', error);
+    } finally {
+      setIsDeletingTag(false);
     }
   };
 
@@ -211,7 +230,9 @@ function HouseholdTagsScreen() {
           setEditingTag(undefined);
         }}
         onSubmit={handleEditTag}
+        onDelete={handleDeleteTag}
         isLoading={isEditingTag}
+        isDeleting={isDeletingTag}
         tag={editingTag}
       />
     </Screen>
