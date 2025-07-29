@@ -53,6 +53,9 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
     );
   }
 
+  // Sort tags by name for consistent display
+  const sortedTags = tags.sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Tags (optional)</Text>
@@ -61,7 +64,7 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.tagGrid}>
-          {tags.map(tag => {
+          {sortedTags.map(tag => {
             const isSelected = selectedTagIds.includes(tag.id);
             return (
               <TouchableOpacity

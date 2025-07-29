@@ -43,7 +43,9 @@ export const TagList: React.FC<TagListProps> = ({
     );
   }
 
-  const displayTags = maxTags ? tags.slice(0, maxTags) : tags;
+  // Sort tags by name for consistent display
+  const sortedTags = tags.sort((a, b) => a.name.localeCompare(b.name));
+  const displayTags = maxTags ? sortedTags.slice(0, maxTags) : sortedTags;
 
   return (
     <View style={styles.container}>

@@ -27,4 +27,14 @@ export class TagService extends BaseService {
     const response = await this.post<Tag>(url, tagData);
     return response.data;
   }
+
+  async updateTag(
+    householdId: string,
+    tagId: string,
+    tagData: Omit<Tag, 'id'>
+  ): Promise<Tag> {
+    const url = `/households/${householdId}/tags/${tagId}`;
+    const response = await this.put<Tag>(url, tagData);
+    return response.data;
+  }
 }

@@ -72,8 +72,9 @@ function TaskPreview({
 
   const household = households.find(h => h.id === task.householdId);
 
-  // Filter tags to only show the ones assigned to this task
+  // Filter tags to only show the ones assigned to this task and sort them by name
   const taskTags = tags?.filter(tag => task.tagIds?.includes(tag.id)) || [];
+  const sortedTaskTags = taskTags.sort((a, b) => a.name.localeCompare(b.name));
 
   const handleCheckboxPress = () => {
     if (onPress) {
@@ -130,12 +131,12 @@ function TaskPreview({
           {task.title}
         </Text>
 
-        {showTags && taskTags.length > 0 && (
+        {showTags && sortedTaskTags.length > 0 && (
           <View style={styles.tagsContainer}>
-            {taskTags.slice(0, 3).map(tag => (
+            {sortedTaskTags.slice(0, 3).map(tag => (
               <Tag key={tag.id} tag={tag} size="small" />
             ))}
-            {taskTags.length > 3 && (
+            {sortedTaskTags.length > 3 && (
               <Text
                 style={[
                   styles.moreTags,
@@ -144,7 +145,7 @@ function TaskPreview({
                   },
                 ]}
               >
-                +{taskTags.length - 3}
+                +{sortedTaskTags.length - 3}
               </Text>
             )}
           </View>

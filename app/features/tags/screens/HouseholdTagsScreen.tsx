@@ -13,8 +13,9 @@ import { useHouseholds } from '../../households/hooks/useHouseholds';
 import { useHouseholdTags } from '../hooks/useHouseholdTags';
 import { Ionicons } from '@expo/vector-icons';
 import configs from '../../../common/config';
-import { Tag } from '../services/TagService';
+import { Tag, TagService } from '../services/TagService';
 import CreateTagModal from '../components/CreateTagModal';
+import EditTagModal from '../components/EditTagModal';
 
 type HouseholdTagsRouteProp = RouteProp<
   {
@@ -30,6 +31,9 @@ function HouseholdTagsScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
   const [isCreatingTag, setIsCreatingTag] = useState(false);
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [isEditingTag, setIsEditingTag] = useState(false);
+  const [editingTag, setEditingTag] = useState<Tag | undefined>(undefined);
 
   const {
     households,
@@ -69,8 +73,8 @@ function HouseholdTagsScreen() {
   const handleCreateTag = async (tagData: { name: string; color: string }) => {
     setIsCreatingTag(true);
     try {
-      // TODO: Implement tag creation API call
-      console.log('Creating tag:', tagData);
+      const tagService = new TagService();
+      await tagService.createTag(householdId, tagData);
       // After successful creation, refresh the tags list
       await refetchTags();
       setIsCreateModalVisible(false);
@@ -81,10 +85,46 @@ function HouseholdTagsScreen() {
     }
   };
 
+  const handleEditTag = async (tagData: { name: string; color: string }) => {
+    if (!editingTag) return;
+
+    setIsEditingTag(true);
+    try {
+      const tagService = new TagService();
+      await tagService.updateTag(householdId, editingTag.id, tagData);
+      // After successful update, refresh the tags list
+      await refetchTags();
+      setIsEditModalVisible(false);
+      setEditingTag(undefined);
+    } catch (error) {
+      console.error('Error updating tag:', error);
+    } finally {
+      setIsEditingTag(false);
+    }
+  };
+
+  const handleEditPress = (tag: Tag) => {
+    setEditingTag(tag);
+    setIsEditModalVisible(true);
+  };
+
   const renderTag = ({ item }: { item: Tag }) => (
     <View style={styles.tagItem}>
-      <View style={[styles.tagColor, { backgroundColor: item.color }]} />
-      <Text style={styles.tagName}>{item.name}</Text>
+      <View style={styles.tagLeft}>
+        <View style={[styles.tagColor, { backgroundColor: item.color }]} />
+        <Text style={styles.tagName}>{item.name}</Text>
+      </View>
+      <TouchableOpacity
+        style={styles.editButton}
+        onPress={() => handleEditPress(item)}
+        activeOpacity={0.7}
+      >
+        <Ionicons
+          name="create-outline"
+          size={20}
+          color={configs.colors.textSecondary}
+        />
+      </TouchableOpacity>
     </View>
   );
 
@@ -163,6 +203,17 @@ function HouseholdTagsScreen() {
         onSubmit={handleCreateTag}
         isLoading={isCreatingTag}
       />
+
+      <EditTagModal
+        isVisible={isEditModalVisible}
+        onClose={() => {
+          setIsEditModalVisible(false);
+          setEditingTag(undefined);
+        }}
+        onSubmit={handleEditTag}
+        isLoading={isEditingTag}
+        tag={editingTag}
+      />
     </Screen>
   );
 }
@@ -200,10 +251,20 @@ const styles = StyleSheet.create({
   tagItem: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: configs.colors.foreground,
     borderRadius: 8,
     padding: 16,
     marginBottom: 12,
+  },
+  tagLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  editButton: {
+    padding: 8,
+    borderRadius: 20,
   },
   tagColor: {
     width: 16,
