@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
+import { View } from 'react-native';
 import Screen from '../../../common/components/Screen';
 import MultiTaskList from '../../tasks/components/MultiTaskList';
+import FloatingActionButton from '../../../common/components/FloatingActionButton';
+import CreateTaskModal from '../../tasks/components/CreateTaskModal';
 import { useTasksByHousehold } from '../../tasks/hooks/useTasksByHousehold';
 import { useHouseholds } from '../hooks/useHouseholds';
 import { Task, TaskStatus } from '../../tasks/services/TaskService';
@@ -18,6 +21,7 @@ function HouseholdTasksScreen() {
   const navigation = useNavigation();
   const { householdId } = route.params;
   const [refreshing, setRefreshing] = useState(false);
+  const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
 
   const {
     tasks,
@@ -82,24 +86,53 @@ function HouseholdTasksScreen() {
   }, [household, navigation]);
 
   return (
-    <Screen
-      style={{ paddingHorizontal: '5%' }}
-      refreshable={true}
-      onRefresh={onRefresh}
-      refreshing={refreshing}
-    >
-      <MultiTaskList
-        tasks={tasks}
-        isLoading={isLoadingTasks}
-        onToggleTask={toggleTaskCompletion}
-        onUpdateTask={handleUpdateTask}
-        onCreateTask={handleCreateTask}
+    <View style={styles.container}>
+      <Screen
+        style={{ paddingHorizontal: '5%' }}
+        refreshable={true}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
+      >
+        <MultiTaskList
+          tasks={tasks}
+          isLoading={isLoadingTasks}
+          onToggleTask={toggleTaskCompletion}
+          onUpdateTask={handleUpdateTask}
+          onCreateTask={handleCreateTask}
+          households={households}
+          isLoadingHouseholds={isLoadingHouseholds}
+          preSelectedHouseholdId={householdId}
+          showCreateButton={false}
+        />
+      </Screen>
+
+      <FloatingActionButton
+        onPress={() => setIsCreateModalVisible(true)}
+        icon="plus"
+        style={styles.fab}
+      />
+
+      <CreateTaskModal
+        visible={isCreateModalVisible}
+        onClose={() => setIsCreateModalVisible(false)}
+        onSubmit={handleCreateTask}
         households={households}
         isLoadingHouseholds={isLoadingHouseholds}
         preSelectedHouseholdId={householdId}
       />
-    </Screen>
+    </View>
   );
 }
+
+const styles = {
+  container: {
+    flex: 1,
+  },
+  fab: {
+    position: 'absolute' as const,
+    bottom: 30,
+    right: 30,
+  },
+};
 
 export default HouseholdTasksScreen;

@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { StyleSheet, ActivityIndicator, View } from 'react-native';
 import TaskList from './TaskList';
 import Text from '../../../common/components/Text';
-import FloatingActionButton from '../../../common/components/FloatingActionButton';
-import CreateTaskModal from './CreateTaskModal';
 import UpdateTaskModal from './UpdateTaskModal';
 import { Task } from '../services/TaskService';
 import { Household } from '../../households/services/HouseholdService';
@@ -39,17 +37,8 @@ function MultiTaskList({
   preSelectedHouseholdId,
 }: TaskListProps) {
   const { deleteTask } = useTasks();
-  const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-
-  const handleCreateTask = (
-    title: string,
-    householdId: string,
-    tagIds: string[]
-  ) => {
-    onCreateTask(title, householdId, tagIds);
-  };
 
   const handleUpdateTask = (task: Task) => {
     setSelectedTask(task);
@@ -117,23 +106,6 @@ function MultiTaskList({
         )}
       </View>
 
-      {showCreateButton && (
-        <FloatingActionButton
-          onPress={() => setIsCreateModalVisible(true)}
-          icon="plus"
-          style={styles.fab}
-        />
-      )}
-
-      <CreateTaskModal
-        visible={isCreateModalVisible}
-        onClose={() => setIsCreateModalVisible(false)}
-        onSubmit={handleCreateTask}
-        households={households}
-        isLoadingHouseholds={isLoadingHouseholds}
-        preSelectedHouseholdId={preSelectedHouseholdId}
-      />
-
       <UpdateTaskModal
         visible={isUpdateModalVisible}
         onClose={handleUpdateModalClose}
@@ -175,11 +147,6 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     color: configs.colors.textSecondary,
-  },
-  fab: {
-    position: 'absolute',
-    bottom: 30,
-    right: 30,
   },
 });
 
