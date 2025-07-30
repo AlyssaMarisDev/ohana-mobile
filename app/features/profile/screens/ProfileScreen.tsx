@@ -5,9 +5,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  ScrollView,
   ActivityIndicator,
-  RefreshControl,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Screen from '../../../common/components/Screen';
@@ -62,181 +60,174 @@ function ProfileScreen() {
   }
 
   return (
-    <Screen style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={[configs.colors.primary || '#0000ff']}
-            tintColor={configs.colors.primary || '#0000ff'}
+    <Screen
+      style={styles.container}
+      refreshable={true}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
+    >
+      {/* Profile Header */}
+      <View style={styles.profileHeader}>
+        <Image
+          source={require('../../../../assets/icon.png')}
+          style={styles.profileImage}
+        />
+        <Text style={styles.userName}>{member?.name || 'John Doe'}</Text>
+        <Text style={styles.userEmail}>
+          {member?.email || 'john.doe@example.com'}
+        </Text>
+        <Text style={styles.userDetails}>
+          {member?.age ? `${member.age} years old` : ''} •{' '}
+          {member?.gender || ''}
+        </Text>
+      </View>
+
+      {/* Profile Options */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Account</Text>
+
+        <TouchableOpacity style={styles.optionItem}>
+          <View style={styles.optionLeft}>
+            <Ionicons
+              name="person-outline"
+              size={20}
+              color={configs.colors.textPrimary}
+            />
+            <Text style={styles.optionText}>Edit Profile</Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={configs.colors.textSecondary}
           />
-        }
-      >
-        {/* Profile Header */}
-        <View style={styles.profileHeader}>
-          <Image
-            source={require('../../../../assets/icon.png')}
-            style={styles.profileImage}
-          />
-          <Text style={styles.userName}>{member?.name || 'John Doe'}</Text>
-          <Text style={styles.userEmail}>
-            {member?.email || 'john.doe@example.com'}
-          </Text>
-          <Text style={styles.userDetails}>
-            {member?.age ? `${member.age} years old` : ''} •{' '}
-            {member?.gender || ''}
-          </Text>
-        </View>
-
-        {/* Profile Options */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Account</Text>
-
-          <TouchableOpacity style={styles.optionItem}>
-            <View style={styles.optionLeft}>
-              <Ionicons
-                name="person-outline"
-                size={20}
-                color={configs.colors.textPrimary}
-              />
-              <Text style={styles.optionText}>Edit Profile</Text>
-            </View>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color={configs.colors.textSecondary}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.optionItem}>
-            <View style={styles.optionLeft}>
-              <Ionicons
-                name="mail-outline"
-                size={20}
-                color={configs.colors.textPrimary}
-              />
-              <Text style={styles.optionText}>Change Email</Text>
-            </View>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color={configs.colors.textSecondary}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.optionItem}>
-            <View style={styles.optionLeft}>
-              <Ionicons
-                name="lock-closed-outline"
-                size={20}
-                color={configs.colors.textPrimary}
-              />
-              <Text style={styles.optionText}>Change Password</Text>
-            </View>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color={configs.colors.textSecondary}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Preferences</Text>
-
-          <TouchableOpacity style={styles.optionItem}>
-            <View style={styles.optionLeft}>
-              <Ionicons
-                name="notifications-outline"
-                size={20}
-                color={configs.colors.textPrimary}
-              />
-              <Text style={styles.optionText}>Notifications</Text>
-            </View>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color={configs.colors.textSecondary}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.optionItem}>
-            <View style={styles.optionLeft}>
-              <Ionicons
-                name="color-palette-outline"
-                size={20}
-                color={configs.colors.textPrimary}
-              />
-              <Text style={styles.optionText}>Appearance</Text>
-            </View>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color={configs.colors.textSecondary}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Support</Text>
-
-          <TouchableOpacity style={styles.optionItem}>
-            <View style={styles.optionLeft}>
-              <Ionicons
-                name="help-circle-outline"
-                size={20}
-                color={configs.colors.textPrimary}
-              />
-              <Text style={styles.optionText}>Help & Support</Text>
-            </View>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color={configs.colors.textSecondary}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.optionItem}>
-            <View style={styles.optionLeft}>
-              <Ionicons
-                name="document-text-outline"
-                size={20}
-                color={configs.colors.textPrimary}
-              />
-              <Text style={styles.optionText}>Terms of Service</Text>
-            </View>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color={configs.colors.textSecondary}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.optionItem}>
-            <View style={styles.optionLeft}>
-              <Ionicons
-                name="shield-checkmark-outline"
-                size={20}
-                color={configs.colors.textPrimary}
-              />
-              <Text style={styles.optionText}>Privacy Policy</Text>
-            </View>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color={configs.colors.textSecondary}
-            />
-          </TouchableOpacity>
-        </View>
-
-        {/* Logout Button */}
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Ionicons name="log-out-outline" size={20} color="#ff4444" />
-          <Text style={styles.logoutText}>Log Out</Text>
         </TouchableOpacity>
-      </ScrollView>
+
+        <TouchableOpacity style={styles.optionItem}>
+          <View style={styles.optionLeft}>
+            <Ionicons
+              name="mail-outline"
+              size={20}
+              color={configs.colors.textPrimary}
+            />
+            <Text style={styles.optionText}>Change Email</Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={configs.colors.textSecondary}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.optionItem}>
+          <View style={styles.optionLeft}>
+            <Ionicons
+              name="lock-closed-outline"
+              size={20}
+              color={configs.colors.textPrimary}
+            />
+            <Text style={styles.optionText}>Change Password</Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={configs.colors.textSecondary}
+          />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Preferences</Text>
+
+        <TouchableOpacity style={styles.optionItem}>
+          <View style={styles.optionLeft}>
+            <Ionicons
+              name="notifications-outline"
+              size={20}
+              color={configs.colors.textPrimary}
+            />
+            <Text style={styles.optionText}>Notifications</Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={configs.colors.textSecondary}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.optionItem}>
+          <View style={styles.optionLeft}>
+            <Ionicons
+              name="color-palette-outline"
+              size={20}
+              color={configs.colors.textPrimary}
+            />
+            <Text style={styles.optionText}>Appearance</Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={configs.colors.textSecondary}
+          />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Support</Text>
+
+        <TouchableOpacity style={styles.optionItem}>
+          <View style={styles.optionLeft}>
+            <Ionicons
+              name="help-circle-outline"
+              size={20}
+              color={configs.colors.textPrimary}
+            />
+            <Text style={styles.optionText}>Help & Support</Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={configs.colors.textSecondary}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.optionItem}>
+          <View style={styles.optionLeft}>
+            <Ionicons
+              name="document-text-outline"
+              size={20}
+              color={configs.colors.textPrimary}
+            />
+            <Text style={styles.optionText}>Terms of Service</Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={configs.colors.textSecondary}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.optionItem}>
+          <View style={styles.optionLeft}>
+            <Ionicons
+              name="shield-checkmark-outline"
+              size={20}
+              color={configs.colors.textPrimary}
+            />
+            <Text style={styles.optionText}>Privacy Policy</Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={configs.colors.textSecondary}
+          />
+        </TouchableOpacity>
+      </View>
+
+      {/* Logout Button */}
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Ionicons name="log-out-outline" size={20} color="#ff4444" />
+        <Text style={styles.logoutText}>Log Out</Text>
+      </TouchableOpacity>
     </Screen>
   );
 }
