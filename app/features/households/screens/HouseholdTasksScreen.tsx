@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import Screen from '../../../common/components/Screen';
 import MultiTaskList from '../../tasks/components/MultiTaskList';
@@ -17,6 +17,7 @@ function HouseholdTasksScreen() {
   const route = useRoute<HouseholdTasksRouteProp>();
   const navigation = useNavigation();
   const { householdId } = route.params;
+  const [refreshing, setRefreshing] = useState(false);
 
   const {
     tasks,
@@ -33,7 +34,14 @@ function HouseholdTasksScreen() {
   } = useHouseholds(false);
 
   const onRefresh = async () => {
-    await Promise.all([refetchTasks(), refetchHouseholds()]);
+    setRefreshing(true);
+    try {
+      await Promise.all([refetchTasks(), refetchHouseholds()]);
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   const toggleTaskCompletion = (task: Task) => {
@@ -74,11 +82,15 @@ function HouseholdTasksScreen() {
   }, [household, navigation]);
 
   return (
-    <Screen style={{ paddingHorizontal: '5%' }}>
+    <Screen
+      style={{ paddingHorizontal: '5%' }}
+      refreshable={true}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
+    >
       <MultiTaskList
         tasks={tasks}
         isLoading={isLoadingTasks}
-        onRefresh={onRefresh}
         onToggleTask={toggleTaskCompletion}
         onUpdateTask={handleUpdateTask}
         onCreateTask={handleCreateTask}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Screen from '../../../common/components/Screen';
 import TodayTaskList from '../components/TodayTaskList';
 import { useTodayTasks } from '../hooks/useTodayTasks';
@@ -6,8 +6,28 @@ import { useHouseholds } from '../../households/hooks/useHouseholds';
 import { Task, TaskStatus } from '../../tasks/services/TaskService';
 
 function TodayScreen() {
-  const { updateTaskData, createNewTask } = useTodayTasks();
-  const { households, isLoading: isLoadingHouseholds } = useHouseholds(true);
+  const {
+    updateTaskData,
+    createNewTask,
+    refetch: refetchTodayTasks,
+  } = useTodayTasks();
+  const {
+    households,
+    isLoading: isLoadingHouseholds,
+    refetch: refetchHouseholds,
+  } = useHouseholds(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await Promise.all([refetchTodayTasks(), refetchHouseholds()]);
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   const toggleTaskCompletion = (task: Task) => {
     const newStatus =
@@ -33,7 +53,12 @@ function TodayScreen() {
   };
 
   return (
-    <Screen style={{ paddingHorizontal: '5%' }}>
+    <Screen
+      style={{ paddingHorizontal: '5%' }}
+      refreshable={true}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
+    >
       <TodayTaskList
         onToggleTask={toggleTaskCompletion}
         onUpdateTask={handleUpdateTask}

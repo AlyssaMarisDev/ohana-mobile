@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  ActivityIndicator,
-  View,
-  ScrollView,
-  RefreshControl,
-} from 'react-native';
+import { StyleSheet, ActivityIndicator, View } from 'react-native';
 import TaskList from './TaskList';
 import Text from '../../../common/components/Text';
 import FloatingActionButton from '../../../common/components/FloatingActionButton';
@@ -19,7 +13,6 @@ import { useTasks } from '../hooks/useTasks';
 interface TaskListProps {
   tasks: Task[];
   isLoading: boolean;
-  onRefresh: () => Promise<void>;
   onToggleTask: (task: Task) => void;
   onUpdateTask: (
     taskId: string,
@@ -36,7 +29,6 @@ interface TaskListProps {
 function MultiTaskList({
   tasks,
   isLoading,
-  onRefresh,
   onToggleTask,
   onUpdateTask,
   onCreateTask,
@@ -47,21 +39,9 @@ function MultiTaskList({
   preSelectedHouseholdId,
 }: TaskListProps) {
   const { deleteTask } = useTasks();
-  const [refreshing, setRefreshing] = useState(false);
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    try {
-      await onRefresh();
-    } catch (error) {
-      console.error('Error refreshing tasks:', error);
-    } finally {
-      setRefreshing(false);
-    }
-  };
 
   const handleCreateTask = (
     title: string,
@@ -99,7 +79,7 @@ function MultiTaskList({
   const incompleteTasks = tasks.filter(task => task.status !== 'COMPLETED');
   const completeTasks = tasks.filter(task => task.status === 'COMPLETED');
 
-  if (isLoading && !refreshing) {
+  if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator
@@ -113,17 +93,7 @@ function MultiTaskList({
 
   return (
     <>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            colors={[configs.colors.primary || '#0000ff']}
-            tintColor={configs.colors.primary || '#0000ff'}
-          />
-        }
-      >
+      <View style={styles.container}>
         <TaskList
           title="To Do"
           tasks={incompleteTasks}
@@ -145,7 +115,7 @@ function MultiTaskList({
             <Text style={styles.emptyText}>No tasks found</Text>
           </View>
         )}
-      </ScrollView>
+      </View>
 
       {showCreateButton && (
         <FloatingActionButton
@@ -176,6 +146,9 @@ function MultiTaskList({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',

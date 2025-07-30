@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import Screen from '../../../common/components/Screen';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Image,
-  RefreshControl,
-} from 'react-native';
+import { View, StyleSheet, FlatList, Image } from 'react-native';
 import Text from '../../../common/components/Text';
 import { useHouseholds } from '../../households/hooks/useHouseholds';
 import { useHouseholdMembers } from '../hooks/useHouseholdMembers';
@@ -79,32 +73,8 @@ function HouseholdMembersScreen() {
     </View>
   );
 
-  if (isLoadingHouseholds || isLoadingMembers) {
+  const renderContent = () => {
     return (
-      <Screen style={styles.container}>
-        <Text style={styles.loadingText}>Loading members...</Text>
-      </Screen>
-    );
-  }
-
-  if (!household) {
-    return (
-      <Screen style={styles.container}>
-        <Text style={styles.errorText}>Household not found</Text>
-      </Screen>
-    );
-  }
-
-  if (membersError) {
-    return (
-      <Screen style={styles.container}>
-        <Text style={styles.errorText}>Failed to load members</Text>
-      </Screen>
-    );
-  }
-
-  return (
-    <Screen style={styles.container}>
       <View style={styles.content}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Members</Text>
@@ -115,14 +85,7 @@ function HouseholdMembersScreen() {
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.membersList}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                  colors={[configs.colors.primary]}
-                  tintColor={configs.colors.primary}
-                />
-              }
+              scrollEnabled={false}
             />
           ) : (
             <View style={styles.emptyContainer}>
@@ -139,6 +102,25 @@ function HouseholdMembersScreen() {
           )}
         </View>
       </View>
+    );
+  };
+
+  return (
+    <Screen
+      style={styles.container}
+      refreshable={true}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
+    >
+      {isLoadingHouseholds || isLoadingMembers ? (
+        <Text style={styles.loadingText}>Loading members...</Text>
+      ) : !household ? (
+        <Text style={styles.errorText}>Household not found</Text>
+      ) : membersError ? (
+        <Text style={styles.errorText}>Failed to load members</Text>
+      ) : (
+        renderContent()
+      )}
     </Screen>
   );
 }

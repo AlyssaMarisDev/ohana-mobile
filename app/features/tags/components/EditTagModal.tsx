@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: configs.colors.danger + '10',
+    backgroundColor: `${configs.colors.danger  }10`,
     borderRadius: 8,
   },
   warningText: {

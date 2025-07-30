@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import Screen from '../../../common/components/Screen';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-  RefreshControl,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Text from '../../../common/components/Text';
 import { useHouseholds } from '../hooks/useHouseholds';
 import { Ionicons } from '@expo/vector-icons';
@@ -84,88 +77,78 @@ function HouseholdDetailScreen() {
   }
 
   return (
-    <Screen style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={[configs.colors.primary]}
-            tintColor={configs.colors.primary}
+    <Screen
+      style={styles.container}
+      refreshable={true}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
+    >
+      {/* Household Header */}
+      <View style={styles.householdHeader}>
+        <Image
+          source={require('../../../../assets/icon.png')}
+          style={styles.householdImage}
+        />
+        <Text style={styles.householdName}>{household.name}</Text>
+        {household.description && (
+          <Text style={styles.householdDescription}>
+            {household.description}
+          </Text>
+        )}
+      </View>
+
+      {/* Household Options */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Management</Text>
+
+        <TouchableOpacity style={styles.optionItem} onPress={handleViewTasks}>
+          <View style={styles.optionLeft}>
+            <Ionicons
+              name="list-outline"
+              size={20}
+              color={configs.colors.textPrimary}
+            />
+            <Text style={styles.optionText}>View Tasks</Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={configs.colors.textSecondary}
           />
-        }
-      >
-        {/* Household Header */}
-        <View style={styles.householdHeader}>
-          <Image
-            source={require('../../../../assets/icon.png')}
-            style={styles.householdImage}
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.optionItem} onPress={handleViewTags}>
+          <View style={styles.optionLeft}>
+            <Ionicons
+              name="pricetag-outline"
+              size={20}
+              color={configs.colors.textPrimary}
+            />
+            <Text style={styles.optionText}>View Tags</Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={configs.colors.textSecondary}
           />
-          <Text style={styles.householdName}>{household.name}</Text>
-          {household.description && (
-            <Text style={styles.householdDescription}>
-              {household.description}
-            </Text>
-          )}
-        </View>
+        </TouchableOpacity>
 
-        {/* Household Options */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Management</Text>
-
-          <TouchableOpacity style={styles.optionItem} onPress={handleViewTasks}>
-            <View style={styles.optionLeft}>
-              <Ionicons
-                name="list-outline"
-                size={20}
-                color={configs.colors.textPrimary}
-              />
-              <Text style={styles.optionText}>View Tasks</Text>
-            </View>
+        <TouchableOpacity style={styles.optionItem} onPress={handleViewMembers}>
+          <View style={styles.optionLeft}>
             <Ionicons
-              name="chevron-forward"
+              name="people-outline"
               size={20}
-              color={configs.colors.textSecondary}
+              color={configs.colors.textPrimary}
             />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.optionItem} onPress={handleViewTags}>
-            <View style={styles.optionLeft}>
-              <Ionicons
-                name="pricetag-outline"
-                size={20}
-                color={configs.colors.textPrimary}
-              />
-              <Text style={styles.optionText}>View Tags</Text>
-            </View>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color={configs.colors.textSecondary}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.optionItem}
-            onPress={handleViewMembers}
-          >
-            <View style={styles.optionLeft}>
-              <Ionicons
-                name="people-outline"
-                size={20}
-                color={configs.colors.textPrimary}
-              />
-              <Text style={styles.optionText}>View Members</Text>
-            </View>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              color={configs.colors.textSecondary}
-            />
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+            <Text style={styles.optionText}>View Members</Text>
+          </View>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={configs.colors.textSecondary}
+          />
+        </TouchableOpacity>
+      </View>
     </Screen>
   );
 }

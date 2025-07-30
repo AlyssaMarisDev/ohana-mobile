@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import Screen from '../../../common/components/Screen';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  RefreshControl,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import Text from '../../../common/components/Text';
 import { useHouseholds } from '../../households/hooks/useHouseholds';
 import { useHouseholdTags } from '../hooks/useHouseholdTags';
@@ -147,32 +141,8 @@ function HouseholdTagsScreen() {
     </View>
   );
 
-  if (isLoadingHouseholds || isLoadingTags) {
+  const renderContent = () => {
     return (
-      <Screen style={styles.container}>
-        <Text style={styles.loadingText}>Loading tags...</Text>
-      </Screen>
-    );
-  }
-
-  if (!household) {
-    return (
-      <Screen style={styles.container}>
-        <Text style={styles.errorText}>Household not found</Text>
-      </Screen>
-    );
-  }
-
-  if (tagsError) {
-    return (
-      <Screen style={styles.container}>
-        <Text style={styles.errorText}>Failed to load tags</Text>
-      </Screen>
-    );
-  }
-
-  return (
-    <Screen style={styles.container}>
       <View style={styles.content}>
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -191,14 +161,7 @@ function HouseholdTagsScreen() {
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.tagsList}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                  colors={[configs.colors.primary]}
-                  tintColor={configs.colors.primary}
-                />
-              }
+              scrollEnabled={false}
             />
           ) : (
             <View style={styles.emptyContainer}>
@@ -215,6 +178,25 @@ function HouseholdTagsScreen() {
           )}
         </View>
       </View>
+    );
+  };
+
+  return (
+    <Screen
+      style={styles.container}
+      refreshable={true}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
+    >
+      {isLoadingHouseholds || isLoadingTags ? (
+        <Text style={styles.loadingText}>Loading tags...</Text>
+      ) : !household ? (
+        <Text style={styles.errorText}>Household not found</Text>
+      ) : tagsError ? (
+        <Text style={styles.errorText}>Failed to load tags</Text>
+      ) : (
+        renderContent()
+      )}
 
       <CreateTagModal
         isVisible={isCreateModalVisible}
