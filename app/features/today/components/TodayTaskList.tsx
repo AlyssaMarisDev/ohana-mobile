@@ -5,6 +5,7 @@ import Text from '../../../common/components/Text';
 import UpdateTaskModal from '../../tasks/components/UpdateTaskModal';
 import { Task } from '../../tasks/services/TaskService';
 import { Household } from '../../households/services/HouseholdService';
+import { Tag } from '../../tags/services/TagService';
 import configs from '../../../common/config';
 import { useTodayTasks } from '../hooks/useTodayTasks';
 
@@ -20,6 +21,8 @@ interface TodayTaskListProps {
   showCreateButton?: boolean;
   showHousehold?: boolean;
   preSelectedHouseholdId?: string;
+  tags?: Tag[];
+  isLoadingTags?: boolean;
 }
 
 function TodayTaskList({
@@ -31,6 +34,8 @@ function TodayTaskList({
   showCreateButton = true,
   showHousehold = false,
   preSelectedHouseholdId,
+  tags,
+  isLoadingTags = false,
 }: TodayTaskListProps) {
   const { incompleteTasks, completedTasks, isLoading, deleteTask } =
     useTodayTasks();
@@ -85,6 +90,8 @@ function TodayTaskList({
           onToggleTask={onToggleTask}
           onUpdateTask={handleUpdateTask}
           showHousehold={showHousehold}
+          tags={tags}
+          isLoadingTags={isLoadingTags}
         />
 
         <TaskList
@@ -93,6 +100,8 @@ function TodayTaskList({
           onToggleTask={onToggleTask}
           onUpdateTask={handleUpdateTask}
           showHousehold={showHousehold}
+          tags={tags}
+          isLoadingTags={isLoadingTags}
         />
 
         {incompleteTasks.length === 0 &&

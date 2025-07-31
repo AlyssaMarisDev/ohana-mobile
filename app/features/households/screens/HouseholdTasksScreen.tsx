@@ -7,6 +7,7 @@ import FloatingActionButton from '../../../common/components/FloatingActionButto
 import CreateTaskModal from '../../tasks/components/CreateTaskModal';
 import { useTasksByHousehold } from '../../tasks/hooks/useTasksByHousehold';
 import { useHouseholds } from '../hooks/useHouseholds';
+import { useHouseholdTags } from '../../tags/hooks/useHouseholdTags';
 import { Task, TaskStatus } from '../../tasks/services/TaskService';
 
 type HouseholdTasksRouteProp = RouteProp<
@@ -36,6 +37,9 @@ function HouseholdTasksScreen() {
     isLoading: isLoadingHouseholds,
     refetch: refetchHouseholds,
   } = useHouseholds(false);
+
+  const { data: tags, isLoading: isLoadingTags } =
+    useHouseholdTags(householdId);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -103,6 +107,8 @@ function HouseholdTasksScreen() {
           isLoadingHouseholds={isLoadingHouseholds}
           preSelectedHouseholdId={householdId}
           showCreateButton={false}
+          tags={tags}
+          isLoadingTags={isLoadingTags}
         />
       </Screen>
 

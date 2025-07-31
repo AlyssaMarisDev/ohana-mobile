@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import TaskPreview from './TaskPreview';
 import Text from '../../../common/components/Text';
 import { Task } from '../services/TaskService';
+import { Tag } from '../../tags/services/TagService';
 import configs from '../../../common/config';
 
 interface TaskListBoxProps {
@@ -13,6 +14,8 @@ interface TaskListBoxProps {
   showHousehold?: boolean;
   backgroundColor?: string;
   textColor?: string;
+  tags?: Tag[];
+  isLoadingTags?: boolean;
 }
 
 function TaskList({
@@ -23,6 +26,8 @@ function TaskList({
   showHousehold = false,
   backgroundColor = configs.colors.foreground,
   textColor = configs.colors.textPrimary,
+  tags,
+  isLoadingTags = false,
 }: TaskListBoxProps) {
   if (tasks.length === 0) {
     return null;
@@ -46,6 +51,8 @@ function TaskList({
               onUpdateTask={onUpdateTask}
               showHousehold={showHousehold}
               textColor={textColor}
+              tags={tags}
+              isLoadingTags={isLoadingTags}
             />
           ))}
       </View>

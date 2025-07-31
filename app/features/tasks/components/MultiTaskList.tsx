@@ -5,6 +5,7 @@ import Text from '../../../common/components/Text';
 import UpdateTaskModal from './UpdateTaskModal';
 import { Task } from '../services/TaskService';
 import { Household } from '../../households/services/HouseholdService';
+import { Tag } from '../../tags/services/TagService';
 import configs from '../../../common/config';
 import { useTasks } from '../hooks/useTasks';
 
@@ -22,6 +23,8 @@ interface TaskListProps {
   showCreateButton?: boolean;
   showHousehold?: boolean;
   preSelectedHouseholdId?: string;
+  tags?: Tag[];
+  isLoadingTags?: boolean;
 }
 
 function MultiTaskList({
@@ -35,6 +38,8 @@ function MultiTaskList({
   showCreateButton = true,
   showHousehold = false,
   preSelectedHouseholdId,
+  tags,
+  isLoadingTags = false,
 }: TaskListProps) {
   const { deleteTask } = useTasks();
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
@@ -89,6 +94,8 @@ function MultiTaskList({
           onToggleTask={onToggleTask}
           onUpdateTask={handleUpdateTask}
           showHousehold={showHousehold}
+          tags={tags}
+          isLoadingTags={isLoadingTags}
         />
 
         <TaskList
@@ -97,6 +104,8 @@ function MultiTaskList({
           onToggleTask={onToggleTask}
           onUpdateTask={handleUpdateTask}
           showHousehold={showHousehold}
+          tags={tags}
+          isLoadingTags={isLoadingTags}
         />
 
         {tasks.length === 0 && !isLoading && (

@@ -6,6 +6,7 @@ import FloatingActionButton from '../../../common/components/FloatingActionButto
 import CreateTaskModal from '../../tasks/components/CreateTaskModal';
 import { useTodayTasks } from '../hooks/useTodayTasks';
 import { useHouseholds } from '../../households/hooks/useHouseholds';
+import { useHouseholdTags } from '../../tags/hooks/useHouseholdTags';
 import { Task, TaskStatus } from '../../tasks/services/TaskService';
 
 function TodayScreen() {
@@ -21,6 +22,12 @@ function TodayScreen() {
   } = useHouseholds(true);
   const [refreshing, setRefreshing] = useState(false);
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
+
+  // Get the first household's tags (assuming single household for today screen)
+  const selectedHousehold = households?.[0];
+  const { data: tags, isLoading: isLoadingTags } = useHouseholdTags(
+    selectedHousehold?.id || ''
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -72,6 +79,8 @@ function TodayScreen() {
           isLoadingHouseholds={isLoadingHouseholds}
           showHousehold={true}
           showCreateButton={false}
+          tags={tags}
+          isLoadingTags={isLoadingTags}
         />
       </Screen>
 

@@ -10,8 +10,8 @@ import Text from '../../../common/components/Text';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Task, TaskStatus } from '../services/TaskService';
 import { useGlobalState } from '../../../common/context/GlobalStateContext';
-import { useTodayTags } from '../../tags/hooks/useTodayTags';
-import { Tag } from '../../tags/components/Tag';
+import { Tag } from '../../tags/services/TagService';
+import { Tag as TagComponent } from '../../tags/components/Tag';
 import configs from '../../../common/config';
 
 type TaskPreviewProps = {
@@ -24,6 +24,7 @@ type TaskPreviewProps = {
   textColor?: string;
   onPress?: () => void;
   onUpdateTask?: (task: Task) => void;
+  tags?: Tag[];
 };
 
 function TaskPreview({
@@ -36,9 +37,9 @@ function TaskPreview({
   textColor,
   onPress,
   onUpdateTask,
+  tags,
 }: TaskPreviewProps) {
   const { households } = useGlobalState();
-  const { data: tags } = useTodayTags(task.householdId);
   const taskDueDate = new Date(task.dueDate);
   const isCompleted = task.status === TaskStatus.COMPLETED;
   const actualTextColor = isCompleted
@@ -134,7 +135,7 @@ function TaskPreview({
         {showTags && sortedTaskTags.length > 0 && (
           <View style={styles.tagsContainer}>
             {sortedTaskTags.slice(0, 3).map(tag => (
-              <Tag key={tag.id} tag={tag} size="small" />
+              <TagComponent key={tag.id} tag={tag} size="small" />
             ))}
             {sortedTaskTags.length > 3 && (
               <Text

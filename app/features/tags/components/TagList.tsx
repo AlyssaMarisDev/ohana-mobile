@@ -1,36 +1,29 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { useTodayTags } from '../hooks/useTodayTags';
-import { Tag } from './Tag';
+import { Tag } from '../services/TagService';
+import { Tag as TagComponent } from './Tag';
 import ErrorMessage from '../../../common/components/ErrorMessage';
 
 interface TagListProps {
-  householdId: string;
+  tags?: Tag[];
+  isLoading?: boolean;
+  error?: Error | null;
   size?: 'small' | 'medium' | 'large';
   onTagPress?: (tagId: string) => void;
   maxTags?: number;
 }
 
 export const TagList: React.FC<TagListProps> = ({
-  householdId,
+  tags,
+  isLoading = false,
   size = 'medium',
   onTagPress,
   maxTags,
 }) => {
-  const { data: tags, isLoading, error } = useTodayTags(householdId);
-
   if (isLoading) {
     return (
       <View style={styles.container}>
         <Text style={styles.loadingText}>Loading tags...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.container}>
-        <ErrorMessage error="Failed to load tags" visible={true} />
       </View>
     );
   }
@@ -55,7 +48,11 @@ export const TagList: React.FC<TagListProps> = ({
         horizontal={false}
         numColumns={3}
         renderItem={({ item }) => (
-          <Tag tag={item} size={size} onPress={() => onTagPress?.(item.id)} />
+          <TagComponent
+            tag={item}
+            size={size}
+            onPress={() => onTagPress?.(item.id)}
+          />
         )}
         contentContainerStyle={styles.tagList}
       />
