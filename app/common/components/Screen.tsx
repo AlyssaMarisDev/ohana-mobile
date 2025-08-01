@@ -6,7 +6,10 @@ import {
   ScrollView,
   RefreshControl,
 } from 'react-native';
-// import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import configs from '../config';
 
@@ -25,31 +28,34 @@ function Screen({
   onRefresh,
   refreshing = false,
 }: ScreenProps) {
-  if (refreshable && onRefresh) {
-    return (
-      <GestureHandlerRootView>
-        <ScrollView
-          style={[styles.container, style]}
-          contentContainerStyle={styles.scrollContent}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              colors={[configs.colors.primary]}
-              tintColor={configs.colors.primary}
-            />
-          }
-        >
-          {children}
-        </ScrollView>
-      </GestureHandlerRootView>
-    );
-  }
+  const refreshableScrollView = (
+    <ScrollView
+      style={styles.scrollView}
+      contentContainerStyle={styles.scrollContent}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={[configs.colors.primary]}
+          tintColor={configs.colors.primary}
+        />
+      }
+    >
+      {children}
+    </ScrollView>
+  );
+
+  const staticView = <View style={styles.content}>{children}</View>;
 
   return (
-    <GestureHandlerRootView>
-      <View style={[styles.container, style]}>{children}</View>
-    </GestureHandlerRootView>
+    <SafeAreaView
+      style={[styles.container, style]}
+      edges={['top', 'left', 'right', 'bottom']}
+    >
+      <GestureHandlerRootView style={styles.gestureContainer}>
+        {refreshable && onRefresh ? refreshableScrollView : staticView}
+      </GestureHandlerRootView>
+    </SafeAreaView>
   );
 }
 
@@ -57,6 +63,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: configs.colors.background,
+  },
+  gestureContainer: {
+    flex: 1,
+  },
+  content: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
   },
   scrollContent: {
     flexGrow: 1,

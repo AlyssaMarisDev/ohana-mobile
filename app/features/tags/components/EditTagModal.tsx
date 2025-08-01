@@ -307,9 +307,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: configs.colors.gray3,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   cancelText: {
-    fontSize: 16,
+    fontSize: 20,
     color: configs.colors.textSecondary,
   },
   updateButton: {

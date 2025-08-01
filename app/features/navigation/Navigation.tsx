@@ -68,7 +68,7 @@ function NavigationContent() {
   return (
     <View style={{ flex: 1 }}>
       <Stack.Navigator
-        initialRouteName={isAuthenticated ? 'Today' : 'Login'}
+        initialRouteName={isAuthenticated ? 'Today' : 'Today'}
         screenOptions={{
           headerShown: isAuthenticated, // Only show header for authenticated screens
           headerLeft: () => <HamburgerMenu onPress={handleHamburgerPress} />,

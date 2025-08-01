@@ -3,6 +3,7 @@ import { GlobalStateProvider } from './app/common/context/GlobalStateContext';
 import Navigation from './app/features/navigation/Navigation';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from './app/common/components/ErrorBoundary';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -19,14 +20,16 @@ const queryClient = new QueryClient({
 
 export default function App() {
   return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <GlobalStateProvider>
-          <AuthProvider>
-            <Navigation />
-          </AuthProvider>
-        </GlobalStateProvider>
-      </QueryClientProvider>
-    </ErrorBoundary>
+    <SafeAreaProvider>
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <GlobalStateProvider>
+            <AuthProvider>
+              <Navigation />
+            </AuthProvider>
+          </GlobalStateProvider>
+        </QueryClientProvider>
+      </ErrorBoundary>
+    </SafeAreaProvider>
   );
 }
