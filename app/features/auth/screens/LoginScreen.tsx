@@ -9,7 +9,7 @@ import Text from '../../../common/components/Text';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { enhancedLogger } from '@/app/common/utils/logger';
+import { AxiosError } from 'axios';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
@@ -26,10 +26,14 @@ function LoginScreen() {
       await login(values.email, values.password);
       setError(null);
       navigation.navigate('Today' as never);
-    } catch (error: any) {
-      setError(
-        error.response?.data?.message || error.message || 'Login failed'
-      );
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        setError(
+          error.response?.data?.message || error.message || 'Login failed'
+        );
+      } else {
+        setError('Login failed');
+      }
     }
   };
 

@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Modal,
   TouchableOpacity,
-  TextInput,
   ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -41,12 +40,7 @@ const tagColors = [
   '#85C1E9', // Light blue
 ];
 
-function CreateTagModal({
-  isVisible,
-  onClose,
-  onSubmit,
-  isLoading = false,
-}: CreateTagModalProps) {
+function CreateTagModal({ isVisible, onClose, onSubmit }: CreateTagModalProps) {
   const [selectedColor, setSelectedColor] = useState(tagColors[0]);
 
   const handleSubmit = (values: { name: string }) => {

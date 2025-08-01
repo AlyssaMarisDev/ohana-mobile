@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { taskService, Task, TaskStatus } from '../services/TaskService';
 import { useAuth } from '../../auth/context/AuthContext';
 import { v4 as uuidv4 } from 'uuid';
+import { logger } from '@/app/common/utils/logger';
 
 export const useTasks = () => {
   const queryClient = useQueryClient();
@@ -42,7 +43,7 @@ export const useTasks = () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
     onError: err => {
-      console.error('Task creation failed:', err);
+      logger.error('Task creation failed:', err);
       alert(
         `Failed to create task: ${
           err instanceof Error ? err.message : 'Unknown error'
@@ -100,7 +101,7 @@ export const useTasks = () => {
       variables,
       context: { previousTasks?: Task[] } | undefined
     ) => {
-      console.error('Task update failed:', err);
+      logger.error('Task update failed:', err);
       if (context?.previousTasks) {
         queryClient.setQueryData(['tasks'], context.previousTasks);
       }
@@ -127,7 +128,7 @@ export const useTasks = () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
     onError: err => {
-      console.error('Task deletion failed:', err);
+      logger.error('Task deletion failed:', err);
       alert(
         `Failed to delete task: ${
           err instanceof Error ? err.message : 'Unknown error'

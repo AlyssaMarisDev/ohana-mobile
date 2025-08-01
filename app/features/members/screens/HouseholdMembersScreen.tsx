@@ -8,6 +8,7 @@ import { useHouseholdMembers } from '../hooks/useHouseholdMembers';
 import { Ionicons } from '@expo/vector-icons';
 import configs from '../../../common/config';
 import { Member } from '../services/MemberService';
+import { logger } from '@/app/common/utils/logger';
 
 type HouseholdMembersRouteProp = RouteProp<
   {
@@ -40,7 +41,7 @@ function HouseholdMembersScreen() {
   // Update header title when household data is loaded
   useEffect(() => {
     if (household) {
-      (navigation as any).setOptions({
+      navigation.setOptions({
         title: `${household.name} Members`,
       });
     }
@@ -51,7 +52,7 @@ function HouseholdMembersScreen() {
     try {
       await Promise.all([refetchHouseholds(), refetchMembers()]);
     } catch (error) {
-      console.error('Error refreshing data:', error);
+      logger.error('Error refreshing data:', error);
     } finally {
       setRefreshing(false);
     }

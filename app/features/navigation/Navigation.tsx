@@ -57,12 +57,12 @@ function NavigationContent() {
 
   const handleSidebarHouseholdPress = (householdId: string) => {
     setIsSidebarVisible(false); // Close sidebar
-    (navigation as any).navigate('HouseholdDetail', { householdId }); // Navigate to household detail
+    navigation.navigate('HouseholdDetail', { householdId }); // Navigate to household detail
   };
 
   const handleSidebarHouseholdTasksPress = (householdId: string) => {
     setIsSidebarVisible(false); // Close sidebar
-    (navigation as any).navigate('HouseholdTasks', { householdId }); // Navigate to household tasks
+    navigation.navigate('HouseholdTasks', { householdId }); // Navigate to household tasks
   };
 
   return (

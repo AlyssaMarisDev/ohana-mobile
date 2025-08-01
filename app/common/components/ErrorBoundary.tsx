@@ -1,6 +1,6 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { enhancedLogger } from '../utils/logger';
+import { logger } from '@/app/common/utils/logger';
 
 interface Props {
   children: ReactNode;
@@ -24,7 +24,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    enhancedLogger.error('ErrorBoundary caught an error', error, {
+    logger.error('ErrorBoundary caught an error', error, {
       componentStack: errorInfo.componentStack,
     });
 
@@ -41,7 +41,7 @@ export class ErrorBoundary extends Component<Props, State> {
   handleReportError = () => {
     if (this.state.error) {
       // In a real app, you might want to send this to your error reporting service
-      enhancedLogger.error('User reported error', this.state.error, {
+      logger.error('User reported error', this.state.error, {
         componentStack: this.state.errorInfo?.componentStack,
       });
     }

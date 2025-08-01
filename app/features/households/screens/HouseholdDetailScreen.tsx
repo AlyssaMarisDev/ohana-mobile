@@ -6,6 +6,7 @@ import Text from '../../../common/components/Text';
 import { useHouseholds } from '../hooks/useHouseholds';
 import { Ionicons } from '@expo/vector-icons';
 import configs from '../../../common/config';
+import { logger } from '@/app/common/utils/logger';
 
 type HouseholdDetailRouteProp = RouteProp<
   {
@@ -31,22 +32,22 @@ function HouseholdDetailScreen() {
   // Update header title when household data is loaded
   useEffect(() => {
     if (household) {
-      (navigation as any).setOptions({
+      navigation.setOptions({
         title: household.name,
       });
     }
   }, [household, navigation]);
 
   const handleViewTasks = () => {
-    (navigation as any).navigate('HouseholdTasks', { householdId });
+    navigation.navigate('HouseholdTasks', { householdId });
   };
 
   const handleViewTags = () => {
-    (navigation as any).navigate('HouseholdTags', { householdId });
+    navigation.navigate('HouseholdTags', { householdId });
   };
 
   const handleViewMembers = () => {
-    (navigation as any).navigate('HouseholdMembers', { householdId });
+    navigation.navigate('HouseholdMembers', { householdId });
   };
 
   const onRefresh = async () => {
@@ -54,7 +55,7 @@ function HouseholdDetailScreen() {
     try {
       await refetchHouseholds();
     } catch (error) {
-      console.error('Error refreshing household data:', error);
+      logger.error('Error refreshing household data:', error);
     } finally {
       setRefreshing(false);
     }

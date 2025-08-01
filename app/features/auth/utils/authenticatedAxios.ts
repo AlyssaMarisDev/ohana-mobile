@@ -1,6 +1,6 @@
 import axios from 'axios';
 import tokenManager from './tokenManager';
-import { enhancedLogger } from '@/app/common/utils/logger';
+import { logger } from '@/app/common/utils/logger';
 import { API_CONFIG } from '@/app/common/config/constants';
 
 // Create an axios instance with automatic token refresh
@@ -32,7 +32,7 @@ export const createAuthenticatedAxios = () => {
 
       // Don't retry timeout errors
       if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
-        enhancedLogger.error('Request timeout in interceptor', error);
+        logger.error('Request timeout in interceptor', error);
         return Promise.reject(error);
       }
 
@@ -45,8 +45,8 @@ export const createAuthenticatedAxios = () => {
             originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
             return axiosInstance(originalRequest);
           }
-        } catch (refreshError: any) {
-          enhancedLogger.error('Token refresh failed:', refreshError);
+        } catch (refreshError) {
+          logger.error('Token refresh failed:', refreshError as Error);
         }
       }
 

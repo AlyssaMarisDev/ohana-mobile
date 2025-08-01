@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { memberService, Member } from '../services/MemberService';
 import { useAuth } from '../../auth/context/AuthContext';
+import { logger } from '@/app/common/utils/logger';
 
 export const useMembers = (shouldFetch: boolean = true) => {
   const queryClient = useQueryClient();
@@ -60,7 +61,7 @@ export const useMembers = (shouldFetch: boolean = true) => {
       variables,
       context: { previousMember?: Member } | undefined
     ) => {
-      console.error('Member update failed:', err);
+      logger.error('Member update failed:', err);
       if (context?.previousMember) {
         queryClient.setQueryData(
           ['member', variables.memberId],
@@ -85,7 +86,7 @@ export const useMembers = (shouldFetch: boolean = true) => {
 
   const updateMemberData = (data: Omit<Member, 'id' | 'email'>) => {
     if (!memberId) {
-      console.error('No member ID available for update');
+      logger.error('No member ID available for update');
       return;
     }
 

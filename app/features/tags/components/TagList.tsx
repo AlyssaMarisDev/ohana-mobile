@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { Tag } from '../services/TagService';
 import { Tag as TagComponent } from './Tag';
-import ErrorMessage from '../../../common/components/ErrorMessage';
 
 interface TagListProps {
   tags?: Tag[];

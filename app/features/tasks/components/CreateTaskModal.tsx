@@ -1,16 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Modal,
   View,
   StyleSheet,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
   Animated,
 } from 'react-native';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Text from '../../../common/components/Text';
 import TextInput from '../../../common/components/TextInput';
 import Button from '../../../common/components/Button';

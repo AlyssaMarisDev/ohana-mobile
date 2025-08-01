@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Modal,
   TouchableOpacity,
-  TextInput,
   ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -50,7 +49,6 @@ function EditTagModal({
   onClose,
   onSubmit,
   onDelete,
-  isLoading = false,
   isDeleting = false,
   tag,
 }: EditTagModalProps) {
@@ -332,7 +330,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: `${configs.colors.danger  }10`,
+    backgroundColor: `${configs.colors.danger}10`,
     borderRadius: 8,
   },
   warningText: {

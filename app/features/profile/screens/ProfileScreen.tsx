@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import configs from '../../../common/config';
 import { useMembers } from '../../members/hooks/useMembers';
 import { useAuth } from '../../auth/context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import { logger } from '@/app/common/utils/logger';
 
 function ProfileScreen() {
   const navigation = useNavigation();
@@ -25,7 +26,7 @@ function ProfileScreen() {
       await logout();
       navigation.navigate('Login' as never);
     } catch (error) {
-      console.error('Logout error:', error);
+      logger.error('Logout error:', error);
     }
   };
 
@@ -36,10 +37,10 @@ function ProfileScreen() {
         await refetch();
       } else {
         // If user is not authenticated, they should be redirected to login
-        console.log('User not authenticated during refresh');
+        logger.info('User not authenticated during refresh');
       }
     } catch (error) {
-      console.error('Error refreshing member data:', error);
+      logger.error('Error refreshing member data:', error);
     } finally {
       setRefreshing(false);
     }

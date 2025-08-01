@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { jwtDecode } from 'jwt-decode';
 import { authService } from '../services/AuthService';
-import { enhancedLogger } from '@/app/common/utils/logger';
+import { logger } from '@/app/common/utils/logger';
 
 interface JWTPayload {
   exp: number;
@@ -39,7 +39,7 @@ export class TokenManager {
     const { accessToken, refreshToken } = await this.getTokens();
 
     if (!accessToken || !refreshToken) {
-      enhancedLogger.info('No access token or refresh token found');
+      logger.info('No access token or refresh token found');
       return null;
     }
 
@@ -50,22 +50,22 @@ export class TokenManager {
     // If refresh token is expired, user needs to login again
     if (this.isTokenExpired(refreshToken)) {
       await this.clearTokens();
-      enhancedLogger.info('Refresh token is expired');
+      logger.info('Refresh token is expired');
       return null;
     }
 
     // Refresh the access token
     try {
-      enhancedLogger.info('Refreshing access token');
+      logger.info('Refreshing access token');
       const newTokens = await this.refreshAccessToken(refreshToken);
-      enhancedLogger.info('New tokens', newTokens);
+      logger.info('New tokens', newTokens);
       return newTokens.accessToken;
-    } catch (error: any) {
-      enhancedLogger.error('Error refreshing access token:', error);
+    } catch (error) {
+      logger.error('Error refreshing access token:', error as Error);
       // Only clear tokens if the error is a 401 (Unauthorized)
       if (error?.response?.status === 401) {
         await this.clearTokens();
-        enhancedLogger.info('Cleared tokens due to 401 during refresh');
+        logger.info('Cleared tokens due to 401 during refresh');
       }
       // For other errors (network/server), do not clear tokens
       return null;
@@ -78,7 +78,7 @@ export class TokenManager {
       const decoded = jwtDecode(token);
       return decoded as JWTPayload;
     } catch (error) {
-      console.error('Error decoding token:', error);
+      logger.error('Error decoding token:', error as Error);
       return null;
     }
   }
@@ -91,7 +91,7 @@ export class TokenManager {
         AsyncStorage.setItem(REFRESH_TOKEN_KEY, refreshToken),
       ]);
     } catch (error) {
-      console.error('Error storing tokens:', error);
+      logger.error('Error storing tokens:', error as Error);
       throw error;
     }
   }
@@ -108,7 +108,7 @@ export class TokenManager {
       ]);
       return { accessToken, refreshToken };
     } catch (error) {
-      console.error('Error getting tokens:', error);
+      logger.error('Error getting tokens:', error as Error);
       return { accessToken: null, refreshToken: null };
     }
   }
@@ -121,7 +121,7 @@ export class TokenManager {
         AsyncStorage.removeItem(REFRESH_TOKEN_KEY),
       ]);
     } catch (error) {
-      console.error('Error clearing tokens:', error);
+      logger.error('Error clearing tokens:', error as Error);
       throw error;
     }
   }
@@ -163,7 +163,7 @@ export class TokenManager {
 
       return tokens;
     } catch (error) {
-      console.error('Error performing token refresh:', error);
+      logger.error('Error performing token refresh:', error as Error);
       throw error;
     }
   }

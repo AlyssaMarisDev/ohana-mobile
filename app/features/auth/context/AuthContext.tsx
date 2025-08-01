@@ -9,6 +9,7 @@ import tokenManager from '../utils/tokenManager';
 import { authService } from '../services/AuthService';
 import { useGlobalState } from '../../../common/context/GlobalStateContext';
 import { useQueryClient } from '@tanstack/react-query';
+import { logger } from '@/app/common/utils/logger';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -42,7 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const decoded = tokenManager.decodeToken(token);
       return decoded?.userId || null;
     } catch (error) {
-      console.error('Error extracting member ID from token:', error);
+      logger.error('Error extracting member ID from token:', error as Error);
       return null;
     }
   };
@@ -63,7 +64,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         queryClient.clear();
       }
     } catch (error) {
-      console.error('Error checking auth status:', error);
+      logger.error('Error checking auth status:', error as Error);
       setIsAuthenticated(false);
       setMemberId(null);
       clearAllState();
@@ -88,7 +89,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setMemberId(userId);
       setIsAuthenticated(true);
     } catch (error) {
-      console.error('Login error:', error);
+      logger.error('Login error:', error as Error);
       throw error;
     }
   };
@@ -107,7 +108,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setMemberId(userId);
       setIsAuthenticated(true);
     } catch (error) {
-      console.error('Register error:', error);
+      logger.error('Register error:', error as Error);
       throw error;
     }
   };
@@ -121,7 +122,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Clear React Query cache
       queryClient.clear();
     } catch (error) {
-      console.error('Logout error:', error);
+      logger.error('Logout error:', error as Error);
       // Even if logout fails, clear local state
       setIsAuthenticated(false);
       setMemberId(null);

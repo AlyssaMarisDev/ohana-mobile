@@ -1,10 +1,12 @@
 import React, { ReactNode } from 'react';
 import {
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
   Text,
   StyleSheet,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
 } from 'react-native';
 
 export type ActionMenuItemProps = {
@@ -12,8 +14,8 @@ export type ActionMenuItemProps = {
   icon: ReactNode;
   color?: string;
   onPress: () => void;
-  style?: any;
-  textStyle?: any;
+  style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
 };
 
 export const ActionMenuItem = ({
@@ -26,7 +28,7 @@ export const ActionMenuItem = ({
 }: ActionMenuItemProps) => {
   let iconElement = icon;
   if (React.isValidElement(icon)) {
-    const iconProps = (icon.props || {}) as { style?: any };
+    const iconProps = (icon.props || {}) as { style?: StyleProp<ViewStyle> };
     iconElement = React.cloneElement(icon, {
       ...(color ? { color } : {}),
       ...(iconProps.style !== undefined
@@ -51,17 +53,11 @@ export const ActionMenuItem = ({
 
 export type ActionMenuProps = {
   visible: boolean;
-  onRequestClose: () => void;
   children: ReactNode;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 };
 
-export const ActionMenu = ({
-  visible,
-  onRequestClose,
-  children,
-  style,
-}: ActionMenuProps) => {
+export const ActionMenu = ({ visible, children, style }: ActionMenuProps) => {
   if (!visible) return null;
   return <View style={[styles.dropdownMenu, style]}>{children}</View>;
 };

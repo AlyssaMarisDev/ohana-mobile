@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, ActivityIndicator, View } from 'react-native';
 import TaskList from './TaskList';
 import Text from '../../../common/components/Text';
 import UpdateTaskModal from './UpdateTaskModal';
 import { Task } from '../services/TaskService';
-import { Household } from '../../households/services/HouseholdService';
 import { Tag } from '../../tags/services/TagService';
 import configs from '../../../common/config';
 import { useTasks } from '../hooks/useTasks';
@@ -17,9 +16,6 @@ interface TaskListProps {
     taskId: string,
     data: Omit<Task, 'id' | 'createdBy' | 'householdId'>
   ) => void;
-  onCreateTask: (title: string, householdId: string, tagIds: string[]) => void;
-  households: Household[];
-  isLoadingHouseholds?: boolean;
   showCreateButton?: boolean;
   showHousehold?: boolean;
   preSelectedHouseholdId?: string;
@@ -32,12 +28,7 @@ function MultiTaskList({
   isLoading,
   onToggleTask,
   onUpdateTask,
-  onCreateTask,
-  households,
-  isLoadingHouseholds = false,
-  showCreateButton = true,
   showHousehold = false,
-  preSelectedHouseholdId,
   tags,
   isLoadingTags = false,
 }: TaskListProps) {

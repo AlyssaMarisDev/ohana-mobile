@@ -8,7 +8,7 @@ import configs from '../config';
 import Text from './Text';
 
 interface ButtonProps {
-  onPress: (arg0: any) => void;
+  onPress: () => void;
   children?: React.ReactNode;
   color?: string;
   style?: StyleProp<ViewStyle>;

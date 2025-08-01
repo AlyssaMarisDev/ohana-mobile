@@ -9,6 +9,7 @@ import { useTasksByHousehold } from '../../tasks/hooks/useTasksByHousehold';
 import { useHouseholds } from '../hooks/useHouseholds';
 import { useHouseholdTags } from '../../tags/hooks/useHouseholdTags';
 import { Task, TaskStatus } from '../../tasks/services/TaskService';
+import { logger } from '@/app/common/utils/logger';
 
 type HouseholdTasksRouteProp = RouteProp<
   {
@@ -46,7 +47,7 @@ function HouseholdTasksScreen() {
     try {
       await Promise.all([refetchTasks(), refetchHouseholds()]);
     } catch (error) {
-      console.error('Error refreshing data:', error);
+      logger.error('Error refreshing data:', error);
     } finally {
       setRefreshing(false);
     }
@@ -83,7 +84,7 @@ function HouseholdTasksScreen() {
   // Update header title when household data is loaded
   useEffect(() => {
     if (household) {
-      (navigation as any).setOptions({
+      navigation.setOptions({
         title: household.name,
       });
     }

@@ -8,6 +8,7 @@ import { useTodayTasks } from '../hooks/useTodayTasks';
 import { useHouseholds } from '../../households/hooks/useHouseholds';
 import { useHouseholdTags } from '../../tags/hooks/useHouseholdTags';
 import { Task, TaskStatus } from '../../tasks/services/TaskService';
+import { logger } from '@/app/common/utils/logger';
 
 function TodayScreen() {
   const {
@@ -34,7 +35,7 @@ function TodayScreen() {
     try {
       await Promise.all([refetchTodayTasks(), refetchHouseholds()]);
     } catch (error) {
-      console.error('Error refreshing data:', error);
+      logger.error('Error refreshing data:', error);
     } finally {
       setRefreshing(false);
     }

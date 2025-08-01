@@ -1,5 +1,10 @@
-import { enhancedLogger } from './logger';
-import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { logger } from '@/app/common/utils/logger';
+import {
+  AxiosError,
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from 'axios';
 
 export class BaseService {
   protected axiosInstance: AxiosInstance;
@@ -8,7 +13,7 @@ export class BaseService {
     this.axiosInstance = axiosInstance;
   }
 
-  protected async get<T = any>(
+  protected async get<T = unknown>(
     url: string,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
@@ -16,18 +21,22 @@ export class BaseService {
     try {
       const response = await this.axiosInstance.get<T>(url, config);
       const duration = Date.now() - start;
-      enhancedLogger.logApiCall(url, 'GET', response.status, duration);
+      logger.logApiCall(url, 'GET', response.status, duration);
       return response;
-    } catch (error: any) {
-      const duration = Date.now() - start;
-      enhancedLogger.logApiCall(url, 'GET', error?.response?.status, duration);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const duration = Date.now() - start;
+        logger.logApiCall(url, 'GET', error?.response?.status, duration);
+      } else {
+        logger.error('Error getting', error as Error);
+      }
       throw error;
     }
   }
 
-  protected async post<T = any>(
+  protected async post<T = unknown>(
     url: string,
-    data?: any,
+    data?: unknown,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
     const start = Date.now();
@@ -35,76 +44,83 @@ export class BaseService {
 
     try {
       const response = await this.axiosInstance.post<T>(url, data, config);
-      enhancedLogger.info('Response', response);
       const duration = Date.now() - start;
-      enhancedLogger.logApiCall(url, 'POST', response.status, duration);
+      logger.logApiCall(url, 'POST', response.status, duration);
       return response;
-    } catch (error: any) {
+    } catch (error) {
       const duration = Date.now() - start;
 
-      // Handle timeout errors specifically
-      if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
-        enhancedLogger.error('Request timeout', error, {
-          url,
-          duration,
-          timeout,
-        });
-        enhancedLogger.logApiCall(url, 'POST', 408, duration);
+      if (error instanceof AxiosError) {
+        if (
+          error.code === 'ECONNABORTED' ||
+          error.message?.includes('timeout')
+        ) {
+          logger.error('Request timeout', error, {
+            url,
+            duration,
+            timeout,
+          });
+          logger.logApiCall(url, 'POST', 408, duration);
+        } else {
+          logger.logApiCall(url, 'POST', error?.response?.status, duration);
+        }
       } else {
-        enhancedLogger.logApiCall(
-          url,
-          'POST',
-          error?.response?.status,
-          duration
-        );
+        logger.error('Error posting', error as Error);
       }
 
       throw error;
     }
   }
 
-  protected async put<T = any>(
+  protected async put<T = unknown>(
     url: string,
-    data?: any,
+    data?: unknown,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
     const start = Date.now();
     try {
       const response = await this.axiosInstance.put<T>(url, data, config);
       const duration = Date.now() - start;
-      enhancedLogger.logApiCall(url, 'PUT', response.status, duration);
+      logger.logApiCall(url, 'PUT', response.status, duration);
       return response;
-    } catch (error: any) {
+    } catch (error) {
       const duration = Date.now() - start;
-      enhancedLogger.logApiCall(url, 'PUT', error?.response?.status, duration);
+
+      if (error instanceof AxiosError) {
+        logger.logApiCall(url, 'PUT', error?.response?.status, duration);
+      } else {
+        logger.error('Error putting', error as Error);
+      }
+
       throw error;
     }
   }
 
-  protected async patch<T = any>(
+  protected async patch<T = unknown>(
     url: string,
-    data?: any,
+    data?: unknown,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
     const start = Date.now();
     try {
       const response = await this.axiosInstance.patch<T>(url, data, config);
       const duration = Date.now() - start;
-      enhancedLogger.logApiCall(url, 'PATCH', response.status, duration);
+      logger.logApiCall(url, 'PATCH', response.status, duration);
       return response;
-    } catch (error: any) {
+    } catch (error) {
       const duration = Date.now() - start;
-      enhancedLogger.logApiCall(
-        url,
-        'PATCH',
-        error?.response?.status,
-        duration
-      );
+
+      if (error instanceof AxiosError) {
+        logger.logApiCall(url, 'PATCH', error?.response?.status, duration);
+      } else {
+        logger.error('Error patching', error as Error);
+      }
+
       throw error;
     }
   }
 
-  protected async delete<T = any>(
+  protected async delete<T = unknown>(
     url: string,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
@@ -112,16 +128,17 @@ export class BaseService {
     try {
       const response = await this.axiosInstance.delete<T>(url, config);
       const duration = Date.now() - start;
-      enhancedLogger.logApiCall(url, 'DELETE', response.status, duration);
+      logger.logApiCall(url, 'DELETE', response.status, duration);
       return response;
-    } catch (error: any) {
+    } catch (error) {
       const duration = Date.now() - start;
-      enhancedLogger.logApiCall(
-        url,
-        'DELETE',
-        error?.response?.status,
-        duration
-      );
+
+      if (error instanceof AxiosError) {
+        logger.logApiCall(url, 'DELETE', error?.response?.status, duration);
+      } else {
+        logger.error('Error deleting', error as Error);
+      }
+
       throw error;
     }
   }

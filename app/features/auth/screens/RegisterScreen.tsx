@@ -9,6 +9,7 @@ import Text from '../../../common/components/Text';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { AxiosError } from 'axios';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
@@ -42,10 +43,16 @@ function RegisterScreen() {
       await register(values.name, values.email, values.password);
       setError(null);
       navigation.navigate('Today' as never);
-    } catch (error: any) {
-      setError(
-        error.response?.data?.message || error.message || 'Registration failed'
-      );
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setError(
+          error.response?.data?.message ||
+            error.message ||
+            'Registration failed'
+        );
+      } else {
+        setError('Registration failed');
+      }
     }
   };
 

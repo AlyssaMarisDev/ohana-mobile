@@ -10,6 +10,7 @@ import configs from '../../../common/config';
 import { Tag, TagService } from '../services/TagService';
 import CreateTagModal from '../components/CreateTagModal';
 import EditTagModal from '../components/EditTagModal';
+import { logger } from '@/app/common/utils/logger';
 
 type HouseholdTagsRouteProp = RouteProp<
   {
@@ -48,7 +49,7 @@ function HouseholdTagsScreen() {
   // Update header title when household data is loaded
   useEffect(() => {
     if (household) {
-      (navigation as any).setOptions({
+      navigation.setOptions({
         title: `${household.name} Tags`,
       });
     }
@@ -59,7 +60,7 @@ function HouseholdTagsScreen() {
     try {
       await Promise.all([refetchHouseholds(), refetchTags()]);
     } catch (error) {
-      console.error('Error refreshing data:', error);
+      logger.error('Error refreshing data:', error);
     } finally {
       setRefreshing(false);
     }
@@ -74,7 +75,7 @@ function HouseholdTagsScreen() {
       await refetchTags();
       setIsCreateModalVisible(false);
     } catch (error) {
-      console.error('Error creating tag:', error);
+      logger.error('Error creating tag:', error);
     } finally {
       setIsCreatingTag(false);
     }
@@ -92,7 +93,7 @@ function HouseholdTagsScreen() {
       setIsEditModalVisible(false);
       setEditingTag(undefined);
     } catch (error) {
-      console.error('Error updating tag:', error);
+      logger.error('Error updating tag:', error);
     } finally {
       setIsEditingTag(false);
     }
@@ -110,7 +111,7 @@ function HouseholdTagsScreen() {
       setIsEditModalVisible(false);
       setEditingTag(undefined);
     } catch (error) {
-      console.error('Error deleting tag:', error);
+      logger.error('Error deleting tag:', error);
     } finally {
       setIsDeletingTag(false);
     }

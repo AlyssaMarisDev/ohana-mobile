@@ -8,6 +8,7 @@ import {
 } from '../../tasks/services/TaskService';
 import { useAuth } from '../../auth/context/AuthContext';
 import { v4 as uuidv4 } from 'uuid';
+import { logger } from '@/app/common/utils/logger';
 
 export const useTodayTasks = () => {
   const { isAuthenticated } = useAuth();
@@ -58,7 +59,7 @@ export const useTodayTasks = () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
     onError: err => {
-      console.error('Task creation failed:', err);
+      logger.error('Task creation failed:', err);
       alert(
         `Failed to create task: ${
           err instanceof Error ? err.message : 'Unknown error'
@@ -90,7 +91,7 @@ export const useTodayTasks = () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
     onError: err => {
-      console.error('Task update failed:', err);
+      logger.error('Task update failed:', err);
       alert(
         `Failed to update task: ${
           err instanceof Error ? err.message : 'Unknown error'
@@ -110,7 +111,7 @@ export const useTodayTasks = () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
     onError: err => {
-      console.error('Task deletion failed:', err);
+      logger.error('Task deletion failed:', err);
       alert(
         `Failed to delete task: ${
           err instanceof Error ? err.message : 'Unknown error'

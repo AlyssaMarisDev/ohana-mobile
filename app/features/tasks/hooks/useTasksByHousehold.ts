@@ -3,6 +3,7 @@ import { Task, taskService, TaskStatus } from '../services/TaskService';
 import { useAuth } from '../../auth/context/AuthContext';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
+import { logger } from '@/app/common/utils/logger';
 
 export const useTasksByHousehold = (
   householdId: string,
@@ -51,7 +52,7 @@ export const useTasksByHousehold = (
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
     onError: err => {
-      console.error('Task creation failed:', err);
+      logger.error('Task creation failed:', err);
       alert(
         `Failed to create task: ${
           err instanceof Error ? err.message : 'Unknown error'
@@ -116,7 +117,7 @@ export const useTasksByHousehold = (
       variables,
       context: { previousTasks?: Task[] } | undefined
     ) => {
-      console.error('Task update failed:', err);
+      logger.error('Task update failed:', err);
       if (context?.previousTasks) {
         queryClient.setQueryData(
           ['tasks', 'household', householdId],
